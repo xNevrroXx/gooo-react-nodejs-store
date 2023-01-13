@@ -8,6 +8,7 @@ router.post("/login", userController.login);
 router.post("/logout", userController.logout);
 router.get("/refresh", userController.refresh);
 router.get("/users", userController.getUsers);
+router.get("/activate/:link", userController.activate);
 router.post("/recovery/get-code", userController.sendRecoveryCode);
 router.post("/recovery/verify-code", userController.verifyRecoveryCode);
 

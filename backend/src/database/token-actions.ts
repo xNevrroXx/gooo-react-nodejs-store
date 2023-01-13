@@ -9,8 +9,8 @@ class TokenActions {
         if(isExistToken) {
             return new Promise((resolve, reject) => {
                 dbPool.getConnection((error: MysqlError, connection: PoolConnection) => {
-                    const saveTokenStringSQL = `UPDATE refresh_token SET value = ?`;
-                    const saveTokenQuerySQL = mysql.format(saveTokenStringSQL, [refreshToken]);
+                    const saveTokenStringSQL = `UPDATE refresh_token SET value = ? WHERE user_id = ?`;
+                    const saveTokenQuerySQL = mysql.format(saveTokenStringSQL, [refreshToken, userId]);
 
                     connection.query(saveTokenQuerySQL, (error, result) => {
                         if(error) {

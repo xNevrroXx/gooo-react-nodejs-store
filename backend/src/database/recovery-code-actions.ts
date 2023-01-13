@@ -26,10 +26,11 @@ class RecoveryCodeActions {
         const foundRecoveryCode = await this.find(userId);
 
         if(foundRecoveryCode.length > 0) {
-            const updateRecoveryCodeStringSQL = `UPDATE user_recovery_code SET value = ${recoveryCode}, created_at = "${timestamp}"`;
             return new Promise((resolve, reject) => {
                 dbPool.getConnection((error: MysqlError, connection: PoolConnection) => {
-                    connection.query(updateRecoveryCodeStringSQL, (error, result) => {
+                    const updateRecoveryCodeStringSQL = `UPDATE user_recovery_code SET value = ?, created_at = ? WHERE user_id = ?`;
+                    const updateRecoveryCodeQuerySQL = mysql.format(updateRecoveryCodeStringSQL, [recoveryCode, timestamp, userId])
+                    connection.query(updateRecoveryCodeQuerySQL, (error, result) => {
                         connection.release();
 
                         if(error) {

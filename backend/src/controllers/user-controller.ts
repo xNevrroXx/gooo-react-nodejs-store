@@ -20,6 +20,18 @@ class UserController {
         }
     }
 
+    async activate(request: Request, response: Response, next: () => void) {
+        try {
+            const activationLink = request.params.link;
+            await userService.activate(activationLink);
+
+            response.redirect(process.env.CLIENT_URL || "");
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+
     async login(request: Request, response: Response, next: () => void) {
         try {
             const email = request.body.email;
