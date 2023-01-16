@@ -11,6 +11,26 @@ class TokenService {
         }
     }
 
+    validateAccessToken(token: string) {
+        try {
+            const userData = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+            return userData;
+        }
+        catch {
+            return null;
+        }
+    }
+
+    validateRefreshToken(token: string) {
+        try {
+            const userData = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+            return userData;
+        }
+        catch {
+            return null;
+        }
+    }
+
     async saveToken(userId: number, refreshToken: string) {
         const timestamp = new Date().toISOString().slice(0, 19).replace("T", " ");
         await tokenActions.saveToken(userId, refreshToken, timestamp);

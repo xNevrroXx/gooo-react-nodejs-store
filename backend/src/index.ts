@@ -5,6 +5,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const errorMiddleware = require("./middlewares/error-middleware");
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 app.use("/api", router);
+app.use(errorMiddleware);
 
 const start = () => {
     try {
