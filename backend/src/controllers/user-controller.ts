@@ -72,12 +72,12 @@ class UserController {
         }
     }
 
-    async sendRecoveryCode(request: Request, response: Response, next: NextFunction) {
+    async sendRecoveryLink(request: Request, response: Response, next: NextFunction) {
         try {
             const email = request.body.email;
-            const recoveryCode: number = await userService.createRecoveryCode(email);
-            // todo send not code and url of the recovery page. Create table for this urls;
-            mailService.sendRecoveryMail(email, recoveryCode);
+            const recoveryCode: string = await userService.createRecoveryCode(email);
+            const recoveryLink: string = process.env.CLIENT_URL + "/recovery/" + recoveryCode;
+            mailService.sendRecoveryMail(email, recoveryLink);
             response.status(200).json({
                 message: "Сообщение отправлено на ваш почтовый адрес"
             })
@@ -87,25 +87,15 @@ class UserController {
         }
     }
 
-    async verifyRecoveryCode(request: Request, response: Response, next: NextFunction) {
+    async changePassword(request: Request, response: Response, next: NextFunction) {
         try {
-            // todo change this endpoint to the getting password and repeat password. Add one param to the URL.
-            const email = request.body.email;
-            const recoveryCode = request.body.recoveryCode;
-            await userService.verifyRecoveryCode(email, recoveryCode);
+            const recoveryCode = request.params.code;
+            const newPassword = request.body.password;
+            await userService.changePassword(recoveryCode, newPassword);
 
             response.status(200).json({
-                message: "Код верен"
+                message: "Пароль изменен"
             })
-        }
-        catch (error) {
-            next(error);
-        }
-    }
-
-    async recoveryCreateNewPassword(request: Request, response: Response, next: NextFunction) {
-        try {
-            const {email, }
         }
         catch (error) {
             next(error);

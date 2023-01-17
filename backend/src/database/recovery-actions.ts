@@ -3,11 +3,14 @@ import {MysqlError, PoolConnection} from "mysql";
 const mysql = require("mysql");
 const dbPool = require("./index");
 
-class RecoveryCodeActions {
-    async find(userId: number): Promise<any[]> {
+class RecoveryActions {
+    async find({userId, recoveryCode}: {userId: number | null, recoveryCode: string | null}): Promise<any[]> {
         return new Promise((resolve, reject) => {
             dbPool.getConnection((error: MysqlError, connection: PoolConnection) => {
-                const findCodeStringSql = `SELECT * FROM user_recovery_code WHERE user_id = ${userId}`;
+                let findCodeStringSql = `SELECT * FROM user_recovery_code WHERE `;
+                if(userId) findCodeStringSql += `user_id = "${userId}"`;
+                else if(recoveryCode) findCodeStringSql += `value = "${recoveryCode}"`;
+
                 connection.query(findCodeStringSql, (error, result) => {
                     connection.release();
 
@@ -21,9 +24,9 @@ class RecoveryCodeActions {
         })
     }
 
-    async create(userId: number, recoveryCode: number) {
+    async create(userId: number, recoveryCode: string) {
         const timestamp = new Date().toISOString().slice(0, 19).replace("T", " ");
-        const foundRecoveryCode = await this.find(userId);
+        const foundRecoveryCode = await this.find({userId, recoveryCode: null});
 
         if(foundRecoveryCode.length > 0) {
             return new Promise((resolve, reject) => {
@@ -64,4 +67,4 @@ class RecoveryCodeActions {
     // async reset
 }
 
-module.exports = new RecoveryCodeActions();
+module.exports = new RecoveryActions();

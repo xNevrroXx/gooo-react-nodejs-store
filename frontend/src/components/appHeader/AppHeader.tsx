@@ -10,8 +10,7 @@ import {
   Typography,
   MenuItem,
   ListItemIcon,
-  ListItemText,
-  Box
+  ListItemText
 } from "@mui/material";
 import {
   AccountCircleOutlined,
@@ -116,13 +115,12 @@ function AppHeader() {
               Корзина
             </Typography>
           </Button>
-          <IconButton
-            color="inherit"
-            size="large"
-            sx={{display: {xs: "none", sm: "block"}}}
-          >
+          <Button sx={{display: {xs: "none", sm: "flex"}, alignItems: "center", flexDirection: "column", color: "inherit"}}>
             <AccountCircleOutlined/>
-          </IconButton>
+            <Typography variant="body2" component="span">
+              Войти
+            </Typography>
+          </Button>
           <IconButton
             sx={{display: {xs: "block", sm: "none"} }}
             onClick={onClick}

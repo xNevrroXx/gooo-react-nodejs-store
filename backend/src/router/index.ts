@@ -20,8 +20,7 @@ router.post("/logout", userController.logout);
 router.get("/refresh", userController.refresh);
 router.get("/users", authMiddleware, userController.getUsers);
 router.get("/activate/:link", userController.activate);
-router.post("/recovery/get-code", userController.sendRecoveryCode);
-router.post("/recovery/verify-code", userController.verifyRecoveryCode);
-router.post("/recovery/create-new-password", userController.recoveryCreateNewPassword);
+router.post("/recovery/get-link", userController.sendRecoveryLink);
+router.post("/recovery/:code", userController.changePassword);
 
 module.exports = router;

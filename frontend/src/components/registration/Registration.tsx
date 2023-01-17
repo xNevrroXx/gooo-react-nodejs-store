@@ -1,10 +1,13 @@
-import React, {useState} from 'react';
+import React, {FC, useState} from 'react';
 import {Box, Button, TextField, Typography} from "@mui/material";
 import AuthService from "../../services/AuthService";
 
-const Login = () => {
+const Registration: FC = () => {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+    const [username, setUsername] = useState<string>("");
+    const [firstname, setFirstname] = useState<string>("");
+    const [lastname, setLastname] = useState<string>("");
 
     return (
         <Box sx={{display: "grid", gridTemplateColumns: "2fr 4fr", gap: "5rem"}} className="login-content">
@@ -14,11 +17,14 @@ const Login = () => {
                 action=""
                 className="login-content__form"
             >
-                <Typography variant="h5">Вход</Typography>
-                <TextField onChange={event => setEmail(event.target.value)} value={email} placeholder="Почта" variant="outlined" />
+                <Typography variant="h5">Регистрация</Typography>
+                <TextField onChange={event => setEmail(event.target.value)} value={email} label="Почта" variant="outlined" />
                 <TextField onChange={event => setPassword(event.target.value)} value={password} label="Пароль" variant="outlined" />
+                <TextField onChange={event => setUsername(event.target.value)} value={username} label="Псевдоним" variant="outlined" />
+                <TextField onChange={event => setFirstname(event.target.value)} value={firstname} label="Имя" variant="outlined" />
+                <TextField onChange={event => setLastname(event.target.value)} value={lastname} label="Фамилия" variant="outlined" />
 
-                <Button onClick={() => AuthService.login(email, password)} variant="outlined">Войти</Button>
+                <Button onClick={() => AuthService.registration(email, password, username, firstname, lastname)} variant="outlined">Зарегистрироваться</Button>
             </Box>
             <Box
                 sx={{display: "flex", justifyContent: "center", alignItems: "center"}}
@@ -29,7 +35,7 @@ const Login = () => {
                 </svg>
             </Box>
         </Box>
-    );
+    )
 };
 
-export default Login;
+export default Registration;

@@ -8,6 +8,8 @@ import AppHeader from "../components/appHeader/AppHeader";
 import Loading from "../components/loading/Loading";
 import AdministrationLogin from "../pages/Administration/AdministrationLogin";
 import UserLogin from "../pages/UserLogin";
+import UserRegistration from "../pages/UserRegistration";
+import {useSelector} from "react-redux";
 
 // pages
 const Main = lazy(() => import("../pages/Main"));
@@ -27,16 +29,20 @@ const theme = createTheme({
 })
 
 function App() {
+  const filters = useSelector(store => store);
+  console.log(filters);
+
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <AppHeader/>
-        <Container>
+        <Container maxWidth="xl">
           <Suspense fallback={<Loading sx={{position: "absolute", top: "0", left: "0", height: "100vh", width: "100%"}}/>} >
             <Routes>
               <Route path="/" element={<Navigate to="/main"/>}/>
 
               <Route path="/login" element={<UserLogin/>} />
+              <Route path="/registration" element={<UserRegistration/>} />
               <Route path="/main" element={<Main/>} />
               <Route path="/categories/:title" element={<Filtered/>} />
 

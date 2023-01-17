@@ -16,18 +16,18 @@ class MailService {
             }
         })
     }
-    async sendRecoveryMail(targetAddress: string, temporaryCode: string | number) {
+    async sendRecoveryMail(targetAddress: string, recoveryLink: string | number) {
         await this.transporter.sendMail({
             from: 'Gooo online store <govorov.business@gmail.com>',
             to: targetAddress,
             subject: "Recovery account",
             html: `
                 <div style="padding: 5px; border-radius: 5px; border: 1px solid black; height: auto; width: 400px; box-shadow: 0 0 3px black">
-                    <p style="margin: 0; padding: 0">Please do not transfer the following code. Via this <span style="font-weight: bold">whoever</span> can access your account</p>
+                    <p style="margin: 0; padding: 0">Please do not transfer the following link. Via this <span style="font-weight: bold">whoever</span> can access your account</p>
                     <br><br>
-                    <p style="margin: 0; padding: 0"><span style="font-weight: bold">Enter code</span> to the input form on the site.</p>
+                    <p style="margin: 0; padding: 0"><span style="font-weight: bold">Click on the link</span> to go to the desired route.</p>
                     </div>
-                <h1>${temporaryCode}</h1>
+                <h1>${recoveryLink}</h1>
             `
         })
     }

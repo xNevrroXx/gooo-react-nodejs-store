@@ -2,7 +2,7 @@ export {};
 
 const bcrypt = require("bcrypt");
 const {v4: uuidv4} = require("uuid");
-const recoveryCodeActions = require("../database/recovery-code-actions");
+const recoveryActions = require("../database/recovery-actions");
 const mailService = require("./mail-service");
 const tokenService = require("./token-service");
 const userActions = require("../database/user-actions");
@@ -80,26 +80,24 @@ class UserService {
         return {...tokens, user: userDto};
     }
 
-    async createRecoveryCode(email: string): Promise<number> {
+    async createRecoveryCode(email: string): Promise<string> {
         const foundUser = await userActions.findUser({email});
         if(foundUser.length == 0) {
             throw ApiError.BadRequest(`Пользователя с почтовым адресом ${email} не существует`);
         }
-        const recoveryCode = Math.floor(Math.random()*(1e6-1e5))+1e5;
-        const creationCode = await recoveryCodeActions.create(foundUser[0].id, recoveryCode);
+        const recoveryCode = uuidv4();
+        await recoveryActions.create(foundUser[0].id, recoveryCode);
         return recoveryCode;
     }
 
-    async verifyRecoveryCode(email: string, recoveryCode: string | number): Promise<boolean> {
-        const foundUser = await userActions.findUser({email});
-        if(foundUser.length == 0) {
-            throw ApiError.BadRequest(`Пользователя с почтовым адресом ${email} не существует`);
-        }
-        const foundRecoveryCode = await recoveryCodeActions.find(foundUser[0].id);
-        if(foundRecoveryCode.length == 0 || foundRecoveryCode[0].value != recoveryCode) {
+    async changePassword(recoveryCode: string, newPassword: string) {
+        const foundRecoveryCode = await recoveryActions.find({userId: null, recoveryCode});
+        if(foundRecoveryCode.length === 0 || foundRecoveryCode[0].value !== recoveryCode) {
             throw ApiError.BadRequest("Код неверен");
         }
-        return foundRecoveryCode[0].value == recoveryCode;
+        const foundUser = await userActions.findUser({id: foundRecoveryCode[0]["user_id"]});
+        const hashPassword = await bcrypt.hash(newPassword, 3);
+        await customQuery(`UPDATE user SET password = "${hashPassword}" WHERE id = "${foundUser[0].id}"`);
     }
 
     async getUsers(): Promise<any[]> {
