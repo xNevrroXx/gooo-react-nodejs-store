@@ -6,14 +6,13 @@ import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 // components
 import AppHeader from "../components/appHeader/AppHeader";
 import Loading from "../components/loading/Loading";
-import AdministrationLogin from "../pages/Administration/AdministrationLogin";
-import UserLogin from "../pages/UserLogin";
-import UserRegistration from "../pages/UserRegistration";
-import {useSelector} from "react-redux";
 
 // pages
 const Main = lazy(() => import("../pages/Main"));
+const UserLogin = lazy(() => import("../pages/UserLogin"));
+const AdministrationLogin = lazy(() => import("../pages/Administration/AdministrationLogin"));
 const Filtered = lazy(() => import("../pages/Filtered"));
+const UserRegistration = lazy(() => import("../pages/UserRegistration"));
 const NotFound = lazy(() => import("../pages/NotFound"));
 
 
@@ -29,9 +28,6 @@ const theme = createTheme({
 })
 
 function App() {
-  const filters = useSelector(store => store);
-  console.log(filters);
-
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme}>

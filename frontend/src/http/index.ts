@@ -18,6 +18,7 @@ $api.interceptors.request.use(function(config: AxiosRequestConfig) {
 $api.interceptors.response.use(function(config: AxiosResponse) {
     const accessToken = config.data.accessToken;
     localStorage.setItem("token", accessToken);
+
     return config;
 })
 

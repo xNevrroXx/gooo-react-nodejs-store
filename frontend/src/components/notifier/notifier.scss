@@ -1,0 +1,17 @@
+.notifier-enter {
+  opacity: 0;
+}
+.notifier-enter-done {
+  opacity: 1;
+}
+.notifier-enter-active {
+  opacity: 1;
+  transition: opacity 200ms;
+}
+.notifier-exit-done {
+  opacity: 0;
+}
+.notifier-exit-active {
+  opacity: 0;
+  transition: opacity 200ms;
+}
