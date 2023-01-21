@@ -1,19 +1,36 @@
-import React from 'react';
+import React, {useCallback, useState} from 'react';
 import {Box, Button, Divider, Typography} from "@mui/material";
 
 // own modules
 import Login from "../components/login/Login";
 import {LinkRouterButton} from "../components/HOC";
+import {CSSTransition} from "react-transition-group";
+import Notifier from "../components/notifier/Notifier";
+// own hooks
+import {useNotifier} from "../hooks/notifier.hook";
+import {INotifier} from "../models/INotifier";
 
 const UserLogin = () => {
+    const {onShowNotifier, isShowNotifier, onHideNotifier, descriptionNotifier, titleNotifier, typeIconNotifier} = useNotifier();
+
+    const onErrorLogin = useCallback((props: INotifier) => {
+        onShowNotifier(props);
+        setTimeout(() => {
+            onHideNotifier();
+        }, 3200)
+    }, [])
+
     return (
         <>
+            <CSSTransition classNames="notifier" in={isShowNotifier} timeout={800} mountOnEnter={true}>
+                <Notifier type={typeIconNotifier} title={titleNotifier} description={descriptionNotifier}/>
+            </CSSTransition>
             <Typography variant="h1" textAlign="center" >Привет, мы тебя ждали!</Typography>
             <Divider />
             <Box component="main" sx={{display: "flex", flexDirection: "column", justifyContent: "center", height: "60vh"}}>
                 <Box sx={{display: "grid", gridTemplateColumns: "2fr 4fr", gap: "5rem"}} className="login-content">
                     <Box>
-                        <Login sx={{mb: "1rem"}} />
+                        <Login sx={{mb: "1rem"}} onErrorLogin={(description: string) => onErrorLogin({type: "error", title: "Error", description: description})} />
                         <Divider/>
                         <LinkRouterButton to="/registration" sx={{width: "100%", textAlign: "center"}}>Зарегистрироваться</LinkRouterButton>
                     </Box>

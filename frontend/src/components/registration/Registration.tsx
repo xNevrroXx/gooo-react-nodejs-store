@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {Box, Button, TextField, Typography} from "@mui/material";
+import {Box, Button, SxProps, TextField, Typography} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import {useFormik} from "formik";
 import * as Yup from "yup";
@@ -13,8 +13,10 @@ import {
     passwordValidation,
     usernameValidation
 } from "../../validation/validation";
+import {INotifier} from "../../models/INotifier";
+import axios, {AxiosError} from "axios";
 
-const Registration: FC = () => {
+const Registration: FC<{ sx?: SxProps, onErrorRegistration: (description: string) => void }> = ({sx, onErrorRegistration}) => {
     const navigate = useNavigate();
     const formik = useFormik({
         initialValues: {email: "", password: "", username: "", firstname: "", lastname: ""},
@@ -27,7 +29,15 @@ const Registration: FC = () => {
         }),
         onSubmit: (values, {setSubmitting}) => {
             AuthService.registration(values.email, values.password, values.username, values.firstname, values.lastname)
-                .then(() => navigate("/main"));
+                .then(() => navigate("/main"))
+                .catch((error: Error | AxiosError) => {
+                    if(axios.isAxiosError(error) && error.response) {
+                        onErrorRegistration(error.response.data.message)
+                    }
+                    else {
+                        onErrorRegistration(error.message)
+                    }
+                })
             setSubmitting(false);
         },
         validateOnBlur: false

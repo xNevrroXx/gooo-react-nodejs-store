@@ -1,17 +1,53 @@
 .notifier-enter {
   opacity: 0;
 }
+
 .notifier-enter-done {
   opacity: 1;
 }
+
 .notifier-enter-active {
   opacity: 1;
   transition: opacity 200ms;
 }
+
 .notifier-exit-done {
   opacity: 0;
 }
+
 .notifier-exit-active {
   opacity: 0;
   transition: opacity 200ms;
+}
+
+.notifier {
+  position: absolute;
+  right: 1rem;
+  top: 5rem;
+  display: grid;
+  align-items: flex-start;
+  gap: 1rem;
+  grid-template-rows: 1fr;
+  grid-template-columns: 2.5rem 17.5rem;
+  min-height: 3rem;
+  height: max-content;
+  color: white;
+  padding: 1rem 1rem;
+  border-radius: 5px;
+  text-shadow: 0px 0px 0px black;
+  &-error {
+    background-color: rgba(241, 82, 82, .85);
+  }
+  &-warning {
+    background-color: rgba(orange, .85);
+  }
+  &-success {
+    background-color: rgba(82, 195, 82, .85);
+  }
+  &-information {
+    background-color: rgba(0, 114, 255, .85);
+  }
+  svg {
+    fill: white;
+  }
 }

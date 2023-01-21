@@ -7,11 +7,10 @@ import {CSSTransition} from "react-transition-group";
 import AuthService from "../../services/AuthService";
 import {emailValidation, loginPasswordValidation} from "../../validation/validation";
 import {useNavigate} from "react-router-dom";
-import Notifier from "../notifier/Notifier";
+import {INotifier} from "../../models/INotifier";
+import axios, {AxiosError} from "axios";
 
-
-const Login: FC<{ sx?: SxProps }> = ({sx}) => {
-    const [isShowNotifier, setIsShowNotifier] = useState<boolean>(true);
+const Login: FC<{ sx?: SxProps, onErrorLogin: (description: string) => void }> = ({sx, onErrorLogin}) => {
     const navigate = useNavigate();
     const formik = useFormik({
         initialValues: {email: "", password: ""},
@@ -20,11 +19,16 @@ const Login: FC<{ sx?: SxProps }> = ({sx}) => {
                 password: loginPasswordValidation
             }),
         onSubmit: (values, {setSubmitting}) => {
-            setIsShowNotifier(!isShowNotifier)
-            // AuthService.login(values.email, values.password)
-            //     // .then(() => navigate("/main"));
-            //     // .then(() => setIsShowNotifier(!isShowNotifier))
-            //     .catch(() => setIsShowNotifier(!isShowNotifier))
+            AuthService.login(values.email, values.password)
+                .then(() => navigate("/main"))
+                .catch((error: Error | AxiosError) => {
+                    if(axios.isAxiosError(error) && error.response) {
+                        onErrorLogin(error.response.data.message)
+                    }
+                    else {
+                        onErrorLogin(error.message)
+                    }
+                })
             setSubmitting(false);
         },
         validateOnBlur: false
@@ -37,9 +41,6 @@ const Login: FC<{ sx?: SxProps }> = ({sx}) => {
             className="login-content__form"
             onSubmit={formik.handleSubmit}
         >
-            <CSSTransition classNames="notifier" in={isShowNotifier} timeout={200}>
-                <Notifier icon="information" title="Title" description="mini-description"/>
-            </CSSTransition>
             <Typography variant="h5">Вход</Typography>
             <TextField
                 error={!!(formik.errors.email && formik.touched.email)}
