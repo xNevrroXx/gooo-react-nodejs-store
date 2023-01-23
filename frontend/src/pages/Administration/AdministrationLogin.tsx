@@ -12,7 +12,7 @@ const AdministrationLogin = () => {
     const dispatch = useAppDispatch();
 
     const onErrorLogin = useCallback((description: string) =>
-        dispatch(createTimeoutNotification({type: "error", title: "Error", description: description})
+        dispatch(createTimeoutNotification({type: "error", title: "Ошибка", description: description})
         ), []);
 
     return (

@@ -10,7 +10,7 @@ export const createTimeoutNotification = (notification: INotifier) => (dispatch:
     dispatch(createNotification({...notification, id}));
     setTimeout(() => {
         dispatch(deleteNotification(id));
-    }, 4000)
+    }, 3200)
 }
 export const createNotification = (notification: INotification) => {
     return {type: "CREATE_NOTIFICATION", payload: notification}

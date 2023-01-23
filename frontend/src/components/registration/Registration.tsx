@@ -30,10 +30,7 @@ const Registration: FC<{ sx?: SxProps, onErrorRegistration: (description: string
             AuthService.registration(values.email, values.password, values.username, values.firstname, values.lastname)
                 .then(() => navigate("/main"))
                 .catch((error: Error | AxiosError) => {
-                    if(axios.isAxiosError(error) && error.response) {
-                        onErrorRegistration(error.response.data.message)
-                    }
-                    else {
+                    if(!axios.isAxiosError(error)) {
                         onErrorRegistration(error.message)
                     }
                 })

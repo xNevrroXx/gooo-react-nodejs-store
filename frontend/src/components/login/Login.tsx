@@ -21,11 +21,7 @@ const Login: FC<{ sx?: SxProps, onErrorLogin: (description: string) => void }> =
             AuthService.login(values.email, values.password)
                 .then(() => navigate("/main"))
                 .catch((error: Error | AxiosError) => {
-                    if(axios.isAxiosError(error) && error.response) {
-                        console.log("error message: ", error.response.data.message);
-                        onErrorLogin(error.response.data.message)
-                    }
-                    else {
+                    if(!axios.isAxiosError(error)) { // axios error handler is in the interceptor
                         onErrorLogin(error.message)
                     }
                 })

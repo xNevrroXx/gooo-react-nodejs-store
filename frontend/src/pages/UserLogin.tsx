@@ -10,7 +10,8 @@ import {useAppDispatch} from "../hooks/store.hook";
 const UserLogin = () => {
     const dispatch = useAppDispatch();
     const onErrorLogin = useCallback((description: string) =>
-        dispatch(createTimeoutNotification({type: "error", title: "Error", description: description})
+        dispatch(createTimeoutNotification({type: "error", title: "Ошибка", description: description})
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     ), []);
 
     return (

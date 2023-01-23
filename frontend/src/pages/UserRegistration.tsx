@@ -9,7 +9,7 @@ const UserRegistration = () => {
     const dispatch = useAppDispatch();
 
     const onErrorRegistration = useCallback((description: string) =>
-        dispatch(createTimeoutNotification({type: "error", title: "Error", description: description})
+        dispatch(createTimeoutNotification({type: "error", title: "Ошибка", description: description})
     ), []);
 
     return (

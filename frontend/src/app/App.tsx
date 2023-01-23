@@ -1,18 +1,13 @@
 // third-party modules
-import React, {lazy, Suspense, useMemo} from 'react';
+import React, {lazy, Suspense} from 'react';
 import {Container, createTheme, ThemeProvider} from "@mui/material";
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
-import {CSSTransition, TransitionGroup} from "react-transition-group";
-import ReactDOM from 'react-dom';
 
 // components
 import AppHeader from "../components/appHeader/AppHeader";
 import Loading from "../components/loading/Loading";
-import Notification from "../components/notifier/Notification";
-import {useAppSelector} from "../hooks/store.hook";
-// types
-import {INotification} from "../models/IStore";
 import NotificationList from "../components/notifier/NotificationList";
+// types
 
 // pages
 const Main = lazy(() => import("../pages/Main"));

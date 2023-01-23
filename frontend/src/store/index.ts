@@ -1,7 +1,7 @@
 import {
-    Action,
     combineReducers,
     configureStore,
+    Action,
     Dispatch,
     Middleware,
 } from "@reduxjs/toolkit";
