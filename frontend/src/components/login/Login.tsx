@@ -1,14 +1,13 @@
-import React, {FC, useState} from 'react';
+import React, {FC} from 'react';
 import {Box, Button, SxProps, TextField, Typography} from "@mui/material";
 import {useFormik} from "formik";
 import * as Yup from "yup";
-import {CSSTransition} from "react-transition-group";
+import {useNavigate} from "react-router-dom";
+import axios, {AxiosError} from "axios";
 
+// own modules
 import AuthService from "../../services/AuthService";
 import {emailValidation, loginPasswordValidation} from "../../validation/validation";
-import {useNavigate} from "react-router-dom";
-import {INotifier} from "../../models/INotifier";
-import axios, {AxiosError} from "axios";
 
 const Login: FC<{ sx?: SxProps, onErrorLogin: (description: string) => void }> = ({sx, onErrorLogin}) => {
     const navigate = useNavigate();
@@ -23,6 +22,7 @@ const Login: FC<{ sx?: SxProps, onErrorLogin: (description: string) => void }> =
                 .then(() => navigate("/main"))
                 .catch((error: Error | AxiosError) => {
                     if(axios.isAxiosError(error) && error.response) {
+                        console.log("error message: ", error.response.data.message);
                         onErrorLogin(error.response.data.message)
                     }
                     else {

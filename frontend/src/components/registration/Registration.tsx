@@ -3,6 +3,7 @@ import {Box, Button, SxProps, TextField, Typography} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import {useFormik} from "formik";
 import * as Yup from "yup";
+import axios, {AxiosError} from "axios";
 
 // own modules
 import AuthService from "../../services/AuthService";
@@ -13,8 +14,6 @@ import {
     passwordValidation,
     usernameValidation
 } from "../../validation/validation";
-import {INotifier} from "../../models/INotifier";
-import axios, {AxiosError} from "axios";
 
 const Registration: FC<{ sx?: SxProps, onErrorRegistration: (description: string) => void }> = ({sx, onErrorRegistration}) => {
     const navigate = useNavigate();

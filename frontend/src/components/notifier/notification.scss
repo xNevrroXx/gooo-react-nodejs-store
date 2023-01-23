@@ -1,29 +1,37 @@
-.notifier-enter {
+.notification-enter {
   opacity: 0;
 }
 
-.notifier-enter-done {
+.notification-enter-done {
   opacity: 1;
 }
 
-.notifier-enter-active {
+.notification-enter-active {
   opacity: 1;
   transition: opacity 200ms;
 }
 
-.notifier-exit-done {
+.notification-exit-done {
   opacity: 0;
 }
 
-.notifier-exit-active {
+.notification-exit-active {
   opacity: 0;
   transition: opacity 200ms;
 }
 
-.notifier {
+.notification-list {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  width: max-content;
+  height: max-content;
   position: absolute;
   right: 1rem;
   top: 5rem;
+}
+
+.notification {
   display: grid;
   align-items: flex-start;
   gap: 1rem;

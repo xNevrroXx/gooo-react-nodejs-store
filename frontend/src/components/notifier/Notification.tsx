@@ -1,16 +1,13 @@
 import React, {FC, useMemo} from 'react';
-import ReactDOM from 'react-dom';
 import {Box, SxProps, Typography} from "@mui/material";
 import classNames from "classnames";
 // styles
-import "./notifier.scss";
+import "./notification.scss";
 // types
 import {INotifier} from "../../models/INotifier";
 
 const CROSS_SVG = (
-    <svg fill="#000000" xmlns="http://www.w3.org/2000/svg"
-         width="100%" height="100%" viewBox="0 0 512 512" enable-background="new 0 0 512 512"
-    >
+    <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 512 512">
         <polygon points="335.188,154.188 256,233.375 176.812,154.188 154.188,176.812 233.375,256 154.188,335.188 176.812,357.812 256,278.625 335.188,357.812 357.812,335.188 278.625,256 357.812,176.812"/>
         <path d="M256,0C114.609,0,0,114.609,0,256s114.609,256,256,256s256-114.609,256-256S397.391,0,256,0z M256,472 c-119.297,0-216-96.703-216-216S136.703,40,256,40s216,96.703,216,216S375.297,472,256,472z"/>
     </svg>
@@ -36,38 +33,38 @@ const WARNING_SVG = (
 interface INotifierProps extends INotifier{
     style?: SxProps
 }
-const Notifier: FC<INotifierProps> = ({type, title, description, style}) => {
+const Notification: FC<INotifierProps> = ({type, title, description, style}) => {
     const content: {className: string, svg: React.ReactNode} = useMemo(() => {
         switch (type) {
             case "error":
                 return {
-                    className: classNames({"notifier": true, "notifier-error": true}),
+                    className: classNames({"notification": true, "notification-error": true}),
                     svg: CROSS_SVG
                 };
             case "warning":
                 return {
-                    className: classNames({"notifier": true, "notifier-warning": true}),
+                    className: classNames({"notification": true, "notification-warning": true}),
                     svg: WARNING_SVG
                 };
             case "success":
                 return {
-                    className: classNames({"notifier": true, "notifier-success": true}),
+                    className: classNames({"notification": true, "notification-success": true}),
                     svg: SUCCESS_SVG
                 };
             case "information":
                 return {
-                    className: classNames({"notifier": true, "notifier-information": true}),
+                    className: classNames({"notification": true, "notification-information": true}),
                     svg: INFORMATION_SVG
                 };
             default:
                 return {
-                    className: classNames({"notifier": true, "notifier-information": true}),
+                    className: classNames({"notification": true, "notification-information": true}),
                     svg: INFORMATION_SVG
                 };
         }
     }, [])
 
-    return ReactDOM.createPortal(
+    return (
         <Box className={content.className} sx={{...style}}>
             <Box sx={{paddingTop: ".5rem"}}>{content.svg}</Box>
             <Box>
@@ -75,7 +72,7 @@ const Notifier: FC<INotifierProps> = ({type, title, description, style}) => {
                 <Typography variant="body1">{description}</Typography>
             </Box>
         </Box>
-    , document.body)
+    )
 };
 
-export default Notifier;
+export default Notification;

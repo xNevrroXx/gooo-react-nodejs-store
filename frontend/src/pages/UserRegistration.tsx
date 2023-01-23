@@ -1,31 +1,24 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {Box, Divider, Typography} from "@mui/material";
+// own modules
 import Registration from "../components/registration/Registration";
-import {useNotifier} from "../hooks/notifier.hook";
-import {INotifier} from "../models/INotifier";
-import {CSSTransition} from "react-transition-group";
-import Notifier from "../components/notifier/Notifier";
+import {createTimeoutNotification} from "../actions/notifications";
+import {useAppDispatch} from "../hooks/store.hook";
 
 const UserRegistration = () => {
-    const {onShowNotifier, isShowNotifier, onHideNotifier, descriptionNotifier, titleNotifier, typeIconNotifier} = useNotifier();
+    const dispatch = useAppDispatch();
 
-    const onErrorRegistration = (props: INotifier) => {
-        onShowNotifier(props);
-        setTimeout(() => {
-            onHideNotifier();
-        }, 3200)
-    }
+    const onErrorRegistration = useCallback((description: string) =>
+        dispatch(createTimeoutNotification({type: "error", title: "Error", description: description})
+    ), []);
 
     return (
         <>
-            <CSSTransition classNames="notifier" in={isShowNotifier} timeout={200} mountOnEnter={true}>
-                <Notifier type={typeIconNotifier} title={titleNotifier} description={descriptionNotifier}/>
-            </CSSTransition>
             <Typography variant="h1" textAlign="center" >Привет, рады знакомству с тобой!</Typography>
             <Divider sx={{mb: "2rem"}}/>
             <Box component="main" sx={{display: "flex", flexDirection: "column", justifyContent: "center", height: "60vh"}}>
                 <Box sx={{display: "grid", gridTemplateColumns: "2fr 4fr", gap: "5rem"}} className="login-content">
-                    <Registration onErrorRegistration={(description) => onErrorRegistration({type: "error", title: "Error", description: description})} />
+                    <Registration onErrorRegistration={onErrorRegistration} />
                     <Box
                         sx={{display: "flex", justifyContent: "center", alignItems: "center"}}
                         className="login-content__decoration"

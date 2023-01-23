@@ -1,34 +1,26 @@
 // third-party modules
-import React from 'react';
-import Login from "../../components/login/Login";
+import React, {useCallback} from 'react';
 import {Box, Divider, Typography} from "@mui/material";
-import {CSSTransition} from "react-transition-group";
-import Notifier from "../../components/notifier/Notifier";
-import {useNotifier} from "../../hooks/notifier.hook";
-import {INotifier} from "../../models/INotifier";
 
 // own modules
+import Login from "../../components/login/Login";
+import {createTimeoutNotification} from "../../actions/notifications";
+import {useAppDispatch} from "../../hooks/store.hook";
 
 
 const AdministrationLogin = () => {
-    const {onShowNotifier, isShowNotifier, onHideNotifier, descriptionNotifier, titleNotifier, typeIconNotifier} = useNotifier();
+    const dispatch = useAppDispatch();
 
-    const onErrorLogin = (props: INotifier) => {
-        onShowNotifier(props);
-        setTimeout(() => {
-            onHideNotifier();
-        }, 3200)
-    }
+    const onErrorLogin = useCallback((description: string) =>
+        dispatch(createTimeoutNotification({type: "error", title: "Error", description: description})
+        ), []);
 
     return (
         <>
-            <CSSTransition classNames="notifier" in={isShowNotifier} timeout={200} mountOnEnter={true}>
-                <Notifier type={typeIconNotifier} title={titleNotifier} description={descriptionNotifier}/>
-            </CSSTransition>
             <Typography variant="h1" textAlign="center" >Administrative login</Typography>
             <Divider />
             <Box component="main" sx={{display: "flex", flexDirection: "column", justifyContent: "center", height: "60vh"}}>
-                <Login onErrorLogin={(description: string) => onErrorLogin({type: "error", title: "Error", description: description})} />
+                <Login onErrorLogin={onErrorLogin} />
             </Box>
         </>
     );

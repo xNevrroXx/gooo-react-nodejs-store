@@ -1,11 +1,18 @@
 // third-party modules
-import {lazy, Suspense} from 'react';
+import React, {lazy, Suspense, useMemo} from 'react';
 import {Container, createTheme, ThemeProvider} from "@mui/material";
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
+import {CSSTransition, TransitionGroup} from "react-transition-group";
+import ReactDOM from 'react-dom';
 
 // components
 import AppHeader from "../components/appHeader/AppHeader";
 import Loading from "../components/loading/Loading";
+import Notification from "../components/notifier/Notification";
+import {useAppSelector} from "../hooks/store.hook";
+// types
+import {INotification} from "../models/IStore";
+import NotificationList from "../components/notifier/NotificationList";
 
 // pages
 const Main = lazy(() => import("../pages/Main"));
@@ -32,6 +39,7 @@ function App() {
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <AppHeader/>
+        <NotificationList/>
         <Container maxWidth="xl">
           <Suspense fallback={<Loading sx={{position: "absolute", top: "0", left: "0", height: "100vh", width: "100%"}}/>} >
             <Routes>
