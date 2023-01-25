@@ -7,7 +7,6 @@ const ProductList: FC = () => {
     useEffect(() => {
         UserService.getUsers()
             .then(response => setProducts(response.data))
-            .catch(error => console.log(error));
     }, [])
 
 

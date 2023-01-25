@@ -1,8 +1,8 @@
 export interface IProduct {
-    id: number,
+    id?: number,
     name: string,
-    price: number,
-    weight: number,
+    price: string,
+    weight: string,
     shortDescription: string,
     longDescription: string,
     image: string,
@@ -10,5 +10,5 @@ export interface IProduct {
     categoryId: number,
     location: string,
     stock: number,
-    createdAt: string
+    createdAt?: string
 }
