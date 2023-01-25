@@ -3,6 +3,15 @@ import axios, {AxiosError, AxiosRequestConfig, AxiosResponse} from "axios";
 // own modules
 import store from "../store/index";
 import {createTimeoutNotification} from "../actions/notifications";
+import AuthService from "../services/AuthService";
+
+interface AxiosRequestConfigExtra extends AxiosRequestConfig {
+    _isRetry: boolean
+}
+const isAxiosRequestConfigExtra = (config: AxiosRequestConfig): config is AxiosRequestConfigExtra => {
+    // @ts-ignore
+    return true;
+}
 
 export const API_URL = "http://localhost:5000/api";
 const {dispatch} = store;
@@ -26,13 +35,19 @@ $api.interceptors.request.use(function(config: AxiosRequestConfig) {
 })
 
 $api.interceptors.response.use(function(config: AxiosResponse) {
-    const accessToken = config.data.accessToken;
-    localStorage.setItem("token", accessToken);
-
     return config;
-}, function(error: AxiosError) {
+}, async function(error: AxiosError) {
     if(axios.isAxiosError(error) && error.response) {
-        if (error.response.data.message) {
+        if (error.response.status === 401) {
+            if (error.config && isAxiosRequestConfigExtra(error.config) && !error.config._isRetry) {
+                error.config._isRetry = true;
+                const originalRequest = error.config;
+                const response = await AuthService.refreshToken();
+                localStorage.setItem("token", response.data.accessToken);
+                return $api.request(originalRequest);
+            }
+        }
+        else if (error.response.data.message) {
             dispatch(createTimeoutNotification({type: "error", title: `Ошибка ${error.response.status}`, description: error.response.data.message}))
         }
         else if(error.response.status) {

@@ -1,5 +1,5 @@
-import $api from "../http";
-import {AxiosResponse} from "axios";
+import $api, {API_URL} from "../http";
+import axios, {AxiosResponse} from "axios";
 import {AuthResponse} from "../models/response/AuthResponse";
 
 class AuthService {
@@ -24,7 +24,7 @@ class AuthService {
     }
 
     static async refreshToken(): Promise<AxiosResponse<AuthResponse>> {
-        return $api.post<AuthResponse>("/refresh");
+        return axios.get<AuthResponse>(`${API_URL}/refresh`, {withCredentials: true});
     }
 }
 

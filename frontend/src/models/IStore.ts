@@ -1,5 +1,6 @@
 import {IProduct} from "./IProduct";
 import {INotifier} from "./INotifier";
+import {IUser} from "./IUser";
 
 // goods
 export interface IGoods {
@@ -23,4 +24,10 @@ export interface INotification extends INotifier {
 }
 export interface INotifications {
     notifications: INotification[]
+}
+
+// authentication
+export interface IAuthentication {
+    user: IUser | null,
+    isAuthenticated: boolean
 }

@@ -12,7 +12,7 @@ module.exports = function (request: IAuthRequestInfoUser, response: Response, ne
             return next(ApiError.UnauthorizedError());
         }
         const userData = tokenService.validateAccessToken(accessToken);
-        if(!accessToken) {
+        if(!userData) {
             return next(ApiError.UnauthorizedError());
         }
         request.user = userData;

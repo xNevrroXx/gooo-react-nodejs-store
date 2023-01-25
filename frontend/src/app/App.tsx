@@ -1,13 +1,14 @@
 // third-party modules
-import React, {lazy, Suspense} from 'react';
+import React, {lazy, Suspense, useEffect} from 'react';
 import {Container, createTheme, ThemeProvider} from "@mui/material";
-import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
+import {BrowserRouter, Navigate, Route, Routes, unstable_HistoryRouter as HistoryRouter} from "react-router-dom";
 
 // components
 import AppHeader from "../components/appHeader/AppHeader";
 import Loading from "../components/loading/Loading";
 import NotificationList from "../components/notifier/NotificationList";
-// types
+import {checkAuthentication} from "../actions/authentication";
+import {useAppDispatch} from "../hooks/store.hook";
 
 // pages
 const Main = lazy(() => import("../pages/Main"));
@@ -30,6 +31,14 @@ const theme = createTheme({
 })
 
 function App() {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      dispatch(checkAuthentication());
+    }
+  }, [])
+
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme}>

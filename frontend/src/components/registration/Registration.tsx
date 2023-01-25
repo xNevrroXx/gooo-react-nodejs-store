@@ -3,10 +3,9 @@ import {Box, Button, SxProps, TextField, Typography} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import {useFormik} from "formik";
 import * as Yup from "yup";
-import axios, {AxiosError} from "axios";
 
 // own modules
-import AuthService from "../../services/AuthService";
+import {registration} from "../../actions/authentication";
 import {
     emailValidation,
     lastnameValidation,
@@ -14,8 +13,10 @@ import {
     passwordValidation,
     usernameValidation
 } from "../../validation/validation";
+import {useAppDispatch} from "../../hooks/store.hook";
 
-const Registration: FC<{ sx?: SxProps, onErrorRegistration: (description: string) => void }> = ({sx, onErrorRegistration}) => {
+const Registration: FC<{ sx?: SxProps }> = ({sx}) => {
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const formik = useFormik({
         initialValues: {email: "", password: "", username: "", firstname: "", lastname: ""},
@@ -27,13 +28,7 @@ const Registration: FC<{ sx?: SxProps, onErrorRegistration: (description: string
             lastname: lastnameValidation
         }),
         onSubmit: (values, {setSubmitting}) => {
-            AuthService.registration(values.email, values.password, values.username, values.firstname, values.lastname)
-                .then(() => navigate("/main"))
-                .catch((error: Error | AxiosError) => {
-                    if(!axios.isAxiosError(error)) {
-                        onErrorRegistration(error.message)
-                    }
-                })
+            dispatch(registration(values.email, values.password, values.username, values.firstname, values.lastname))
             setSubmitting(false);
         },
         validateOnBlur: false

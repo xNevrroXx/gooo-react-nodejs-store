@@ -3,13 +3,14 @@ import {Box, Button, SxProps, TextField, Typography} from "@mui/material";
 import {useFormik} from "formik";
 import * as Yup from "yup";
 import {useNavigate} from "react-router-dom";
-import axios, {AxiosError} from "axios";
 
 // own modules
-import AuthService from "../../services/AuthService";
+import {login} from "../../actions/authentication";
 import {emailValidation, loginPasswordValidation} from "../../validation/validation";
+import {useAppDispatch} from "../../hooks/store.hook";
 
-const Login: FC<{ sx?: SxProps, onErrorLogin: (description: string) => void }> = ({sx, onErrorLogin}) => {
+const Login: FC<{ sx?: SxProps }> = ({sx}) => {
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const formik = useFormik({
         initialValues: {email: "", password: ""},
@@ -18,13 +19,7 @@ const Login: FC<{ sx?: SxProps, onErrorLogin: (description: string) => void }> =
                 password: loginPasswordValidation
             }),
         onSubmit: (values, {setSubmitting}) => {
-            AuthService.login(values.email, values.password)
-                .then(() => navigate("/main"))
-                .catch((error: Error | AxiosError) => {
-                    if(!axios.isAxiosError(error)) { // axios error handler is in the interceptor
-                        onErrorLogin(error.message)
-                    }
-                })
+            dispatch(login(values.email, values.password));
             setSubmitting(false);
         },
         validateOnBlur: false

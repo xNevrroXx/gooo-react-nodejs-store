@@ -10,10 +10,10 @@ const Search = (props: {sx: SxProps}) => {
       sx={{...props.sx}}
     >
       <TextField
+        id="main-search"
         type="search"
         color="secondary"
         className="search-input"
-        id="main-search"
         placeholder="Search..."
         InputProps={{
           startAdornment: (

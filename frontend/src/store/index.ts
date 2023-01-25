@@ -11,6 +11,7 @@ import ReduxThunk from "redux-thunk";
 import filters from "../reducers/filters";
 import goods from "../reducers/goods";
 import notifications from "../reducers/notifications";
+import authentication from "../reducers/authentication";
 
 
 // middlewares
@@ -34,7 +35,7 @@ const loggerEnhancer = (createStore: any) => (...args: any) => {
 
 // reducers && store
 const store = configureStore({
-    reducer: combineReducers({filters, goods, notifications}),
+    reducer: combineReducers({filters, goods, notifications, authentication}),
     middleware: [ReduxThunk],
     preloadedState: undefined,
     devTools: process.env.NODE_ENV !== "production",

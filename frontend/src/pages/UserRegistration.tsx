@@ -1,24 +1,16 @@
-import React, {useCallback} from 'react';
+import React from 'react';
 import {Box, Divider, Typography} from "@mui/material";
 // own modules
 import Registration from "../components/registration/Registration";
-import {createTimeoutNotification} from "../actions/notifications";
-import {useAppDispatch} from "../hooks/store.hook";
 
 const UserRegistration = () => {
-    const dispatch = useAppDispatch();
-
-    const onErrorRegistration = useCallback((description: string) =>
-        dispatch(createTimeoutNotification({type: "error", title: "Ошибка", description: description})
-    ), []);
-
     return (
         <>
             <Typography variant="h1" textAlign="center" >Привет, рады знакомству с тобой!</Typography>
             <Divider sx={{mb: "2rem"}}/>
             <Box component="main" sx={{display: "flex", flexDirection: "column", justifyContent: "center", height: "60vh"}}>
                 <Box sx={{display: "grid", gridTemplateColumns: "2fr 4fr", gap: "5rem"}} className="login-content">
-                    <Registration onErrorRegistration={onErrorRegistration} />
+                    <Registration />
                     <Box
                         sx={{display: "flex", justifyContent: "center", alignItems: "center"}}
                         className="login-content__decoration"

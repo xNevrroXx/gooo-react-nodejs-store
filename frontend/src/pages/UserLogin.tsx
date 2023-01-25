@@ -3,17 +3,8 @@ import {Box, Divider, Typography} from "@mui/material";
 // own modules
 import Login from "../components/login/Login";
 import {LinkRouterButton} from "../components/styledComponents/linkRouterButton";
-import {createTimeoutNotification} from "../actions/notifications";
-import {useCallback} from "react";
-import {useAppDispatch} from "../hooks/store.hook";
 
 const UserLogin = () => {
-    const dispatch = useAppDispatch();
-    const onErrorLogin = useCallback((description: string) =>
-        dispatch(createTimeoutNotification({type: "error", title: "Ошибка", description: description})
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), []);
-
     return (
         <>
             <Typography variant="h1" textAlign="center" >Привет, мы тебя ждали!</Typography>
@@ -21,7 +12,7 @@ const UserLogin = () => {
             <Box component="main" sx={{display: "flex", flexDirection: "column", justifyContent: "center", height: "60vh"}}>
                 <Box sx={{display: "grid", gridTemplateColumns: "2fr 4fr", gap: "5rem"}} className="login-content">
                     <Box>
-                        <Login sx={{mb: "1rem"}} onErrorLogin={onErrorLogin} />
+                        <Login sx={{mb: "1rem"}} />
                         <Divider/>
                         <LinkRouterButton to="/registration" sx={{width: "100%", textAlign: "center"}}>Зарегистрироваться</LinkRouterButton>
                     </Box>
