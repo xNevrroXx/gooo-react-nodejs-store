@@ -1,10 +1,10 @@
-import {IProduct} from "./IProduct";
+import {IProductCreation} from "./IProduct";
 import {INotifier} from "./INotifier";
 import {IUser} from "./IUser";
 
 // goods
 export interface IGoods {
-    goods: IProduct[],
+    goods: IProductCreation[],
     goodsLoadingStatus: "idle" | "loading" | "error"
 }
 

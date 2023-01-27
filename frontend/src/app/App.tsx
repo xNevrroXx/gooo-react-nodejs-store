@@ -6,8 +6,7 @@ import {
   Navigate,
   Outlet,
   Route,
-  Routes,
-  unstable_HistoryRouter as HistoryRouter
+  Routes
 } from "react-router-dom";
 
 // components
@@ -25,6 +24,7 @@ const Filtered = lazy(() => import("../pages/Filtered"));
 const UserRegistration = lazy(() => import("../pages/UserRegistration"));
 const NotFound = lazy(() => import("../pages/NotFound"));
 const AdministrationCreateProduct = lazy(() => import("../pages/Administration/AdministrationCreateProduct"));
+const AdministrationCreateCategory = lazy(() => import("../pages/Administration/AdministrationCreateCategory"));
 
 
 const theme = createTheme({
@@ -65,8 +65,10 @@ function App() {
               {/* Admin urls */}
               <Route path="administration" element={<Outlet/>}>
                 <Route index element={<Navigate to="login"/>}/>
+
                 <Route path="login" element={<AdministrationLogin/> }/>
                 <Route path="product/create" element={<AdministrationCreateProduct/> }/>
+                <Route path="category/create" element={<AdministrationCreateCategory/> }/>
               </Route>
 
               <Route path="*" element={<NotFound/>} />

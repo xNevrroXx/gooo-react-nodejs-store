@@ -106,7 +106,6 @@ class UserController {
         try {
             const users = await userService.getUsers();
 
-            console.log("response will: ", users);
             response.json(users);
         }
         catch (error) {

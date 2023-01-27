@@ -1,8 +1,8 @@
-export interface IProduct {
-    id?: number,
+export interface IProductCreation {
     name: string,
     price: string,
     weight: string,
+    weightUnits: string,
     shortDescription: string,
     longDescription: string,
     image: string,
@@ -10,5 +10,9 @@ export interface IProduct {
     categoryId: number,
     location: string,
     stock: number,
-    createdAt?: string
+}
+
+export interface IProduct extends IProductCreation {
+    id: number,
+    createdAt: string
 }

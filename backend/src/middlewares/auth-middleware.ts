@@ -1,7 +1,6 @@
 import {Response, NextFunction} from "express";
 import {IAuthRequestInfoUser} from "../types";
 
-const jwt = require("jsonwebtoken");
 const ApiError = require("../exceptions/api-error");
 const tokenService = require("../service/token-service");
 

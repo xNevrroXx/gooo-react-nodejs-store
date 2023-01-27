@@ -1,20 +1,16 @@
 // third-party modules
 import React from 'react';
-import {Box, Divider, Typography} from "@mui/material";
 
 // own modules
 import Login from "../../components/login/Login";
+import AdministrationFormHOC from "../../components/HOC/AdministrationFormHOC";
 
 
 const AdministrationLogin = () => {
     return (
-        <>
-            <Typography variant="h1" textAlign="center">Административный вход</Typography>
-            <Divider />
-            <Box component="main" sx={{display: "flex", flexDirection: "column", justifyContent: "center", height: "60vh"}}>
-                <Login />
-            </Box>
-        </>
+        <AdministrationFormHOC label="Административный вход" wrapperFormSX={{display: "flex", flexDirection: "column", justifyContent: "center", height: "60vh"}}>
+            <Login />
+        </AdministrationFormHOC>
     );
 };
 

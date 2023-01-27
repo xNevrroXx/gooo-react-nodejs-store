@@ -3,7 +3,7 @@ import {Box, Button, SxProps, TextField, Typography} from "@mui/material";
 import {useFormik} from "formik";
 
 // own modules
-import AdminService from "../../services/AdminService";
+import ProductService from "../../services/ProductService";
 
 const CreateProduct: FC = (sx?: SxProps) => {
     const formik = useFormik({
@@ -20,7 +20,7 @@ const CreateProduct: FC = (sx?: SxProps) => {
             stock: 0
         },
         onSubmit: (values, {setSubmitting}) => {
-            AdminService.createProduct({...values})
+            ProductService.createProduct({...values})
                 .then(() => console.log("created product"))
                 .catch(() => console.log("failure"));
         }
@@ -46,7 +46,7 @@ const CreateProduct: FC = (sx?: SxProps) => {
                 name="name"
                 onChange={formik.handleChange}
                 value={formik.values.name}
-                label="Почта"
+                label="Название"
                 variant="outlined"
                 helperText={formik.errors.name}
             />
