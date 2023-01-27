@@ -1,9 +1,9 @@
 import {MysqlError, PoolConnection} from "mysql";
 
-const dbPool = require("./index");
+import dbPool from "./index";
 
-async function customQuery(queryStringMYSQL: string) {
-    return new Promise((resolve, reject) => {
+async function customQuery(queryStringMYSQL: string): Promise<unknown> {
+    return new Promise<unknown>((resolve, reject) => {
         dbPool.getConnection((error: MysqlError, connection: PoolConnection) => {
             connection.query(queryStringMYSQL, (error, result) => {
                 connection.release();
@@ -18,4 +18,4 @@ async function customQuery(queryStringMYSQL: string) {
     })
 }
 
-module.exports = customQuery;
+export default customQuery;

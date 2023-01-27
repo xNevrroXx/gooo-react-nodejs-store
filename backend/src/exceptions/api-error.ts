@@ -1,13 +1,16 @@
-module.exports = class ApiError extends Error {
+import {ValidationError} from "express-validator";
+type Errors = ValidationError[] | Error[];
+
+class ApiError extends Error {
     status: number;
-    errors: Error[];
-    constructor(status: number, message: string, errors: Error[] = []) {
+    errors: Errors;
+    constructor(status: number, message: string, errors: Errors = []) {
         super(message);
         this.status = status;
         this.errors = errors;
     }
 
-    static BadRequest(message: string, errors: Error[] = []) {
+    static BadRequest(message: string, errors: Errors = []) {
         return new ApiError(400, message, errors);
     }
 
@@ -23,3 +26,5 @@ module.exports = class ApiError extends Error {
         return new ApiError(403, "Нет доступа к этому ресурсу");
     }
 }
+
+export default ApiError;

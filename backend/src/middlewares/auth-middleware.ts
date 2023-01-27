@@ -1,10 +1,9 @@
-import {Response, NextFunction} from "express";
-import {IAuthRequestInfoUser} from "../types";
+import {Request, Response, NextFunction} from "express";
 
-const ApiError = require("../exceptions/api-error");
-const tokenService = require("../service/token-service");
+import ApiError from "../exceptions/api-error";
+import tokenService from "../service/token-service";
 
-module.exports = function (request: IAuthRequestInfoUser, response: Response, next: NextFunction) {
+function authMiddleware (request: Request, response: Response, next: NextFunction) {
     try {
         const accessToken = request.headers.authorization?.split(" ")[1];
         if(!accessToken) {
@@ -21,3 +20,5 @@ module.exports = function (request: IAuthRequestInfoUser, response: Response, ne
         return next(ApiError.UnauthorizedError());
     }
 };
+
+export default authMiddleware;

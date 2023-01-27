@@ -1,12 +1,12 @@
-const Router = require("express").Router;
-const user = require("./user");
-const category = require("./category");
-const product = require("./product");
+import {Router} from "express";
+import user from "./user";
+import category from "./category";
+import product from "./product";
 
-const rootRouter = new Router();
+const rootRouter = Router();
 
 rootRouter.use("/user", user);
 rootRouter.use("/category", category);
 rootRouter.use("/product", product);
 
-module.exports = rootRouter;
+export default rootRouter;

@@ -1,11 +1,11 @@
 import {ICategoryDB, ICategoryRequest} from "../models/ICategory";
 
-const ApiError = require("../exceptions/api-error");
-const categoryActions = require("../database/category-actions");
+import ApiError from "../exceptions/api-error";
+import categoryActions from "../database/category-actions";
  
 class CategoryService {
     async getAll() {
-        const categories = await categoryActions.findAll() as ICategoryDB[] // todo understand why generic return type don't work properly;
+        const categories = await categoryActions.findAll(); // todo understand why generic return type don't work properly;
         const normalizedCategories = categories.map(item => categoryActions.normalization(item));
         return normalizedCategories;
     }
@@ -21,4 +21,4 @@ class CategoryService {
     }
 }
 
-module.exports = new CategoryService();
+export default new CategoryService();

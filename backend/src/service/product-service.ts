@@ -1,8 +1,8 @@
 import {IProductDB, IProductRequest} from "../models/IProduct";
 
-const ApiError = require("../exceptions/api-error");
-const categoryActions = require("../database/category-actions");
-const productActions = require("../database/product-actions");
+import ApiError from "../exceptions/api-error";
+import categoryActions from "../database/category-actions";
+import productActions from "../database/product-actions";
 
 class ProductService {
     async getAll() {
@@ -22,4 +22,4 @@ class ProductService {
     }
 }
 
-module.exports = new ProductService();
+export default new ProductService();

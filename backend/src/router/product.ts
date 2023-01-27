@@ -1,12 +1,9 @@
-export {};
+import {Router} from "express";
+import {body} from "express-validator";
+import authMiddleware from "../middlewares/auth-middleware";
+import productController from "../controllers/product-controller";
 
-const Router = require("express").Router;
-const {body} = require("express-validator");
-const authMiddleware = require("../middlewares/auth-middleware");
-const productController = require("../controllers/product-controller");
-
-const router = new Router();
-
+const router = Router();
 
 router.get("/all", productController.getAll);
 router.post("/create",
@@ -26,4 +23,4 @@ router.post("/create",
 );
 
 
-module.exports = router;
+export default router;

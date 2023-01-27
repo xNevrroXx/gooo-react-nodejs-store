@@ -1,11 +1,11 @@
 import {Application} from "express";
 
-const router = require("./router/index");
-const express = require("express");
-const dotenv = require("dotenv");
-const cors = require("cors");
-const cookieParser = require("cookie-parser");
-const errorMiddleware = require("./middlewares/error-middleware");
+import router from "./router/index";
+import express from "express";
+import dotenv from "dotenv";
+import cors from "cors";
+import cookieParser from "cookie-parser";
+import errorMiddleware from "./middlewares/error-middleware";
 
 dotenv.config();
 

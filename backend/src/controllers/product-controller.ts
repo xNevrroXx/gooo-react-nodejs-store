@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response} from "express";
 import {IProductRequest} from "../models/IProduct";
 
-const productService = require("../service/product-service");
+import productService from "../service/product-service";
 
 class productController {
     async getAll(request: Request, response: Response, next: NextFunction) {
@@ -33,4 +33,4 @@ class productController {
     }
 }
 
-module.exports = new productController();
+export default new productController();

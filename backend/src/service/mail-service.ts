@@ -1,5 +1,5 @@
-const nodemailer = require("nodemailer");
-const dotenv = require("dotenv");
+import nodemailer from "nodemailer";
+import dotenv from "dotenv";
 
 dotenv.config();
 
@@ -49,4 +49,4 @@ class MailService {
     }
 }
 
-module.exports = new MailService();
+export default new MailService();

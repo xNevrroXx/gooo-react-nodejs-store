@@ -1,15 +1,33 @@
+import mysql from "mysql";
+// own modules
+import dbPool from "./index";
+// types
+import {IRecoveryData, IRecoveryDataCreation, IRecoveryDataDB} from "../models/IRecoveryData";
 import {MysqlError, PoolConnection} from "mysql";
 
-const mysql = require("mysql");
-const dbPool = require("./index");
+type TFindRecoveryData = {
+    userId: number,
+    value?: never
+} | {
+    userId?: never,
+    value: string
+};
 
 class RecoveryActions {
-    async find({userId, recoveryCode}: {userId: number | null, recoveryCode: string | null}): Promise<any[]> {
-        return new Promise((resolve, reject) => {
+    normalized({id, user_id, value, created_at}: IRecoveryDataDB): IRecoveryData {
+        return {
+            id,
+            userId: user_id,
+            value,
+            createdAt: created_at
+        }
+    }
+    async findOne({userId, value}: TFindRecoveryData): Promise<IRecoveryDataDB> {
+        return new Promise<IRecoveryDataDB>((resolve, reject) => {
             dbPool.getConnection((error: MysqlError, connection: PoolConnection) => {
                 let findCodeStringSql = `SELECT * FROM user_recovery_code WHERE `;
                 if(userId) findCodeStringSql += `user_id = "${userId}"`;
-                else if(recoveryCode) findCodeStringSql += `value = "${recoveryCode}"`;
+                else if(value) findCodeStringSql += `value = "${value}"`;
 
                 connection.query(findCodeStringSql, (error, result) => {
                     connection.release();
@@ -18,21 +36,20 @@ class RecoveryActions {
                         reject(error);
                     }
 
-                    resolve(result);
+                    resolve(result[0]);
                 })
             })
         })
     }
 
-    async create(userId: number, recoveryCode: string) {
-        const timestamp = new Date().toISOString().slice(0, 19).replace("T", " ");
-        const foundRecoveryCode = await this.find({userId, recoveryCode: null});
+    async create({userId, value, createdAt}: IRecoveryDataCreation) {
+        const foundRecoveryCode = await this.findOne({userId});
 
-        if(foundRecoveryCode.length > 0) {
+        if(foundRecoveryCode) {
             return new Promise((resolve, reject) => {
                 dbPool.getConnection((error: MysqlError, connection: PoolConnection) => {
                     const updateRecoveryCodeStringSQL = `UPDATE user_recovery_code SET value = ?, created_at = ? WHERE user_id = ?`;
-                    const updateRecoveryCodeQuerySQL = mysql.format(updateRecoveryCodeStringSQL, [recoveryCode, timestamp, userId])
+                    const updateRecoveryCodeQuerySQL = mysql.format(updateRecoveryCodeStringSQL, [value, createdAt, userId])
                     connection.query(updateRecoveryCodeQuerySQL, (error, result) => {
                         connection.release();
 
@@ -47,7 +64,7 @@ class RecoveryActions {
         }
         else {
             const createRecoveryCodeStringSQL = "INSERT INTO user_recovery_code (user_id, value, created_at) VALUES (?, ?, ?)";
-            const createRecoveryCodeQuerySQL = mysql.format(createRecoveryCodeStringSQL, [userId, recoveryCode, timestamp]);
+            const createRecoveryCodeQuerySQL = mysql.format(createRecoveryCodeStringSQL, [userId, value, createdAt]);
             return new Promise((resolve, reject) => {
                 dbPool.getConnection((error: MysqlError, connection: PoolConnection) => {
                     connection.query(createRecoveryCodeQuerySQL, (error, result) => {
@@ -63,8 +80,6 @@ class RecoveryActions {
             })
         }
     }
-
-    // async reset
 }
 
-module.exports = new RecoveryActions();
+export default new RecoveryActions();

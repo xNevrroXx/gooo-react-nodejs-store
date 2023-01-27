@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response} from "express";
 import {ICategoryRequest} from "../models/ICategory";
 
-const categoryService = require("../service/category-service");
+import categoryService from "../service/category-service";
 
 class CategoryController {
     async getAll(request: Request, response: Response, next: NextFunction) {
@@ -33,4 +33,4 @@ class CategoryController {
     }
 }
 
-module.exports = new CategoryController();
+export default new CategoryController();

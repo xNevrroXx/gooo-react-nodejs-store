@@ -1,21 +1,20 @@
-export {};
-
-const bcrypt = require("bcrypt");
-const {v4: uuidv4} = require("uuid");
-const recoveryActions = require("../database/recovery-actions");
-const mailService = require("./mail-service");
-const tokenService = require("./token-service");
-const userActions = require("../database/user-actions");
-const UserDto = require("../dtos/user-dto");
-const customQuery = require("../database/custom-query");
-const activationActions = require("../database/activation-actions");
-const tokenActions = require("../database/token-actions");
-const ApiError = require("../exceptions/api-error");
+import bcrypt from "bcrypt";
+import {v4 as uuidv4} from "uuid";
+import recoveryActions from "../database/recovery-actions";
+import mailService from "./mail-service";
+import tokenService from "./token-service";
+import userActions from "../database/user-actions";
+import UserDto from "../dtos/user-dto";
+import customQuery from "../database/custom-query";
+import activationActions from "../database/activation-actions";
+import tokenActions from "../database/token-actions";
+import ApiError from "../exceptions/api-error";
+import {IUser} from "../models/IUser";
 
 class UserService {
     async registration(email: string, password: string, username: string, firstname: string, lastname: string) {
         const foundUser = await userActions.findUser({email});
-        if(foundUser.length > 0) {
+        if(!foundUser) {
             throw ApiError.Conflict(`Пользователь с почтовым адресом ${email} уже существует`);
         }
         const hashPassword = await bcrypt.hash(password, 3);
@@ -27,12 +26,12 @@ class UserService {
             username,
             firstname,
             lastname,
-            timestamp
+            createdAt: timestamp
         });
-        const user = await userActions.findUser({email: email, id: null});
-        await activationActions.createActivationData(user[0].id, activationLink, timestamp);
+        const user = await userActions.findUser({email: email});
+        await activationActions.createActivationData({userId: user.id, activationLink, createdAt: timestamp , isActivated: 0});
         await mailService.sendActivationMail(email, `${process.env.API_URL}/api/activate/${activationLink}`);
-        const userDto = new UserDto(user[0]);
+        const userDto = new UserDto(user);
         const tokens = tokenService.generateTokens({...userDto});
         await tokenService.saveToken(userDto.id, tokens.refreshToken);
 
@@ -40,23 +39,24 @@ class UserService {
     }
 
     async activate(activationLink: string) {
-        const foundActivationData = await activationActions.findActivationData({activationLink, userId: null});
-        if (foundActivationData.length === 0) {
+        const foundActivationData = await activationActions.findActivationData({activationLink});
+        if (!foundActivationData) {
             throw ApiError.BadRequest("Некорректная ссылка активации");
         }
-        await activationActions.activateUser(foundActivationData[0]["user_id"]);
+        const normalizedActivationData = activationActions.normalization(foundActivationData);
+        await activationActions.activateUser(normalizedActivationData.userId);
     }
 
     async login(email: string, password: string) {
         const foundUser = await userActions.findUser({email});
-        if(foundUser.length == 0) {
+        if(!foundUser) {
             throw ApiError.BadRequest(`Пользователя с почтовым адресом ${email} не существует`);
         }
-        const isPasswordEqual = await bcrypt.compare(password, foundUser[0].password);
+        const isPasswordEqual = await bcrypt.compare(password, foundUser.password);
         if(!isPasswordEqual) {
             throw ApiError.BadRequest("Пароль неверный");
         }
-        const userDto = new UserDto(foundUser[0]);
+        const userDto = new UserDto(foundUser);
         const tokens = tokenService.generateTokens({...userDto});
         await tokenService.saveToken(userDto.id, tokens.refreshToken);
 
@@ -73,7 +73,7 @@ class UserService {
             throw ApiError.UnauthorizedError();
         }
         const actualUserData = await userActions.findUser({id: userData.id});
-        const userDto = new UserDto(actualUserData[0]);
+        const userDto = new UserDto(actualUserData);
         const tokens = tokenService.generateTokens({...userDto});
         await tokenService.saveToken(userDto.id, tokens.refreshToken);
 
@@ -82,28 +82,37 @@ class UserService {
 
     async createRecoveryCode(email: string): Promise<string> {
         const foundUser = await userActions.findUser({email});
-        if(foundUser.length == 0) {
+        if(!foundUser) {
             throw ApiError.BadRequest(`Пользователя с почтовым адресом ${email} не существует`);
         }
         const recoveryCode = uuidv4();
-        await recoveryActions.create(foundUser[0].id, recoveryCode);
+        const timestamp = new Date().toISOString().slice(0, 19).replace("T", " ");
+        await recoveryActions.create({userId: foundUser.id, value: recoveryCode, createdAt: timestamp});
         return recoveryCode;
     }
 
     async changePassword(recoveryCode: string, newPassword: string) {
-        const foundRecoveryCode = await recoveryActions.find({userId: null, recoveryCode});
-        if(foundRecoveryCode.length === 0 || foundRecoveryCode[0].value !== recoveryCode) {
+        const foundRecoveryData = await recoveryActions.findOne({value: recoveryCode});
+        if(!foundRecoveryData) {
             throw ApiError.BadRequest("Код неверен");
         }
-        const foundUser = await userActions.findUser({id: foundRecoveryCode[0]["user_id"]});
+        const normalizedRecoveryData = recoveryActions.normalized(foundRecoveryData);
+        console.log("normalized data: ", normalizedRecoveryData);
+        const foundUser = await userActions.findUser({id: normalizedRecoveryData.userId});
+        console.log("foundUser: ", foundUser);
         const hashPassword = await bcrypt.hash(newPassword, 3);
-        await customQuery(`UPDATE user SET password = "${hashPassword}" WHERE id = "${foundUser[0].id}"`);
+        await customQuery(`UPDATE user SET password = "${hashPassword}" WHERE id = "${foundUser.id}"`);
     }
 
     async getUsers(): Promise<any[]> {
         const allUsers = await userActions.findAllUsers();
-        return allUsers.map((result: {"email": string}) => result.email);
+        return allUsers.map((user) => {
+                const obj: any = {...user};
+                delete obj.password;
+                return obj;
+            }
+        );
     }
 }
 
-module.exports = new UserService();
+export default new UserService();

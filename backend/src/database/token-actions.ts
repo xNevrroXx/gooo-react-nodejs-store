@@ -1,11 +1,19 @@
 import {MysqlError, PoolConnection} from "mysql";
 
-const mysql = require("mysql");
-const dbPool = require("./index");
+import mysql from "mysql";
+import dbPool from "./index";
+
+type TIsExistToken = {
+    userId: number,
+    token?: never
+} | {
+    userId?: never,
+    token: string
+}
 
 class TokenActions {
-    async isExistToken({userId = null, token = null}: {[fieldName: string]: string | number | null}): Promise<boolean> {
-        return new Promise((resolve, reject) => {
+    async isExistToken({userId, token}: TIsExistToken): Promise<boolean> {
+        return new Promise<boolean>((resolve, reject) => {
             dbPool.getConnection((error: MysqlError, connection: PoolConnection) => {
                 let findTokenQuerySQL = `SELECT value FROM user_refresh_token WHERE `;
                 if(userId) {
@@ -63,4 +71,4 @@ class TokenActions {
     }
 }
 
-module.exports = new TokenActions();
+export default new TokenActions();

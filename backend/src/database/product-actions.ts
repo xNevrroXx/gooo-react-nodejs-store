@@ -1,9 +1,8 @@
 import {MysqlError, PoolConnection} from "mysql";
-import {ICategory, ICategoryCreation, ICategoryDB} from "../models/ICategory";
 import {IProduct, IProductCreation, IProductDB} from "../models/IProduct";
 
-const mysql = require("mysql");
-const dbPool = require("./index");
+import mysql from "mysql";
+import dbPool from "./index";
 
 type TArgumentFindProduct = {
     id: number,
@@ -48,15 +47,15 @@ class ProductActions {
             })
         })
     }
-    async find (arg: TArgumentFindProduct): Promise<IProductDB> {
+    async find ({id, name}: TArgumentFindProduct): Promise<IProductDB> {
         return new Promise<IProductDB>((resolve, reject) => {
             dbPool.getConnection((error: MysqlError, connection: PoolConnection) => {
                 let findSQLString = "SELECT * FROM product_category WHERE ";
-                if(arg.id) {
-                    findSQLString += `id = "${arg.id}"`;
+                if(id) {
+                    findSQLString += `id = "${id}"`;
                 }
-                else if(arg.name) {
-                    findSQLString += `name = "${arg.name}"`;
+                else if(name) {
+                    findSQLString += `name = "${name}"`;
                 }
 
                 connection.query(findSQLString, (error, result) => {
@@ -89,4 +88,4 @@ class ProductActions {
     }
 }
 
-module.exports = new ProductActions();
+export default new ProductActions();

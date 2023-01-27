@@ -1,7 +1,7 @@
 import {MysqlError, Pool, PoolConnection} from "mysql";
 
-const mysql = require("mysql");
-const dotenv = require("dotenv");
+import mysql from "mysql";
+import dotenv from "dotenv";
 
 dotenv.config();
 
@@ -28,7 +28,7 @@ dbPool.getConnection((error: MysqlError, connection: PoolConnection) => {
     console.log("DB connected successfully: " + connection.threadId);
 })
 
-module.exports = {
+export default {
     getConnection: (callback: (error: MysqlError, connection: PoolConnection) => any) => {
         return dbPool.getConnection(callback);
     }

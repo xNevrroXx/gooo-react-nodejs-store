@@ -1,11 +1,9 @@
-export {};
+import {Router} from  "express";
+import {body} from  "express-validator";
+import userController from  "../controllers/user-controller";
+import authMiddleware from  "../middlewares/auth-middleware";
 
-const Router = require("express").Router;
-const {body} = require("express-validator");
-const userController = require("../controllers/user-controller");
-const authMiddleware = require("../middlewares/auth-middleware");
-
-const router = new Router();
+const router = Router();
 
 router.post("/registration",
     body("email").isEmail(),
@@ -25,4 +23,4 @@ router.post("/recovery/get-link", userController.sendRecoveryLink);
 router.post("/recovery/:code", userController.changePassword);
 router.get("/all", authMiddleware, userController.getUsers);
 
-module.exports = router;
+export default router;
