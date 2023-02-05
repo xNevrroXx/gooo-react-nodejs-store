@@ -2,7 +2,7 @@ import axios, {AxiosError, AxiosRequestConfig, AxiosResponse} from "axios";
 
 // own modules
 import store from "../store/index";
-import {createTimeoutNotification} from "../actions/notifications";
+import {createTimeoutNotificationThunk} from "../actions/notifications";
 import AuthService from "../services/AuthService";
 
 interface AxiosRequestConfigExtra extends AxiosRequestConfig {
@@ -12,6 +12,8 @@ const isAxiosRequestConfigExtra = (config: AxiosRequestConfig): config is AxiosR
     // @ts-ignore
     return true;
 }
+
+
 
 export const API_URL = "http://localhost:5000/api";
 const {dispatch} = store;
@@ -29,7 +31,7 @@ $api.interceptors.request.use(function(config: AxiosRequestConfig) {
     return config;
 }, function(error) {
     if(error.request) {
-        dispatch(createTimeoutNotification({type: "error", title: "Ошибка", description: "Непредвиденная ошибка - мы уже занимаемся решением данной проблемы"}))
+        dispatch(createTimeoutNotificationThunk({type: "error", title: "Ошибка", description: "Непредвиденная ошибка - мы уже занимаемся решением данной проблемы"}))
     }
     return Promise.reject(error);
 })
@@ -48,14 +50,14 @@ $api.interceptors.response.use(function(config: AxiosResponse) {
             }
         }
         else if (error.response.data.message) {
-            dispatch(createTimeoutNotification({type: "error", title: `Ошибка ${error.response.status}`, description: error.response.data.message}))
+            dispatch(createTimeoutNotificationThunk({type: "error", title: `Ошибка ${error.response.status}`, description: error.response.data.message}))
         }
         else if(error.response.status) {
-            dispatch(createTimeoutNotification({type: "error", title: `Ошибка ${error.response.status}`, description: error.response.statusText}))
+            dispatch(createTimeoutNotificationThunk({type: "error", title: `Ошибка ${error.response.status}`, description: error.response.statusText}))
         }
     }
     else {
-        dispatch(createTimeoutNotification({type: "error", title: "Ошибка", description: "Непредвиденная ошибка - мы уже занимаемся решением данной проблемы"}))
+        dispatch(createTimeoutNotificationThunk({type: "error", title: "Ошибка", description: "Непредвиденная ошибка - мы уже занимаемся решением данной проблемы"}))
         throw error;
     }
     return Promise.reject(error);

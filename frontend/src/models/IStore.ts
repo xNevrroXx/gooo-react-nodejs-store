@@ -1,16 +1,23 @@
-import {IProductCreation} from "./IProduct";
+import {IProduct} from "./IProduct";
 import {INotifier} from "./INotifier";
 import {IUser} from "./IUser";
+import {ICategory} from "./ICategory";
+import {ICategoryTree} from "./ICategoryTree";
 
-// goods
-export interface IGoods {
-    goods: IProductCreation[],
-    goodsLoadingStatus: "idle" | "loading" | "error"
+// products
+export interface IProducts {
+    products: IProduct[],
+    productLoadingStatus: "idle" | "loading" | "error"
 }
 
+// category
+export interface ICategories {
+    categories: ICategoryTree[],
+    categoryLoadingStatus: "idle" | "loading" | "error"
+}
 
 // filters
-const filters = ["electronics", "appliances", "books",  "children's products", "sports and recreation", "зоотовары", "digital goods"] as const;
+const filters = ["electronics", "appliances", "books",  "children's products", "sports and recreation", "зоотовары", "digital products"] as const;
 type ActiveFilter = typeof filters[number];
 export interface IFilters {
     filters: typeof filters,

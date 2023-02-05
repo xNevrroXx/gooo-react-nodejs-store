@@ -4,25 +4,29 @@ import {useFormik} from "formik";
 
 // own modules
 import ProductService from "../../services/ProductService";
+import {useAppDispatch} from "../../hooks/store.hook";
+import {createProductThunk} from "../../actions/product";
 
 const CreateProduct: FC = (sx?: SxProps) => {
+    const dispatch = useAppDispatch();
+
     const formik = useFormik({
         initialValues: {
             name: "",
             price: "",
             weight: "",
+            weightUnits: "",
             shortDescription: "",
             longDescription: "",
             image: "",
             thumb: "",
             categoryId: 0,
             location: "",
-            stock: 0
+            stock: 0,
         },
         onSubmit: (values, {setSubmitting}) => {
-            ProductService.createProduct({...values})
-                .then(() => console.log("created product"))
-                .catch(() => console.log("failure"));
+            dispatch(createProductThunk(values));
+            setSubmitting(false);
         }
     });
 
@@ -67,6 +71,15 @@ const CreateProduct: FC = (sx?: SxProps) => {
                 label="Вес"
                 variant="outlined"
                 helperText={formik.errors.weight}
+            />
+            <TextField
+                error={!!(formik.errors.weightUnits && formik.touched.weightUnits)}
+                name="weightUnits"
+                onChange={formik.handleChange}
+                value={formik.values.weightUnits}
+                label="Вес(единица измерения)"
+                variant="outlined"
+                helperText={formik.errors.weightUnits}
             />
             <TextField
                 error={!!(formik.errors.shortDescription && formik.touched.shortDescription)}

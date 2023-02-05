@@ -1,7 +1,7 @@
 import {IFilters} from "../models/IStore";
 
 const initialState: IFilters = {
-    filters: ["electronics", "appliances", "books",  "children's products", "sports and recreation", "зоотовары", "digital goods"],
+    filters: ["electronics", "appliances", "books",  "children's products", "sports and recreation", "зоотовары", "digital products"],
     activeFilters: [],
     filterLoadingStatus: "idle"
 }

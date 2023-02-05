@@ -9,11 +9,11 @@ export interface ICategoryCreation extends ICategoryRequest{
 }
 
 export interface ICategory extends ICategoryCreation{
-    id: string
+    id: number
 }
 
 export interface ICategoryDB {
-    id: string
+    id: number
     name: string,
     label: string,
     parent_id: number

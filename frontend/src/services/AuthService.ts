@@ -25,7 +25,7 @@ class AuthService {
     }
 
     static async refreshToken(): Promise<AxiosResponse<AuthResponse>> {
-        return axios.get<AuthResponse>(this.base + `${API_URL}/refresh`, {withCredentials: true});
+        return axios.get<AuthResponse>(`${API_URL}/user/refresh`, {withCredentials: true});
     }
 }
 

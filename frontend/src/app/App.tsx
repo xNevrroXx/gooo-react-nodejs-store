@@ -13,18 +13,20 @@ import {
 import AppHeader from "../components/appHeader/AppHeader";
 import Loading from "../components/loading/Loading";
 import NotificationList from "../components/notifier/NotificationList";
-import {checkAuthentication} from "../actions/authentication";
+import {checkAuthenticationThunk} from "../actions/authentication";
 import {useAppDispatch} from "../hooks/store.hook";
+import {loadingCategoriesServer} from "../actions/category";
 
 // pages
 const Main = lazy(() => import("../pages/Main"));
 const UserLogin = lazy(() => import("../pages/UserLogin"));
-const AdministrationLogin = lazy(() => import("../pages/Administration/AdministrationLogin"));
 const Filtered = lazy(() => import("../pages/Filtered"));
 const UserRegistration = lazy(() => import("../pages/UserRegistration"));
-const NotFound = lazy(() => import("../pages/NotFound"));
+const Product = lazy(() => import("../pages/Product"));
+const AdministrationLogin = lazy(() => import("../pages/Administration/AdministrationLogin"));
 const AdministrationCreateProduct = lazy(() => import("../pages/Administration/AdministrationCreateProduct"));
 const AdministrationCreateCategory = lazy(() => import("../pages/Administration/AdministrationCreateCategory"));
+const NotFound = lazy(() => import("../pages/NotFound"));
 
 
 const theme = createTheme({
@@ -42,8 +44,9 @@ function App() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    dispatch(loadingCategoriesServer());
     if (localStorage.getItem("token")) {
-      dispatch(checkAuthentication());
+      dispatch(checkAuthenticationThunk());
     }
   }, [])
 
@@ -61,6 +64,7 @@ function App() {
               <Route path="registration" element={<UserRegistration/>} />
               <Route path="main" element={<Main/>} />
               <Route path="categories/:title" element={<Filtered/>} />
+              <Route path="product/:id" element={<Product/>} />
 
               {/* Admin urls */}
               <Route path="administration" element={<Outlet/>}>

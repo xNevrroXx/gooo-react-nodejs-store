@@ -4,7 +4,7 @@ import {INotification} from "../models/IStore";
 import {INotifier} from "../models/INotifier";
 import {AppDispatch} from "../store";
 
-export const createTimeoutNotification = (notification: INotifier) => (dispatch: AppDispatch) => {
+export const createTimeoutNotificationThunk = (notification: INotifier) => (dispatch: AppDispatch) => {
     const id: INotification["id"] = uuidv4();
 
     dispatch(createNotification({...notification, id}));

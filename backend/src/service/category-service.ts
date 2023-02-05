@@ -5,9 +5,11 @@ import categoryActions from "../database/category-actions";
  
 class CategoryService {
     async getAll() {
-        const categories = await categoryActions.findAll(); // todo understand why generic return type don't work properly;
+        const categories = await categoryActions.findAll();
         const normalizedCategories = categories.map(item => categoryActions.normalization(item));
-        return normalizedCategories;
+        const categoryTree = categoryActions.createTree(normalizedCategories);
+
+        return categoryTree;
     }
     async create({name, parentId, label}: ICategoryRequest) {
         if(parentId !== 0) {

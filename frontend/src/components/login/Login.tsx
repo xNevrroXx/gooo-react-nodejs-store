@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import {useNavigate} from "react-router-dom";
 
 // own modules
-import {login} from "../../actions/authentication";
+import {loginThunk} from "../../actions/authentication";
 import {emailValidation, loginPasswordValidation} from "../../validation/validation";
 import {useAppDispatch} from "../../hooks/store.hook";
 
@@ -19,7 +19,7 @@ const Login: FC<{ sx?: SxProps }> = ({sx}) => {
                 password: loginPasswordValidation
             }),
         onSubmit: (values, {setSubmitting}) => {
-            dispatch(login(values.email, values.password));
+            dispatch(loginThunk(values.email, values.password));
             setSubmitting(false);
         },
         validateOnBlur: false

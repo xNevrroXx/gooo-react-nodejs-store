@@ -6,7 +6,7 @@ import productActions from "../database/product-actions";
 
 class ProductService {
     async getAll() {
-        const products = await productActions.findAll() as IProductDB[] // todo understand why generic return type don't work properly;
+        const products = await productActions.findAll();
         const normalizedProducts = products.map(item => productActions.normalization(item));
         return normalizedProducts;
     }

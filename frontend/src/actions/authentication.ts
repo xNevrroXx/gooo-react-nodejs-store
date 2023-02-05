@@ -1,12 +1,12 @@
 import axios from "axios";
 // own modules
 import AuthService from "../services/AuthService";
-import {createTimeoutNotification} from "./notifications";
+import {createTimeoutNotificationThunk} from "./notifications";
 // types
 import {IUser} from "../models/IUser";
 import {AppDispatch} from "../store";
 
-export const login = (email: string, password: string) => async (dispatch: AppDispatch) => {
+export const loginThunk = (email: string, password: string) => async (dispatch: AppDispatch) => {
     try {
         const response = await AuthService.login(email, password);
         localStorage.setItem("token", response.data.accessToken);
@@ -15,15 +15,15 @@ export const login = (email: string, password: string) => async (dispatch: AppDi
     } catch (error) {
         if (!axios.isAxiosError(error)) { // axios error handler is in the interceptor
             if(error instanceof Error) {
-                dispatch(createTimeoutNotification({type: "error", title: "Ошибка", description: error.message}))
+                dispatch(createTimeoutNotificationThunk({type: "error", title: "Ошибка", description: error.message}))
             }
             else {
-                dispatch(createTimeoutNotification({type: "error", title: "Ошибка", description: "Непредвиденная ошибка - мы уже занимаемся решением данной проблемы"}))
+                dispatch(createTimeoutNotificationThunk({type: "error", title: "Ошибка", description: "Непредвиденная ошибка - мы уже занимаемся решением данной проблемы"}))
             }
         }
     }
 }
-export const registration = (email: string, password: string, username: string, firstname: string, lastname: string) => async (dispatch: AppDispatch) => {
+export const registrationThunk = (email: string, password: string, username: string, firstname: string, lastname: string) => async (dispatch: AppDispatch) => {
     try {
         const response = await AuthService.registration(email, password, username, firstname, lastname);
         localStorage.setItem("token", response.data.accessToken);
@@ -32,15 +32,15 @@ export const registration = (email: string, password: string, username: string, 
     } catch (error) {
         if (!axios.isAxiosError(error)) { // axios error handler is in the interceptor
             if(error instanceof Error) {
-                dispatch(createTimeoutNotification({type: "error", title: "Ошибка", description: error.message}))
+                dispatch(createTimeoutNotificationThunk({type: "error", title: "Ошибка", description: error.message}))
             }
             else {
-                dispatch(createTimeoutNotification({type: "error", title: "Ошибка", description: "Непредвиденная ошибка - мы уже занимаемся решением данной проблемы"}))
+                dispatch(createTimeoutNotificationThunk({type: "error", title: "Ошибка", description: "Непредвиденная ошибка - мы уже занимаемся решением данной проблемы"}))
             }
         }
     }
 }
-export const logout = () => async (dispatch: AppDispatch) => {
+export const logoutThunk = () => async (dispatch: AppDispatch) => {
     try {
         await AuthService.logout();
         localStorage.removeItem("token");
@@ -50,15 +50,15 @@ export const logout = () => async (dispatch: AppDispatch) => {
     catch (error) {
         if (!axios.isAxiosError(error)) { // axios error handler is in the interceptor
             if(error instanceof Error) {
-                dispatch(createTimeoutNotification({type: "error", title: "Ошибка", description: error.message}))
+                dispatch(createTimeoutNotificationThunk({type: "error", title: "Ошибка", description: error.message}))
             }
             else {
-                dispatch(createTimeoutNotification({type: "error", title: "Ошибка", description: "Непредвиденная ошибка - мы уже занимаемся решением данной проблемы"}))
+                dispatch(createTimeoutNotificationThunk({type: "error", title: "Ошибка", description: "Непредвиденная ошибка - мы уже занимаемся решением данной проблемы"}))
             }
         }
     }
 }
-export const checkAuthentication = () => async (dispatch: AppDispatch) => {
+export const checkAuthenticationThunk = () => async (dispatch: AppDispatch) => {
     try {
         const response = await AuthService.refreshToken();
         localStorage.setItem("token", response.data.accessToken);
@@ -68,10 +68,10 @@ export const checkAuthentication = () => async (dispatch: AppDispatch) => {
     catch (error) {
         if (!axios.isAxiosError(error)) { // axios error handler is in the interceptor
             if(error instanceof Error) {
-                dispatch(createTimeoutNotification({type: "error", title: "Ошибка", description: error.message}))
+                dispatch(createTimeoutNotificationThunk({type: "error", title: "Ошибка", description: error.message}))
             }
             else {
-                dispatch(createTimeoutNotification({type: "error", title: "Ошибка", description: "Непредвиденная ошибка - мы уже занимаемся решением данной проблемы"}))
+                dispatch(createTimeoutNotificationThunk({type: "error", title: "Ошибка", description: "Непредвиденная ошибка - мы уже занимаемся решением данной проблемы"}))
             }
         }
     }

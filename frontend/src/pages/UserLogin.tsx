@@ -2,7 +2,7 @@ import {Box, Divider, Typography} from "@mui/material";
 
 // own modules
 import Login from "../components/login/Login";
-import {LinkRouterButton} from "../components/styledComponents/linkRouterButton";
+import {LinkRouterButton} from "../components/styledComponents/LinkRouterButton";
 
 const UserLogin = () => {
     return (

@@ -10,8 +10,11 @@ import {
   Typography,
   MenuItem,
   ListItemIcon,
-  ListItemText, Box
+  ListItemText,
+  Box,
+  Stack
 } from "@mui/material";
+
 import {
   AccountCircleOutlined,
   FavoriteBorderOutlined, Logout,
@@ -23,27 +26,25 @@ import {
 
 // own components
 import Search from "../search/Search";
+import Catalog from "../catalog/Catalog";
 import {useAppDispatch, useAppSelector} from "../../hooks/store.hook";
+import {logoutThunk} from "../../actions/authentication";
+// types
 import {RootState} from "../../store";
-import {logout} from "../../actions/authentication";
 
 
 function AppHeader() {
   const user: RootState["authentication"]["user"] = useAppSelector(state => state.authentication.user);
   const [profileDropdownAnchorEl, setProfileDropdownAnchorEl] = useState<null | HTMLElement>(null);
-  const [catalogDropdownAnchorEl, setCatalogDropdownAnchorEl] = useState<null | HTMLElement>(null);
   const [mobileAnchorEl, setMobileAnchorEl] = useState<null | HTMLElement>(null);
 
   const onOpenProfileDropdownMenu = useCallback((event: React.MouseEvent<HTMLButtonElement>) => setProfileDropdownAnchorEl(event.currentTarget), []);
   const onCloseProfileDropdownMenu = useCallback(() => setProfileDropdownAnchorEl(null), []);
-  const onOpenCatalogDropdownMenu = useCallback((event: React.MouseEvent<HTMLButtonElement>) => setCatalogDropdownAnchorEl(event.currentTarget), []);
-  const onCloseCatalogDropdownMenu = useCallback(() => setCatalogDropdownAnchorEl(null), []);
   const onOpenMobileMenu = useCallback((event: React.MouseEvent<HTMLButtonElement>) => setMobileAnchorEl(event.currentTarget), []);
   const onCloseMobileMenu = useCallback(() => setMobileAnchorEl(null), []);
 
   const isOpenMobileMenu = Boolean(mobileAnchorEl);
   const isOpenProfileDropdownMenu = Boolean(profileDropdownAnchorEl);
-  const isOpenCatalogDropdownMenu = Boolean(catalogDropdownAnchorEl);
 
   const renderMobileMenu = (
     <Menu
@@ -96,11 +97,11 @@ function AppHeader() {
           </svg>
         </IconButton>
 
-        {CatalogView(isOpenCatalogDropdownMenu, onOpenCatalogDropdownMenu, onCloseCatalogDropdownMenu, catalogDropdownAnchorEl)}
+        <Catalog/>
 
         <Search sx={{width: "100%"}} />
         <Box sx={{ flexGrow: 1 }} />
-        <Box component="nav" display="flex">
+        <Stack component="nav" direction="row" spacing={2}>
           <Button component={RouterLink} to="/favourites" sx={{display: {xs: "none", sm: "flex"}, alignItems: "center", flexDirection: "column", color: "inherit"}}>
             <FavoriteBorderOutlined/>
             <Typography variant="body2" component="span">
@@ -128,7 +129,7 @@ function AppHeader() {
           >
             <MenuIcon/>
           </IconButton>
-        </Box>
+        </Stack>
       </Toolbar>
     </AppBar>
     {renderMobileMenu}
@@ -136,48 +137,6 @@ function AppHeader() {
   );
 }
 
-const CatalogView = (isOpen: boolean, onOpen: (event: React.MouseEvent<HTMLButtonElement>) => void, onClose: () => void, anchorEl: null | HTMLElement) => {
-  return (
-      <>
-        <Button
-            id="catalog-menu-button"
-            variant="contained"
-            startIcon={<MenuIcon/>}
-            sx={{display: {xs: "none", sm: "flex"}, mr: "1rem", width: "max-content", padding: ".5rem 1.5rem"}}
-            onClick={onOpen}
-            aria-controls={isOpen ? "catalog-dropdown-menu" : undefined}
-            aria-haspopup="true"
-            aria-expanded={isOpen ? 'true' : undefined}
-        >
-          Каталог
-        </Button>
-        <Menu
-            id="catalog-dropdown-menu"
-            anchorEl={anchorEl}
-            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-            transformOrigin={{ vertical: 'top', horizontal: 'center' }}
-            open={isOpen}
-            onClose={onClose}
-            MenuListProps={{
-              'aria-labelledby': 'catalog-menu-button',
-            }}
-        >
-          <MenuItem onClick={onClose}>
-            <ListItemIcon>
-              <Settings fontSize="small" />
-            </ListItemIcon>
-            Настройки
-          </MenuItem>
-          <MenuItem onClick={onClose}>
-            <ListItemIcon>
-              <Logout fontSize="small" />
-            </ListItemIcon>
-            Выйти
-          </MenuItem>
-        </Menu>
-      </>
-  )
-}
 const AuthenticationView = (user: RootState["authentication"]["user"], isOpen: boolean, onOpen: (event: React.MouseEvent<HTMLButtonElement>) => void, onClose: () => void, anchorEl: null | HTMLElement) => {
   const dispatch = useAppDispatch();
 
@@ -216,7 +175,7 @@ const AuthenticationView = (user: RootState["authentication"]["user"], isOpen: b
           </MenuItem>
           <MenuItem onClick={() => {
             onClose();
-            dispatch(logout());
+            dispatch(logoutThunk());
           }}>
             <ListItemIcon>
               <Logout fontSize="small" />

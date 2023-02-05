@@ -6,11 +6,11 @@ import categoryService from "../service/category-service";
 class CategoryController {
     async getAll(request: Request, response: Response, next: NextFunction) {
         try {
-            const categories = await categoryService.getAll();
+            const categoryTree = await categoryService.getAll();
 
             response.status(200).json({
                 message: "success",
-                categories: categories
+                categories: categoryTree
             })
         }
         catch (error) {

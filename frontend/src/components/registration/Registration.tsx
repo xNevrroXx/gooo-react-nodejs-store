@@ -5,7 +5,7 @@ import {useFormik} from "formik";
 import * as Yup from "yup";
 
 // own modules
-import {registration} from "../../actions/authentication";
+import {registrationThunk} from "../../actions/authentication";
 import {
     emailValidation,
     lastnameValidation,
@@ -28,7 +28,7 @@ const Registration: FC<{ sx?: SxProps }> = ({sx}) => {
             lastname: lastnameValidation
         }),
         onSubmit: (values, {setSubmitting}) => {
-            dispatch(registration(values.email, values.password, values.username, values.firstname, values.lastname))
+            dispatch(registrationThunk(values.email, values.password, values.username, values.firstname, values.lastname))
             setSubmitting(false);
         },
         validateOnBlur: false

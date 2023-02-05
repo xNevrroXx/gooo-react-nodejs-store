@@ -4,6 +4,6 @@ export interface ICategoryCreation {
     parentId: number
 }
 export interface ICategory extends ICategoryCreation{
-    id: string,
+    id: number,
     createdAt: string
 }

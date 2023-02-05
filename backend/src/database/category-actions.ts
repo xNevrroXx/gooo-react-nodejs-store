@@ -1,8 +1,10 @@
+import mysql from "mysql";
+// own modules
+import dbPool from "./index";
+// types
 import {MysqlError, PoolConnection} from "mysql";
 import {ICategory, ICategoryCreation, ICategoryDB} from "../models/ICategory";
-
-import mysql from "mysql";
-const dbPool = require("./index");
+import {ICategoryTree} from "../models/ICategoryTree";
 
 type TArgumentFindCategory = {
     id: number,
@@ -13,6 +15,52 @@ type TArgumentFindCategory = {
 }
 
 class CategoryActions {
+    createTree(categories: ICategory[]): ICategoryTree[] {
+        const tree: ICategoryTree[] = [];
+
+        for (let i = 0, length = categories.length; i < length; i++) {
+            const category = categories[i];
+
+            if (category.parentId == 0) {
+                tree.push({...category, children: []});
+            }
+            else {
+                let j = 0;
+                let parentBranch: false | ICategoryTree = false;
+                do {
+                    parentBranch = findParentDeeper(tree[j], category.parentId);
+                    if(parentBranch) {
+                        parentBranch.children.push({...category, children: []})
+                    }
+                    j++;
+                } while(parentBranch == false);
+            }
+        }
+        return tree;
+
+        function findParentDeeper(tree: ICategoryTree, targetParentId: ICategoryTree["id"]): ICategoryTree | false {
+            if (tree.id === targetParentId) {
+                return tree;
+            }
+
+            for (let i = 0; i < tree.children.length; i++) {
+                const someBranch = tree.children[i];
+
+                if(someBranch.id == targetParentId) {
+                    return someBranch;
+                }
+
+                if(someBranch.children.length > 0) {
+                    const parentBranch = findParentDeeper(someBranch, targetParentId);
+                    if (parentBranch) {
+                        return parentBranch;
+                    }
+                }
+            }
+
+            return false;
+        }
+    }
     normalization({name, label, id, created_at, parent_id}: ICategoryDB): ICategory {
         return {
             name,

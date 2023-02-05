@@ -1,6 +1,6 @@
-import {ICategoryCreation} from "../ICategory";
+import {ICategoryTree} from "../ICategoryTree";
 
 
 export interface ICategoryResponse {
-    categories: ICategoryCreation[]
+    categories: ICategoryTree[]
 }
