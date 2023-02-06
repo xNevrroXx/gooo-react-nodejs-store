@@ -12,6 +12,7 @@ class UserController {
             if(!errors.isEmpty()) {
                 return next(ApiError.BadRequest("Ошибка при валидации", errors.array()));
             }
+
             const {email, password, username, firstname, lastname} = request.body;
             const userData = await userService.registration(email, password, username, firstname, lastname);
 
@@ -37,6 +38,11 @@ class UserController {
 
     async login(request: Request, response: Response, next: NextFunction) {
         try {
+            const errors = validationResult(request);
+            if(!errors.isEmpty()) {
+                return next(ApiError.BadRequest("Ошибка при валидации", errors.array()));
+            }
+
             const {email, password} = request.body;
             const userData = await userService.login(email, password);
 

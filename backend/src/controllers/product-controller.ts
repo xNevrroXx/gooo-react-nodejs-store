@@ -2,6 +2,8 @@ import {NextFunction, Request, Response} from "express";
 import {IProductRequest} from "../models/IProduct";
 
 import productService from "../service/product-service";
+import {validationResult} from "express-validator";
+import ApiError from "../exceptions/api-error";
 
 class productController {
     async getAll(request: Request, response: Response, next: NextFunction) {
@@ -20,6 +22,11 @@ class productController {
 
     async create(request: Request, response: Response, next: NextFunction) {
         try {
+            const errors = validationResult(request);
+            if(!errors.isEmpty()) {
+                return next(ApiError.BadRequest("Ошибка при валидации", errors.array()));
+            }
+
             const product: IProductRequest = request.body;
             await productService.create(product);
 
