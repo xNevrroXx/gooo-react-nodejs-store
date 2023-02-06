@@ -1,6 +1,6 @@
 import {useNavigate} from "react-router-dom";
 import React, {FC, MouseEvent, useCallback, useEffect, useMemo, useState} from "react";
-import {Button, Grid, Menu, MenuItem, Stack} from "@mui/material";
+import {Button, Divider, Grid, Menu, MenuItem, Stack} from "@mui/material";
 import {KeyboardArrowRight as KeyboardArrowRightIcon, Menu as MenuIcon} from "@mui/icons-material";
 // own modules
 import ChildCategories from "../childCategories/ChildCategories";
@@ -9,10 +9,10 @@ import {useAppSelector} from "../../hooks/store.hook";
 import {ICategoryTree} from "../../models/ICategoryTree";
 
 interface ICatalogProps {
-    onClickOverload?: (id: number) => void
+    onClickOverride?: (id: number) => void
 }
 
-const Catalog: FC<ICatalogProps> = ({onClickOverload}) => {
+const Catalog: FC<ICatalogProps> = ({onClickOverride}) => {
     const navigate = useNavigate();
     const categories = useAppSelector(state => state.categories.categories) as ICategoryTree[];
 
@@ -36,21 +36,21 @@ const Catalog: FC<ICatalogProps> = ({onClickOverload}) => {
         }
     }, [])
 
-    const onClick = (id: ICategoryTree["id"]) => {
+    const onClick = (categoryTree: ICategoryTree) => {
         onClose();
-        if(onClickOverload) {
-            onClickOverload(id);
+        if(onClickOverride) {
+            onClickOverride(categoryTree.id);
         }
         else {
-            navigate("/"+id)
+            navigate("/catalog/"+categoryTree.name)
         }
     }
 
     const categoryElements = useMemo(() => {
-        return categories.map(({id, label, name, parentId}) => (
+        return categories.map(({id, label, name, parentId, children, createdAt}) => (
             <MenuItem
                 onMouseEnter={onChangeChildCategories}
-                onClick={() => onClick(id)}
+                onClick={() => onClick({id, label, name, parentId, children, createdAt})}
 
                 key={name+id}
                 data-category-name={name}
@@ -92,12 +92,15 @@ const Catalog: FC<ICatalogProps> = ({onClickOverload}) => {
             >
                 <Grid container sx={{width: "80vw", height: "max-content", minHeight: "50vh"}} spacing={5}>
                     <Grid item xs={2}>
-                        <Stack direction="column">
-                            {categoryElements}
+                        <Stack height="100%" direction="row" justifyContent="space-between">
+                            <Stack direction="column">
+                                {categoryElements}
+                            </Stack>
+                            <Divider orientation="vertical" flexItem/>
                         </Stack>
                     </Grid>
                     <Grid item xs={10}>
-                        {parentId ? <ChildCategories categories={categories} parentId={parentId} onClick={(id) => onClick(id)}/> : null}
+                        {parentId ? <ChildCategories categories={categories} parentId={parentId} onClick={(categoryTree) => onClick(categoryTree)}/> : null}
                     </Grid>
                 </Grid>
             </Menu>

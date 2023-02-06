@@ -3,20 +3,19 @@ import {Box, Button, Stack, SxProps, TextField} from "@mui/material";
 import {useFormik} from "formik";
 
 // own modules
-import {createCategoryThunk} from "../../actions/category";
 import Catalog from "../catalog/Catalog";
 import MainStyledButton from "../styledComponents/MainStyledButton";
 import {useAppDispatch} from "../../hooks/store.hook";
+import {createCategoryThunk} from "../../actions/category";
 
 const CreateCategory: FC = (sx?: SxProps) => {
-    const [parentId, setParentId] = useState<number>(0);
     const dispatch = useAppDispatch();
 
     const formik = useFormik({
         initialValues: {
             name: "",
             label: "",
-            parentId: parentId
+            parentId: 0
         },
         onSubmit: (values, {setSubmitting}) => {
             dispatch(createCategoryThunk(values));
@@ -59,19 +58,21 @@ const CreateCategory: FC = (sx?: SxProps) => {
             />
             <Stack direction="row" spacing={2}>
                 <TextField
+                    sx={{flexGrow: 1}}
                     error={!!(formik.errors.parentId && formik.touched.parentId)}
                     name="parentId"
-                    onChange={(event) => setParentId(+event.target.value)}
-                    value={parentId}
+                    value={formik.values.parentId}
                     label="parentId"
                     variant="outlined"
                     helperText={formik.errors.parentId}
-                    disabled
+                    InputProps={{
+                        readOnly: true
+                    }}
                 />
-                <Catalog onClickOverload={setParentId} />
+                <Catalog onClickOverride={(id) => formik.setFieldValue("parentId", id)} />
                 <MainStyledButton
                     sx={{height: "100%", width: "max-content"}}
-                    onClick={() => setParentId(0)}
+                    onClick={() => formik.setFieldValue("parentId", 0)}
                 >
                     Установить родительским (0)
                 </MainStyledButton>

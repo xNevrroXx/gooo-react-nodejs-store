@@ -1,5 +1,5 @@
 // third-party modules
-import React, {lazy, Suspense, useEffect} from 'react';
+import React, {lazy, Suspense, useEffect, useRef} from 'react';
 import {Container, createTheme, ThemeProvider} from "@mui/material";
 import {
   BrowserRouter,
@@ -41,10 +41,14 @@ const theme = createTheme({
 })
 
 function App() {
+  const dataFetchedRef = useRef<boolean>(false);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    if(dataFetchedRef.current) return;
+    dataFetchedRef.current = true;
     dispatch(loadingCategoriesServer());
+
     if (localStorage.getItem("token")) {
       dispatch(checkAuthenticationThunk());
     }
@@ -63,7 +67,7 @@ function App() {
               <Route path="login" element={<UserLogin/>} />
               <Route path="registration" element={<UserRegistration/>} />
               <Route path="main" element={<Main/>} />
-              <Route path="categories/:title" element={<Filtered/>} />
+              <Route path="catalog/:title" element={<Filtered/>} />
               <Route path="product/:id" element={<Product/>} />
 
               {/* Admin urls */}

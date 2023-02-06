@@ -1,11 +1,12 @@
 import React, {FC} from "react";
-import {Box, Button, SxProps, TextField, Typography} from "@mui/material";
+import {Box, Button, Stack, SxProps, TextField, Typography} from "@mui/material";
 import {useFormik} from "formik";
 
 // own modules
-import ProductService from "../../services/ProductService";
 import {useAppDispatch} from "../../hooks/store.hook";
 import {createProductThunk} from "../../actions/product";
+import Catalog from "../catalog/Catalog";
+import MainStyledButton from "../styledComponents/MainStyledButton";
 
 const CreateProduct: FC = (sx?: SxProps) => {
     const dispatch = useAppDispatch();
@@ -117,15 +118,21 @@ const CreateProduct: FC = (sx?: SxProps) => {
                 variant="outlined"
                 helperText={formik.errors.thumb}
             />
-            <TextField
-                error={!!(formik.errors.categoryId && formik.touched.categoryId)}
-                name="categoryId"
-                onChange={formik.handleChange}
-                value={formik.values.categoryId}
-                label="categoryId"
-                variant="outlined"
-                helperText={formik.errors.categoryId}
-            />
+            <Stack direction="row" spacing={2}>
+                <TextField
+                    sx={{flexGrow: 1}}
+                    error={!!(formik.errors.categoryId && formik.touched.categoryId)}
+                    name="categoryId"
+                    value={formik.values.categoryId}
+                    label="categoryId"
+                    variant="outlined"
+                    helperText={formik.errors.categoryId}
+                    InputProps={{
+                        readOnly: true
+                    }}
+                />
+                <Catalog onClickOverride={(id) => formik.setFieldValue("categoryId", id)} />
+            </Stack>
             <TextField
                 error={!!(formik.errors.location && formik.touched.location)}
                 name="location"

@@ -10,7 +10,6 @@ export const loadingCategoriesServer = () => async (dispatch: AppDispatch) => {
     try {
         dispatch(categoriesFetching());
         const response = await CategoryService.fetch();
-        console.log("response categories: ", response.data.categories);
         dispatch(categoriesFetched(response.data.categories));
     }
     catch (error) {

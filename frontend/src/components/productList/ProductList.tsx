@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, useEffect, useRef} from 'react';
 // own modules
 import {loadingProductsThunk} from "../../actions/product";
 import {useAppDispatch, useAppSelector} from "../../hooks/store.hook";
@@ -8,10 +8,13 @@ import ProductCard from "../productCard/ProductCard";
 import {Box} from "@mui/material";
 
 const ProductList: FC = () => {
+    const dataFetchedRef = useRef<boolean>(false);
     const dispatch = useAppDispatch();
     const products = useAppSelector(state => state.products.products) as IProduct[];
 
     useEffect(() => {
+        if(dataFetchedRef.current) return;
+        dataFetchedRef.current = true;
         dispatch(loadingProductsThunk());
     }, [])
 

@@ -1,42 +1,39 @@
-import React, {FC, useCallback, useMemo} from 'react';
-import {Stack, Typography} from "@mui/material";
+import React, {FC, useMemo} from 'react';
+import {Stack} from "@mui/material";
 import LinkTypography from "../styledComponents/LinkTypography";
-import {useNavigate} from "react-router-dom";
 // types
 import {ICategoryTree} from "../../models/ICategoryTree";
 
 interface IChildCategoriesProps {
     categories: ICategoryTree[],
     parentId: ICategoryTree["id"],
-    onClick: (id: ICategoryTree["id"]) => void
+    onClick: (categoryTree: ICategoryTree) => void
 }
 const ChildCategories: FC<IChildCategoriesProps> = ({categories, parentId, onClick}) => {
     const parentCategory = useMemo(() => categories.filter(category => category.id === parentId)[0], [parentId, categories]);
 
-
     const listCategories = useMemo(() => {
-        return parentCategory.children.map(({id, parentId, label, name, children}) => (
-            <Stack direction="column" spacing={1}>
+        return parentCategory.children.map(({id, parentId, label, name, children, createdAt}) => (
+            <Stack key={name+id+"child"} direction="column" spacing={0.2}>
                     <LinkTypography
                         variant="body1"
                         fontWeight="bold"
-                        key={name+id}
                         data-category-name={name}
                         data-category-id={id}
                         data-category-parent-id={parentId}
-                        onClick={() => onClick(id)}
+                        onClick={() => onClick({id, parentId, label, name, children, createdAt})}
                     >
                         {label}
                     </LinkTypography>
                     {
-                        children.map(({id, parentId, label, name, children}) => (
+                        children.map(({id, parentId, label, name, children, createdAt}) => (
                             <LinkTypography
                                 variant="body1"
                                 key={name+id}
                                 data-category-name={name}
                                 data-category-id={id}
                                 data-category-parent-id={parentId}
-                                onClick={() => onClick(id)}
+                                onClick={() => onClick({id, parentId, label, name, children, createdAt})}
                             >
                                 {label}
                             </LinkTypography>
@@ -51,8 +48,9 @@ const ChildCategories: FC<IChildCategoriesProps> = ({categories, parentId, onCli
         <>
             <LinkTypography
                 mb={3}
-                onClick={() => onClick(parentCategory.id)}
+                onClick={() => onClick(parentCategory)}
                 variant="h5"
+                fontWeight="bold"
             >
                 {parentCategory.label}
             </LinkTypography>
