@@ -2,7 +2,6 @@ import React, {FC} from 'react';
 import {Box, Button, SxProps, TextField, Typography} from "@mui/material";
 import {useFormik} from "formik";
 import * as Yup from "yup";
-import {useNavigate} from "react-router-dom";
 
 // own modules
 import {loginThunk} from "../../actions/authentication";
@@ -11,13 +10,13 @@ import {useAppDispatch} from "../../hooks/store.hook";
 
 const Login: FC<{ sx?: SxProps }> = ({sx}) => {
     const dispatch = useAppDispatch();
-    const navigate = useNavigate();
+    
     const formik = useFormik({
         initialValues: {email: "", password: ""},
         validationSchema: Yup.object({
                 email: emailValidation,
                 password: loginPasswordValidation
-            }),
+        }),
         onSubmit: (values, {setSubmitting}) => {
             dispatch(loginThunk(values.email, values.password));
             setSubmitting(false);

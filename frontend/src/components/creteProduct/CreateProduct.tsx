@@ -22,7 +22,6 @@ const CreateProduct: FC = (sx?: SxProps) => {
             image: "",
             thumb: "",
             categoryId: 0,
-            location: "",
             stock: 0,
         },
         onSubmit: (values, {setSubmitting}) => {
@@ -133,15 +132,6 @@ const CreateProduct: FC = (sx?: SxProps) => {
                 />
                 <Catalog onClickOverride={(id) => formik.setFieldValue("categoryId", id)} />
             </Stack>
-            <TextField
-                error={!!(formik.errors.location && formik.touched.location)}
-                name="location"
-                onChange={formik.handleChange}
-                value={formik.values.location}
-                label="Местоположение"
-                variant="outlined"
-                helperText={formik.errors.location}
-            />
             <TextField
                 error={!!(formik.errors.stock && formik.touched.stock)}
                 name="stock"

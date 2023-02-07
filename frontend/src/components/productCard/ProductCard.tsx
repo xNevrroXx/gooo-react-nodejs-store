@@ -8,8 +8,8 @@ import LinkTypography from "../styledComponents/LinkTypography";
 import {IProduct} from "../../models/IProduct";
 
 const ProductCard: FC<IProduct> = ({id, name, stock, shortDescription, longDescription,
-                                       image, createdAt, price, thumb, weight, weightUnits,
-                                       location, categoryId}) => {
+                                       image, createdAt, price, thumb, weight,
+                                       weightUnits, categoryId}) => {
     const navigate = useNavigate();
     const onOpenProduct = () => {
         navigate(`/product/${id}`);

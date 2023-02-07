@@ -14,7 +14,7 @@ export const passwordValidation =
         .matches(/^.*(?=.*[a-z]).*$/, "Минимум 1 латинская строчная буква")
         .matches(/^.*(?=.*[A-Z]).*$/, "Минимум 1 прописная латинская буква")
         .matches(/^.*(?=.*\d).*$/, "Минимум 1 цифра")
-        .matches(/^.*(?=.*[!#$%&? "]).*$/, "Минимум 1 из символов: !#$%&? \"");
+        .matches(/^.*(?=.*[!#$%&? "]).*$/, "Минимум 1 из символов: !#$% &?\"");
 
 export const loginPasswordValidation =
     Yup.string()
@@ -33,6 +33,31 @@ export const firstnameValidation =
         .max(150, "Максимум 150 символов");
 
 export const lastnameValidation =
+    Yup.string()
+        .required("*Обязательное поле")
+        .min(2, "Минимум 2 символа")
+        .max(150, "Максимум 150 символов");
+
+export const technicalNameCategory =
+    Yup.string()
+        .required("*Обязательное поле")
+        .min(2, "Минимум 2 символа")
+        .max(150, "Максимум 150 символов")
+        .matches(/^[a-z]+(-[a-z]+)*$/, "Только на английском языке в формате: name-of-the-category");
+
+export const labelCategory =
+    Yup.string()
+        .required("*Обязательное поле")
+        .min(2, "Минимум 2 символа")
+        .max(150, "Максимум 150 символов")
+        .matches(/^[а-яёА-ЯЁa-z]+( [а-яёА-ЯЁa-z]+)*$/i, "Только на русском и английском языке в формате: Машинки для стрижки и триммеры");
+
+export const categoryId =
+    Yup.string()
+        .required("*Обязательное поле")
+        .matches(/^[0-9]+$/, "Только цифры, представляющие собой идентификатор родительской категории");
+
+export const location =
     Yup.string()
         .required("*Обязательное поле")
         .min(2, "Минимум 2 символа")

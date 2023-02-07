@@ -1,38 +1,57 @@
-import React, {FC} from 'react';
-import {Box, Button, SxProps, TextField, Typography} from "@mui/material";
-import {useNavigate} from "react-router-dom";
-import {useFormik} from "formik";
+import React, {FC, SyntheticEvent, useState} from 'react';
+import {Autocomplete, Box, Button, SxProps, TextField, Typography} from "@mui/material";
+import { useFormik} from "formik";
 import * as Yup from "yup";
 
 // own modules
+import DadataService from "../../services/DadataService";
 import {registrationThunk} from "../../actions/authentication";
 import {
     emailValidation,
     lastnameValidation,
     firstnameValidation,
     passwordValidation,
-    usernameValidation
+    usernameValidation, location
 } from "../../validation/validation";
 import {useAppDispatch} from "../../hooks/store.hook";
+// types
+import {DaDataAddress, DaDataSuggestion} from "react-dadata";
 
 const Registration: FC<{ sx?: SxProps }> = ({sx}) => {
     const dispatch = useAppDispatch();
-    const navigate = useNavigate();
+    const [addressSuggestions, setAddressSuggestions] = useState<DaDataSuggestion<DaDataAddress>["value"][]>([]);
+
     const formik = useFormik({
-        initialValues: {email: "", password: "", username: "", firstname: "", lastname: ""},
+        initialValues: {
+            email: "",
+            password: "",
+            username: "",
+            firstname: "",
+            lastname: "",
+            location: ""
+        },
         validationSchema: Yup.object({
             email: emailValidation,
             password: passwordValidation,
             username: usernameValidation,
             firstname: firstnameValidation,
-            lastname: lastnameValidation
+            lastname: lastnameValidation,
+            location: location
         }),
         onSubmit: (values, {setSubmitting}) => {
-            dispatch(registrationThunk(values.email, values.password, values.username, values.firstname, values.lastname))
+            dispatch(registrationThunk(values.email, values.password, values.username, values.firstname, values.lastname, values.location))
             setSubmitting(false);
         },
         validateOnBlur: false
     });
+
+    const handleLocationInput = async (event: SyntheticEvent<Element, Event>) => {
+        const query = (event.target as HTMLInputElement).value;
+
+        await formik.setFieldValue("location", query);
+        const response = await DadataService.getSuggestion(query);
+        setAddressSuggestions(response.data.suggestions.map(address => address.value))
+    }
 
     return (
         <Box
@@ -82,6 +101,29 @@ const Registration: FC<{ sx?: SxProps }> = ({sx}) => {
                 label="Фамилия"
                 variant="outlined"
                 helperText={formik.errors.lastname}/>
+            <Autocomplete
+                options={addressSuggestions}
+                getOptionLabel={(contact) => contact}
+                value={formik.values.location}
+                isOptionEqualToValue={() => false}
+                renderInput={(params) => {
+                    const inputProps = params.inputProps;
+                    inputProps.autoComplete = "off";
+
+                    return (
+                        <TextField
+                            {...params}
+                            onChange={handleLocationInput}
+                            fullWidth
+                            name="location"
+                            label="Адрес для доставки"
+                            error={!!(formik.errors.location && formik.touched.location)}
+                            helperText={formik.errors.location}
+                            variant="outlined"
+                        />
+                    )
+                }}
+            />
 
             <Button
                 type="submit"

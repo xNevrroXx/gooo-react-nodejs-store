@@ -54,7 +54,7 @@ const ChildCategories: FC<IChildCategoriesProps> = ({categories, parentId, onCli
             >
                 {parentCategory.label}
             </LinkTypography>
-            <Stack direction="row" spacing={4}>
+            <Stack direction="row" spacing={11}>
                 {listCategories}
             </Stack>
         </>

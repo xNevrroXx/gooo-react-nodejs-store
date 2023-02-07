@@ -1,12 +1,14 @@
-import React, {FC, useState} from "react";
+import React, {FC} from "react";
 import {Box, Button, Stack, SxProps, TextField} from "@mui/material";
 import {useFormik} from "formik";
+import * as Yup from "yup";
 
 // own modules
 import Catalog from "../catalog/Catalog";
 import MainStyledButton from "../styledComponents/MainStyledButton";
 import {useAppDispatch} from "../../hooks/store.hook";
 import {createCategoryThunk} from "../../actions/category";
+import {categoryId, labelCategory, technicalNameCategory} from "../../validation/validation";
 
 const CreateCategory: FC = (sx?: SxProps) => {
     const dispatch = useAppDispatch();
@@ -17,6 +19,11 @@ const CreateCategory: FC = (sx?: SxProps) => {
             label: "",
             parentId: 0
         },
+        validationSchema: Yup.object({
+            parentId: categoryId,
+            name: technicalNameCategory,
+            label: labelCategory
+        }),
         onSubmit: (values, {setSubmitting}) => {
             dispatch(createCategoryThunk(values));
             setSubmitting(false);

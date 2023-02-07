@@ -8,7 +8,6 @@ export interface IProductRequest {
     image: string,
     thumb: string,
     categoryId: number,
-    location: string,
     stock: number,
 }
 

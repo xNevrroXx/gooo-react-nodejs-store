@@ -27,8 +27,6 @@ export const loadingProductsThunk = () => async (dispatch: AppDispatch) => {
 export const createProductThunk = (product: IProductCreation) => async (dispatch: AppDispatch) => {
     try {
         await ProductService.create(product);
-        // dispatch(productCreate(product));
-        // todo get id and createdAt fields
     }
     catch (error) {
         if (!axios.isAxiosError(error)) { // axios error handler is in the interceptor

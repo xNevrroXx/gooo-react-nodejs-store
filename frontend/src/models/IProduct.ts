@@ -8,7 +8,6 @@ export interface IProductCreation {
     image: string,
     thumb: string,
     categoryId: number,
-    location: string,
     stock: number,
 }
 

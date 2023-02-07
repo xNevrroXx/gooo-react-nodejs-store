@@ -23,9 +23,9 @@ export const loginThunk = (email: string, password: string) => async (dispatch: 
         }
     }
 }
-export const registrationThunk = (email: string, password: string, username: string, firstname: string, lastname: string) => async (dispatch: AppDispatch) => {
+export const registrationThunk = (email: string, password: string, username: string, firstname: string, lastname: string, location: string) => async (dispatch: AppDispatch) => {
     try {
-        const response = await AuthService.registration(email, password, username, firstname, lastname);
+        const response = await AuthService.registration(email, password, username, firstname, lastname, location);
         localStorage.setItem("token", response.data.accessToken);
         dispatch(setAuthentication(true));
         dispatch(setUser(response.data.user));
