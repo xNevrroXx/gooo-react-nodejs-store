@@ -3,6 +3,8 @@ import {Box, Divider, Typography} from "@mui/material";
 // own modules
 import Login from "../components/login/Login";
 import {LinkRouterButton} from "../components/styledComponents/LinkRouterButton";
+import {createPath} from "../router/createPath";
+import {ROUTE} from "../router";
 
 const UserLogin = () => {
     return (
@@ -14,7 +16,7 @@ const UserLogin = () => {
                     <Box>
                         <Login sx={{mb: "1rem"}} />
                         <Divider/>
-                        <LinkRouterButton to="/registration" sx={{width: "100%", textAlign: "center"}}>Зарегистрироваться</LinkRouterButton>
+                        <LinkRouterButton to={createPath({path: ROUTE.USER_REGISTRATION})} sx={{width: "100%", textAlign: "center"}}>Зарегистрироваться</LinkRouterButton>
                     </Box>
                     <Box
                         sx={{display: "flex", justifyContent: "center", alignItems: "center"}}

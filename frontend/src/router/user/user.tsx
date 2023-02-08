@@ -6,9 +6,13 @@ const UserLogin = lazy(() => import("../../pages/UserLogin"));
 const UserRegistration = lazy(() => import("../../pages/UserRegistration"));
 
 export const user: RouteObject = {
-    path: "/",
+    path: "/user",
     element: <Outlet/>,
     children: [
+        {
+            path: ":userId",
+            element: <></>
+        },
         {
             path: "login",
             element: <UserLogin/>

@@ -5,7 +5,6 @@ import React from 'react';
 import LoginForm from "../../components/login/Login";
 import AdministrationFormHOC from "../../components/HOC/AdministrationFormHOC";
 
-
 const Login = () => {
     return (
         <AdministrationFormHOC label="Административный вход" wrapperFormSX={{display: "flex", flexDirection: "column", justifyContent: "center", height: "60vh"}}>

@@ -1,6 +1,7 @@
 import $api, {API_URL} from "../http";
 import axios, {AxiosResponse} from "axios";
 import {AuthResponse} from "../models/response/AuthResponse";
+import {IUserRegistration} from "../models/IUser";
 
 class AuthService {
     private static base = "/user";
@@ -8,8 +9,8 @@ class AuthService {
         return $api.post<AuthResponse>(this.base + "/login", {email, password});
     }
 
-    static async registration(email: string, password: string, username: string, firstname: string, lastname: string, location: string): Promise<AxiosResponse<AuthResponse>> {
-        return $api.post<AuthResponse>(this.base + "/registration", {email, password, username, firstname, lastname, location});
+    static async registration(user: IUserRegistration): Promise<AxiosResponse<AuthResponse>> {
+        return $api.post<AuthResponse>(this.base + "/registration", user);
     }
 
     static async logout(): Promise<AxiosResponse<null>> {

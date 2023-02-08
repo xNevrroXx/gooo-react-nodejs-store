@@ -9,7 +9,9 @@ export interface IUserRegistration {
     password: string,
     username: string,
     firstname: string,
-    lastname: string
+    lastname: string,
+    location: string,
+    isAdmin: 0 | 1
 }
 
 export interface IUserCreation extends IUserRegistration {

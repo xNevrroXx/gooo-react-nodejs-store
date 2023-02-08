@@ -11,6 +11,16 @@ router.post("/registration",
     body("username").not().isEmpty(),
     body("firstname").not().isEmpty(),
     body("lastname").not().isEmpty(),
+    body("location").not().isEmpty(),
+    body("isAdmin").custom(value => {
+        if(value !== 0 && value !== 1)
+        {
+            return Promise.reject("Поле isAdmin может содержать значение 0 или 1.");
+        }
+
+        console.log("resolve field")
+        return Promise.resolve();
+    }),
     userController.registration);
 router.post("/login",
     body("email").isEmail(),

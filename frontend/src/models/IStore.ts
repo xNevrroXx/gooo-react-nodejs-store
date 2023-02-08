@@ -1,6 +1,6 @@
 import {IProduct} from "./IProduct";
 import {INotifier} from "./INotifier";
-import {IUser} from "./IUser";
+import {IUserDto} from "./IUser";
 import {ICategory} from "./ICategory";
 import {ICategoryTree} from "./ICategoryTree";
 
@@ -35,6 +35,6 @@ export interface INotifications {
 
 // authentication
 export interface IAuthentication {
-    user: IUser | null,
+    user: IUserDto | null,
     isAuthenticated: boolean
 }

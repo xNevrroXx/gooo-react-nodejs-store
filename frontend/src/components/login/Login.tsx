@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {Box, Button, SxProps, TextField, Typography} from "@mui/material";
+import {Stack, Button, SxProps, TextField, Typography} from "@mui/material";
 import {useFormik} from "formik";
 import * as Yup from "yup";
 
@@ -25,8 +25,9 @@ const Login: FC<{ sx?: SxProps }> = ({sx}) => {
     });
 
     return (
-        <Box
-            sx={{display: "flex", flexDirection: "column", justifyContent: "flex-start", gap: "2rem", ...sx}}
+        <Stack
+            gap="2rem"
+            sx={sx}
             component="form"
             className="login-content__form"
             onSubmit={formik.handleSubmit}
@@ -58,7 +59,7 @@ const Login: FC<{ sx?: SxProps }> = ({sx}) => {
                 variant="outlined">
                 Войти
             </Button>
-        </Box>
+        </Stack>
     );
 };
 

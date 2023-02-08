@@ -15,7 +15,7 @@ class UserActions {
     async findUser ({email, id}: TFindUser): Promise<IUser> {
         return new Promise<IUser>((resolve, reject) => {
             dbPool.getConnection(async (error: MysqlError, connection: PoolConnection) => {
-                let findUserStringSQL = "SELECT id, email, password, username, firstname, lastname, created_at as 'createdAt' FROM user WHERE ";
+                let findUserStringSQL = "SELECT id, email, password, username, firstname, lastname, is_admin as 'isAdmin', created_at as 'createdAt' FROM user WHERE ";
 
                 if (email) findUserStringSQL += `email = "${email}"`;
                 else if (id) findUserStringSQL += `id = "${id}"`;
@@ -51,10 +51,10 @@ class UserActions {
         })
     }
 
-    async createUser({email, password, username, firstname, lastname, createdAt}: IUserCreation) {
+    async createUser({email, password, username, firstname, lastname, createdAt, location, isAdmin}: IUserCreation) {
         return new Promise((resolve, reject) => {
             dbPool.getConnection(async (error: MysqlError, connection: PoolConnection) => {
-                const findUserQuerySQL = mysql.format("INSERT INTO user (username, email, password, firstname, lastname, created_at) VALUES(?, ?, ?, ?, ?, ?)", [username, email, password, firstname, lastname, createdAt]);
+                const findUserQuerySQL = mysql.format("INSERT INTO user (username, email, password, firstname, lastname, created_at, location, is_admin) VALUES(?, ?, ?, ?, ?, ?, ?, ?)", [username, email, password, firstname, lastname, createdAt, location, isAdmin]);
 
                 connection.query(findUserQuerySQL, (error, result) => {
                     connection.release();

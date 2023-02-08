@@ -41,6 +41,8 @@ $api.interceptors.response.use(function(config: AxiosResponse) {
 }, async function(error: AxiosError) {
     if(axios.isAxiosError(error) && error.response) {
         if (error.response.status === 401) {
+            dispatch(createTimeoutNotificationThunk({type: "error", title: "Ошибка 401", description: "Вы не авторизованы"}))
+
             if (error.config && isAxiosRequestConfigExtra(error.config) && !error.config._isRetry) {
                 error.config._isRetry = true;
                 const originalRequest = error.config;

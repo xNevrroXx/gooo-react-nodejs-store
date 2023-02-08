@@ -3,10 +3,10 @@ import axios from "axios";
 import AuthService from "../services/AuthService";
 import {createTimeoutNotificationThunk} from "./notifications";
 import {ROUTE, router} from "../router";
-// types
-import {IUser} from "../models/IUser";
-import {AppDispatch} from "../store";
 import {createPath} from "../router/createPath";
+// types
+import {IUserDto, IUserRegistration} from "../models/IUser";
+import {AppDispatch} from "../store";
 
 export const loginThunk = (email: string, password: string) => async (dispatch: AppDispatch) => {
     try {
@@ -27,13 +27,13 @@ export const loginThunk = (email: string, password: string) => async (dispatch: 
         }
     }
 }
-export const registrationThunk = (email: string, password: string, username: string, firstname: string, lastname: string, location: string) => async (dispatch: AppDispatch) => {
+export const registrationThunk = (user: IUserRegistration) => async (dispatch: AppDispatch) => {
     try {
-        const response = await AuthService.registration(email, password, username, firstname, lastname, location);
+        const response = await AuthService.registration(user);
         localStorage.setItem("token", response.data.accessToken);
         dispatch(setAuthentication(true));
         dispatch(setUser(response.data.user));
-        dispatch(createTimeoutNotificationThunk({type: "success", title: "Регистрация прошла успешно"}))
+        dispatch(createTimeoutNotificationThunk({type: "success", title: "Регистрация прошла успешно", description: "Ссылка для активации аккаунта была отправлена на ваш почтовый адрес"}, 5000))
         router.navigate(createPath({path: ROUTE.MAIN}));
     } catch (error) {
         if (!axios.isAxiosError(error)) { // axios error handler is in the interceptor
@@ -85,7 +85,7 @@ export const checkAuthenticationThunk = () => async (dispatch: AppDispatch) => {
         }
     }
 }
-export const setUser = (value: IUser | null) => {
+export const setUser = (value: IUserDto | null) => {
     return {type: "SET_USER", payload: value};
 }
 export const setAuthentication = (value: boolean) => {

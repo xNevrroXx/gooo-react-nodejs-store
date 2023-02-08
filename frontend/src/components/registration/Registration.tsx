@@ -1,6 +1,6 @@
-import React, {FC, SyntheticEvent, useState} from 'react';
-import {Autocomplete, Box, Button, SxProps, TextField, Typography} from "@mui/material";
-import { useFormik} from "formik";
+import React, { FC, SyntheticEvent, useState } from 'react';
+import { Autocomplete, Stack, Button, SxProps, TextField, Typography, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
+import { useFormik } from "formik";
 import * as Yup from "yup";
 
 // own modules
@@ -16,19 +16,21 @@ import {
 import {useAppDispatch} from "../../hooks/store.hook";
 // types
 import {DaDataAddress, DaDataSuggestion} from "react-dadata";
+import {IUserRegistration} from "../../models/IUser";
 
 const Registration: FC<{ sx?: SxProps }> = ({sx}) => {
     const dispatch = useAppDispatch();
-    const [addressSuggestions, setAddressSuggestions] = useState<DaDataSuggestion<DaDataAddress>["value"][]>([]);
+    const [addressSuggestions, setAddressSuggestions] = useState<DaDataSuggestion<DaDataAddress>[]>([]);
 
-    const formik = useFormik({
+    const formik = useFormik<IUserRegistration>({
         initialValues: {
             email: "",
             password: "",
             username: "",
             firstname: "",
             lastname: "",
-            location: ""
+            location: "",
+            isAdmin: 0
         },
         validationSchema: Yup.object({
             email: emailValidation,
@@ -39,7 +41,7 @@ const Registration: FC<{ sx?: SxProps }> = ({sx}) => {
             location: location
         }),
         onSubmit: (values, {setSubmitting}) => {
-            dispatch(registrationThunk(values.email, values.password, values.username, values.firstname, values.lastname, values.location))
+            dispatch(registrationThunk(values))
             setSubmitting(false);
         },
         validateOnBlur: false
@@ -48,14 +50,14 @@ const Registration: FC<{ sx?: SxProps }> = ({sx}) => {
     const handleLocationInput = async (event: SyntheticEvent<Element, Event>) => {
         const query = (event.target as HTMLInputElement).value;
 
-        await formik.setFieldValue("location", query);
+        formik.handleChange(event);
         const response = await DadataService.getSuggestion(query);
-        setAddressSuggestions(response.data.suggestions.map(address => address.value))
+        setAddressSuggestions(response.data.suggestions)
     }
 
     return (
-        <Box
-            sx={{display: "flex", flexDirection: "column", justifyContent: "flex-start", gap: "2rem"}}
+        <Stack
+            gap="2rem"
             component="form"
             className="login-content__form"
             onSubmit={formik.handleSubmit}
@@ -102,19 +104,25 @@ const Registration: FC<{ sx?: SxProps }> = ({sx}) => {
                 variant="outlined"
                 helperText={formik.errors.lastname}/>
             <Autocomplete
+                freeSolo
                 options={addressSuggestions}
-                getOptionLabel={(contact) => contact}
+                getOptionLabel={option => {
+                    if(option instanceof Object) {
+                        return option.value;
+                    }
+
+                    return option;
+                }}
                 value={formik.values.location}
-                isOptionEqualToValue={() => false}
                 renderInput={(params) => {
                     const inputProps = params.inputProps;
-                    inputProps.autoComplete = "off";
+                    inputProps.autoComplete = "none";
 
                     return (
                         <TextField
                             {...params}
-                            onChange={handleLocationInput}
                             fullWidth
+                            onChange={handleLocationInput}
                             name="location"
                             label="Адрес для доставки"
                             error={!!(formik.errors.location && formik.touched.location)}
@@ -124,6 +132,21 @@ const Registration: FC<{ sx?: SxProps }> = ({sx}) => {
                     )
                 }}
             />
+            <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">Хочу быть администратором(В целях тестирования приложения)</InputLabel>
+                <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    name="isAdmin"
+                    label="Хочу быть администратором(В целях тестирования приложения)"
+                    error={!!(formik.errors.isAdmin && formik.touched.isAdmin)}
+                    value={formik.values.isAdmin}
+                    onChange={formik.handleChange}
+                >
+                    <MenuItem value={1}>Да</MenuItem>
+                    <MenuItem value={0}>Нет</MenuItem>
+                </Select>
+            </FormControl>
 
             <Button
                 type="submit"
@@ -131,7 +154,7 @@ const Registration: FC<{ sx?: SxProps }> = ({sx}) => {
                 variant="outlined">
                 Зарегистрироваться
             </Button>
-        </Box>
+        </Stack>
     )
 };
 

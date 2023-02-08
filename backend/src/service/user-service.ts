@@ -9,11 +9,19 @@ import customQuery from "../database/custom-query";
 import activationActions from "../database/activation-actions";
 import tokenActions from "../database/token-actions";
 import ApiError from "../exceptions/api-error";
+import {IUserRegistration} from "../models/IUser";
 
 class UserService {
-    async registration(email: string, password: string, username: string, firstname: string, lastname: string) {
+    async registration({
+                            email,
+                            password,
+                            username,
+                            firstname,
+                            lastname,
+                            location,
+                            isAdmin
+                       }: IUserRegistration) {
         const foundUser = await userActions.findUser({email});
-        console.log("found user: ", foundUser);
         if(foundUser) {
             throw ApiError.Conflict(`Пользователь с почтовым адресом ${email} уже существует`);
         }
@@ -26,11 +34,13 @@ class UserService {
             username,
             firstname,
             lastname,
-            createdAt: timestamp
+            createdAt: timestamp,
+            location,
+            isAdmin
         });
         const user = await userActions.findUser({email: email});
         await activationActions.createActivationData({userId: user.id, activationLink, createdAt: timestamp , isActivated: 0});
-        await mailService.sendActivationMail(email, `${process.env.API_URL}/api/activate/${activationLink}`);
+        await mailService.sendActivationMail(email, `${process.env.API_URL}/api/user/activate/${activationLink}`);
         const userDto = new UserDto(user);
         const tokens = tokenService.generateTokens({...userDto});
         await tokenService.saveToken(userDto.id, tokens.refreshToken);

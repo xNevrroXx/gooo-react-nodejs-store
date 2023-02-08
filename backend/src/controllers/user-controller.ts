@@ -13,8 +13,8 @@ class UserController {
                 return next(ApiError.BadRequest("Ошибка при валидации", errors.array()));
             }
 
-            const {email, password, username, firstname, lastname} = request.body;
-            const userData = await userService.registration(email, password, username, firstname, lastname);
+            const {email, password, username, firstname, lastname, location, isAdmin} = request.body;
+            const userData = await userService.registration({email,password,username,firstname,lastname,location,isAdmin});
 
             response.cookie("refreshToken", userData.refreshToken, {maxAge: 30*24*60*60*1000, httpOnly: true});
             response.status(200).json(userData)
@@ -81,8 +81,8 @@ class UserController {
     async sendRecoveryLink(request: Request, response: Response, next: NextFunction) {
         try {
             const email = request.body.email;
-            const recoveryCode: string = await userService.createRecoveryCode(email);
-            const recoveryLink: string = process.env.CLIENT_URL + "/recovery/" + recoveryCode;
+            const recoveryCode = await userService.createRecoveryCode(email);
+            const recoveryLink = process.env.CLIENT_URL + "/user/recovery/" + recoveryCode;
             mailService.sendRecoveryMail(email, recoveryLink);
             response.status(200).json({
                 message: "Сообщение отправлено на ваш почтовый адрес"

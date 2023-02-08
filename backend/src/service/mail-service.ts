@@ -27,7 +27,7 @@ class MailService {
                     <br><br>
                     <p style="margin: 0; padding: 0"><span style="font-weight: bold">Click on the link</span> to go to the desired route.</p>
                     </div>
-                <h1>${recoveryLink}</h1>
+                <a href=${recoveryLink}>Click me</a>
             `
         })
     }
@@ -42,8 +42,9 @@ class MailService {
                     <p style="margin: 0; padding: 0">Hi, enter the followind code on the website to confirm. And start to get goods at least everyday^.</p>
                     <br><br>
                     <p style="margin: 0; padding: 0">We are waiting for you</p>
+                    
                     </div>
-                <a href=${link}>${link}</a>
+                <a href=${link}>Click me</a>
             `
         })
     }
