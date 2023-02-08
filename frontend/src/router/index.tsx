@@ -7,6 +7,8 @@ import NotFound from "../pages/NotFound";
 import {admin} from "./admin/admin";
 import {user} from "./user/user";
 import {product} from "./product/product";
+// pages
+import Main from "../pages/Main";
 
 export const router = createBrowserRouter([
     {
@@ -16,6 +18,10 @@ export const router = createBrowserRouter([
             user,
             admin,
             product,
+            {
+                path: "/main",
+                element: <Main/>
+            },
             {
                 element: <NotFound/>,
                 path: "*"

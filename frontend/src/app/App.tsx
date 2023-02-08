@@ -9,6 +9,7 @@ import {checkAuthenticationThunk} from "../actions/authentication";
 import {useAppDispatch} from "../hooks/store.hook";
 import {loadingCategoriesServer} from "../actions/category";
 import {router} from "../router";
+import {createTimeoutNotificationThunk} from "../actions/notifications";
 
 const theme = createTheme({
     typography: {
@@ -28,6 +29,11 @@ function App() {
     useEffect(() => {
         if (dataFetchedRef.current) return;
         dataFetchedRef.current = true;
+        dispatch(createTimeoutNotificationThunk({
+            type: "information",
+            title: "Здравствуйте",
+            description: "Спасибо, что уделили время данному проекту. Пожалуйста, дайте знать, понравилось ли вам его использование. Если нет - почему."
+        }, 9000));
         dispatch(loadingCategoriesServer());
 
         if (localStorage.getItem("token")) {

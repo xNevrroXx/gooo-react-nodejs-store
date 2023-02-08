@@ -4,13 +4,13 @@ import {INotification} from "../models/IStore";
 import {INotifier} from "../models/INotifier";
 import {AppDispatch} from "../store";
 
-export const createTimeoutNotificationThunk = (notification: INotifier) => (dispatch: AppDispatch) => {
+export const createTimeoutNotificationThunk = (notification: INotifier, expirationTime?: number) => (dispatch: AppDispatch) => {
     const id: INotification["id"] = uuidv4();
 
     dispatch(createNotification({...notification, id}));
     setTimeout(() => {
         dispatch(deleteNotification(id));
-    }, 3200)
+    }, expirationTime || 3200)
 }
 export const createNotification = (notification: INotification) => {
     return {type: "CREATE_NOTIFICATION", payload: notification}

@@ -7,14 +7,10 @@ const ProductPage = lazy(() => import("../../pages/Product"));
 
 export const product: RouteObject = {
     element: <Outlet/>,
-    path: "/",
+    path: "/product",
     children: [
         {
-            path: "/main",
-            element: <Main/>
-        },
-        {
-            path: "/:id",
+            path: ":id",
             element: <ProductPage/>
         }
     ]

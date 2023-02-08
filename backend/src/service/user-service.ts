@@ -9,12 +9,12 @@ import customQuery from "../database/custom-query";
 import activationActions from "../database/activation-actions";
 import tokenActions from "../database/token-actions";
 import ApiError from "../exceptions/api-error";
-import {IUser} from "../models/IUser";
 
 class UserService {
     async registration(email: string, password: string, username: string, firstname: string, lastname: string) {
         const foundUser = await userActions.findUser({email});
-        if(!foundUser) {
+        console.log("found user: ", foundUser);
+        if(foundUser) {
             throw ApiError.Conflict(`Пользователь с почтовым адресом ${email} уже существует`);
         }
         const hashPassword = await bcrypt.hash(password, 3);
