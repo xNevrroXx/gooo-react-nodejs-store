@@ -1,15 +1,15 @@
 import React, {FC} from 'react';
 
 // own modules
-import CreateProduct from "../../components/creteProduct/CreateProduct";
+import CreateProductForm from "../../components/creteProduct/CreateProduct";
 import AdministrationFormHOC from "../../components/HOC/AdministrationFormHOC";
 
-const AdministrationCreateProduct: FC = () => {
+const CreateProduct: FC = () => {
     return (
         <AdministrationFormHOC label="Адиминистративная панель: создание товара">
-            <CreateProduct />
+            <CreateProductForm />
         </AdministrationFormHOC>
     )
 };
 
-export default AdministrationCreateProduct;
+export default CreateProduct;

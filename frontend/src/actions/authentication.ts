@@ -2,9 +2,11 @@ import axios from "axios";
 // own modules
 import AuthService from "../services/AuthService";
 import {createTimeoutNotificationThunk} from "./notifications";
+import {ROUTE, router} from "../router";
 // types
 import {IUser} from "../models/IUser";
 import {AppDispatch} from "../store";
+import {createPath} from "../router/createPath";
 
 export const loginThunk = (email: string, password: string) => async (dispatch: AppDispatch) => {
     try {
@@ -12,6 +14,8 @@ export const loginThunk = (email: string, password: string) => async (dispatch: 
         localStorage.setItem("token", response.data.accessToken);
         dispatch(setAuthentication(true));
         dispatch(setUser(response.data.user));
+        dispatch(createTimeoutNotificationThunk({type: "success", title: "Привет!", description: "Вы успешно вошли в аккаунт"}))
+        router.navigate(createPath({path: ROUTE.MAIN}));
     } catch (error) {
         if (!axios.isAxiosError(error)) { // axios error handler is in the interceptor
             if(error instanceof Error) {
@@ -29,6 +33,8 @@ export const registrationThunk = (email: string, password: string, username: str
         localStorage.setItem("token", response.data.accessToken);
         dispatch(setAuthentication(true));
         dispatch(setUser(response.data.user));
+        dispatch(createTimeoutNotificationThunk({type: "success", title: "Регистрация прошла успешно"}))
+        router.navigate(createPath({path: ROUTE.MAIN}));
     } catch (error) {
         if (!axios.isAxiosError(error)) { // axios error handler is in the interceptor
             if(error instanceof Error) {
@@ -46,6 +52,8 @@ export const logoutThunk = () => async (dispatch: AppDispatch) => {
         localStorage.removeItem("token");
         dispatch(setAuthentication(false));
         dispatch(setUser(null));
+        dispatch(createTimeoutNotificationThunk({type: "success", title: "Вы успешно вышли из учетной записи"}))
+        router.navigate(createPath({path: ROUTE.USER_LOGIN}));
     }
     catch (error) {
         if (!axios.isAxiosError(error)) { // axios error handler is in the interceptor
@@ -64,6 +72,7 @@ export const checkAuthenticationThunk = () => async (dispatch: AppDispatch) => {
         localStorage.setItem("token", response.data.accessToken);
         dispatch(setAuthentication(true));
         dispatch(setUser(response.data.user));
+        router.navigate(createPath({path: ROUTE.MAIN}))
     }
     catch (error) {
         if (!axios.isAxiosError(error)) { // axios error handler is in the interceptor

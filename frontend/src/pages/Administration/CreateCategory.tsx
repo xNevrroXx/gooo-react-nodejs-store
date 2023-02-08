@@ -2,14 +2,14 @@ import React from "react";
 
 // own modules
 import AdministrationFormHOC from "../../components/HOC/AdministrationFormHOC";
-import CreateCategory from "../../components/createCategory/CreateCategory";
+import CreateCategoryForm from "../../components/createCategory/CreateCategory";
 
-const AdministrationCreateCategory = () => {
+const CreateCategory = () => {
     return (
         <AdministrationFormHOC label="Адиминистративная панель: создание категорий товаров" wrapperFormSX={{display: "flex", flexDirection: "column", justifyContent: "center", height: "60vh"}}>
-            <CreateCategory />
+            <CreateCategoryForm />
         </AdministrationFormHOC>
     );
 };
 
-export default AdministrationCreateCategory;
+export default CreateCategory;
