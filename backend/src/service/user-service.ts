@@ -104,14 +104,25 @@ class UserService {
     async changePassword(recoveryCode: string, newPassword: string) {
         const foundRecoveryData = await recoveryActions.findOne({value: recoveryCode});
         if(!foundRecoveryData) {
-            throw ApiError.BadRequest("Код неверен");
+            throw ApiError.BadRequest("Код восстановления неверен");
         }
-        const normalizedRecoveryData = recoveryActions.normalized(foundRecoveryData);
-        console.log("normalized data: ", normalizedRecoveryData);
-        const foundUser = await userActions.findUser({id: normalizedRecoveryData.userId});
-        console.log("foundUser: ", foundUser);
+        const {createdAt, userId, isUsed} = recoveryActions.normalized(foundRecoveryData);
+        const timezoneOffsetMs = 1000 * 60 * ( new Date().getTimezoneOffset() < 0 ? -new Date().getTimezoneOffset() : new Date().getTimezoneOffset() );
+        if(isUsed === 1) {
+            throw ApiError.BadRequest("Код восстановления уже был использован. Если Вы не изменяли пароль - обратитесь в центр поддержки.")
+        }
+        else if( ( new Date(createdAt).getTime() + timezoneOffsetMs + 1000*60*10 ) < Date.now()) { // if more than 10 minutes ago
+            throw ApiError.BadRequest("Истек срок действия кода восстановления");
+        }
+        const foundUser = await userActions.findUser({id: userId});
         const hashPassword = await bcrypt.hash(newPassword, 3);
         await customQuery(`UPDATE user SET password = "${hashPassword}" WHERE id = "${foundUser.id}"`);
+        try {
+            await customQuery(`UPDATE user_recovery_code SET is_used=1 WHERE user_id = "${foundUser.id}"`);
+        }
+        catch (error) {
+            console.log("Not able to change IS_USED field in the mysql table.");
+        }
     }
 
     async getUsers(): Promise<any[]> {
