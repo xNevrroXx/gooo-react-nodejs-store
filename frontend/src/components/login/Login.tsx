@@ -18,7 +18,7 @@ const Login: FC<{ sx?: SxProps }> = ({sx}) => {
                 password: loginPasswordValidation
         }),
         onSubmit: (values, {setSubmitting}) => {
-            dispatch(loginThunk(values.email, values.password));
+            dispatch(loginThunk(values));
             setSubmitting(false);
         },
         validateOnBlur: false

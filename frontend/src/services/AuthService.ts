@@ -21,7 +21,7 @@ class AuthService {
         return $api.post<null>(this.base + "/recovery/get-link", {email});
     }
 
-    static async recoveryPasswordSetNewPassword(code: string, password: string): Promise<void> {
+    static async recoveryPasswordSetNew(code: string, password: string): Promise<void> {
         return $api.post(this.base + `/recovery/${code}`, {password});
     }
 

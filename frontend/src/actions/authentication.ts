@@ -5,10 +5,43 @@ import {createTimeoutNotificationThunk} from "./notifications";
 import {ROUTE, router} from "../router";
 import {createPath} from "../router/createPath";
 // types
-import {IUserDto, IUserRegistration} from "../models/IUser";
+import {IUser, IUserDto, IUserLogin, IUserRegistration} from "../models/IUser";
 import {AppDispatch} from "../store";
 
-export const loginThunk = (email: string, password: string) => async (dispatch: AppDispatch) => {
+
+export const recoveryPasswordGetLinkThunk = ({email}: {email: IUser["email"]}) => async (dispatch: AppDispatch) => {
+    try {
+        await AuthService.recoveryPasswordGetLink(email);
+        dispatch(createTimeoutNotificationThunk({type: "success", title: "Успешно", description: "Ссылка для восстановления была отправлена на ваш почтовый адрес"}));
+    }
+    catch (error) {
+        if (!axios.isAxiosError(error)) { // axios error handler is in the interceptor
+            if(error instanceof Error) {
+                dispatch(createTimeoutNotificationThunk({type: "error", title: "Ошибка", description: error.message}))
+            }
+            else {
+                dispatch(createTimeoutNotificationThunk({type: "error", title: "Ошибка", description: "Непредвиденная ошибка - мы уже занимаемся решением данной проблемы"}))
+            }
+        }
+    }
+}
+export const recoveryPasswordChangePasswordThunk = ({code, password}: {code: string, password: IUser["password"]}) => async (dispatch: AppDispatch) => {
+    try {
+        await AuthService.recoveryPasswordSetNew(code, password);
+        dispatch(createTimeoutNotificationThunk({type: "success", title: "Успешно", description: "Пароль успешно изменен"}));
+    }
+    catch (error) {
+        if (!axios.isAxiosError(error)) { // axios error handler is in the interceptor
+            if(error instanceof Error) {
+                dispatch(createTimeoutNotificationThunk({type: "error", title: "Ошибка", description: error.message}))
+            }
+            else {
+                dispatch(createTimeoutNotificationThunk({type: "error", title: "Ошибка", description: "Непредвиденная ошибка - мы уже занимаемся решением данной проблемы"}))
+            }
+        }
+    }
+}
+export const loginThunk = ({email, password}: IUserLogin) => async (dispatch: AppDispatch) => {
     try {
         const response = await AuthService.login(email, password);
         localStorage.setItem("token", response.data.accessToken);

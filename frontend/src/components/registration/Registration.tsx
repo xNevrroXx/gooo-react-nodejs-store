@@ -11,7 +11,7 @@ import {
     lastnameValidation,
     firstnameValidation,
     passwordValidation,
-    usernameValidation, location
+    usernameValidation, locationValidation
 } from "../../validation/validation";
 import {useAppDispatch} from "../../hooks/store.hook";
 // types
@@ -38,7 +38,7 @@ const Registration: FC<{ sx?: SxProps }> = ({sx}) => {
             username: usernameValidation,
             firstname: firstnameValidation,
             lastname: lastnameValidation,
-            location: location
+            location: locationValidation
         }),
         onSubmit: (values, {setSubmitting}) => {
             dispatch(registrationThunk(values))

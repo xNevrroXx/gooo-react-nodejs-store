@@ -1,7 +1,7 @@
 export interface IUserDto {
-    id: number,
-    email: string,
-    username: string
+    id: IUser["id"],
+    email: IUser["email"],
+    username: IUser["username"]
 }
 
 
@@ -16,4 +16,9 @@ export interface IUserRegistration extends IUserLogin{
     lastname: string,
     location: string,
     isAdmin: 0 | 1
+}
+
+export interface IUser extends IUserRegistration {
+    createdAt: string,
+    id: number
 }

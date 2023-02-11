@@ -38,32 +38,32 @@ export const lastnameValidation =
         .min(2, "Минимум 2 символа")
         .max(150, "Максимум 150 символов");
 
-export const technicalNameCategory =
+export const technicalNameCategoryValidation =
     Yup.string()
         .required("*Обязательное поле")
         .min(2, "Минимум 2 символа")
         .max(150, "Максимум 150 символов")
         .matches(/^[a-z]+(-[a-z]+)*$/, "Только на английском языке в формате: name-of-the-category");
 
-export const labelCategory =
+export const labelCategoryValidation =
     Yup.string()
         .required("*Обязательное поле")
         .min(2, "Минимум 2 символа")
         .max(150, "Максимум 150 символов")
         .matches(/^[а-яёА-ЯЁa-z]+( [а-яёА-ЯЁa-z]+)*$/i, "Только на русском и английском языке в формате: Машинки для стрижки и триммеры");
 
-export const categoryId =
+export const categoryIdValidation =
     Yup.string()
         .required("*Обязательное поле")
         .matches(/^[0-9]+$/, "Только цифры, представляющие собой идентификатор родительской категории");
 
-export const location =
+export const locationValidation =
     Yup.string()
         .required("*Обязательное поле")
         .min(2, "Минимум 2 символа")
         .max(150, "Максимум 150 символов");
 
-export const isAdmin =
+export const isAdminValidation =
     Yup.number()
         .required("*Обязательное поле")
         .min(0, "Возможно выбрать либо <b>да(1)</b>, либо <b>нет(0)</b>.")

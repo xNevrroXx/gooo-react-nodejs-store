@@ -1,4 +1,4 @@
-import {Outlet, RouteObject} from "react-router-dom";
+import {Navigate, Outlet, RouteObject} from "react-router-dom";
 import React, {lazy} from "react";
 
 // pages

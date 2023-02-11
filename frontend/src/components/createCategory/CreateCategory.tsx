@@ -8,7 +8,7 @@ import Catalog from "../catalog/Catalog";
 import MainStyledButton from "../styledComponents/MainStyledButton";
 import {useAppDispatch} from "../../hooks/store.hook";
 import {createCategoryThunk} from "../../actions/category";
-import {categoryId, labelCategory, technicalNameCategory} from "../../validation/validation";
+import {categoryIdValidation, labelCategoryValidation, technicalNameCategoryValidation} from "../../validation/validation";
 
 const CreateCategory: FC = (sx?: SxProps) => {
     const dispatch = useAppDispatch();
@@ -20,9 +20,9 @@ const CreateCategory: FC = (sx?: SxProps) => {
             parentId: 0
         },
         validationSchema: Yup.object({
-            parentId: categoryId,
-            name: technicalNameCategory,
-            label: labelCategory
+            parentId: categoryIdValidation,
+            name: technicalNameCategoryValidation,
+            label: labelCategoryValidation
         }),
         onSubmit: (values, {setSubmitting}) => {
             dispatch(createCategoryThunk(values));

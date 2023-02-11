@@ -37,6 +37,8 @@ export enum ROUTE {
     USER_LOGIN = "/user/login",
     USER_REGISTRATION = "/user/registration",
     USER_PROFILE = "/user/:userId",
+    USER_RECOVERY_PASSWORD_START = "/user/recovery/get-link",
+    USER_RECOVERY_PASSWORD_FINISH = "/user/recovery/:recoveryLink",
 
     // admin
     ADMIN_LOGIN = "/administration/login",
