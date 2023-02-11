@@ -14,17 +14,17 @@ const RecoveryPasswordFinish: FC = () => {
     const dispatch = useAppDispatch();
     const {recoveryLink} = useParams();
 
-    const formik = useFormik<{newPassword: IUser["password"], passwordRepeat: IUser["password"]}>({
+    const formik = useFormik<{password: IUser["password"], confirmationPassword: IUser["password"]}>({
         initialValues: {
-            newPassword: "",
-            passwordRepeat: ""
+            password: "",
+            confirmationPassword: ""
         },
         validationSchema: Yup.object({
-            newPassword: passwordValidation,
-            passwordRepeat: passwordValidation,
+            password: passwordValidation,
+            confirmationPassword: passwordValidation.oneOf([Yup.ref("password"), "null"], "Пароли должны совпадать"),
         }),
         onSubmit: (values, {setSubmitting}) => {
-            dispatch(recoveryPasswordChangePasswordThunk({code: recoveryLink as string, password: values.newPassword}))
+            dispatch(recoveryPasswordChangePasswordThunk({code: recoveryLink as string, password: values.password}))
             setSubmitting(false);
         }
     });
@@ -32,26 +32,26 @@ const RecoveryPasswordFinish: FC = () => {
     return (
         <Stack onSubmit={formik.handleSubmit} component="form" sx={{width: "50%", height: "30vh"}} justifyContent="center" gap="2rem">
             <TextField
-                error={!!(formik.errors.newPassword && formik.touched.newPassword)}
-                value={formik.values.newPassword}
+                error={!!(formik.errors.password && formik.touched.password)}
+                value={formik.values.password}
                 onChange={formik.handleChange}
                 variant="outlined"
                 label="Новый пароль"
-                name="newPassword"
+                name="password"
                 autoComplete="none"
                 type="password"
-                helperText={formik.errors.newPassword}
+                helperText={formik.errors.password}
             />
             <TextField
-                error={!!(formik.errors.passwordRepeat && formik.touched.passwordRepeat)}
-                value={formik.values.passwordRepeat}
+                error={!!(formik.errors.confirmationPassword && formik.touched.confirmationPassword)}
+                value={formik.values.confirmationPassword}
                 onChange={formik.handleChange}
                 variant="outlined"
                 label="Повторите пароль"
-                name="passwordRepeat"
+                name="confirmationPassword"
                 autoComplete="none"
                 type="password"
-                helperText={formik.errors.passwordRepeat}
+                helperText={formik.errors.confirmationPassword}
             />
 
             <Button

@@ -117,12 +117,7 @@ class UserService {
         const foundUser = await userActions.findUser({id: userId});
         const hashPassword = await bcrypt.hash(newPassword, 3);
         await customQuery(`UPDATE user SET password = "${hashPassword}" WHERE id = "${foundUser.id}"`);
-        try {
-            await customQuery(`UPDATE user_recovery_code SET is_used=1 WHERE user_id = "${foundUser.id}"`);
-        }
-        catch (error) {
-            console.log("Not able to change IS_USED field in the mysql table.");
-        }
+        await customQuery(`UPDATE user_recovery_code SET is_used=1 WHERE user_id = "${foundUser.id}"`);
     }
 
     async getUsers(): Promise<any[]> {
