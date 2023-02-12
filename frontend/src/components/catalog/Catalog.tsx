@@ -1,6 +1,6 @@
 import {useNavigate} from "react-router-dom";
 import React, {FC, MouseEvent, useCallback, useEffect, useMemo, useState} from "react";
-import {Button, Divider, Grid, Menu, MenuItem, Stack} from "@mui/material";
+import {Button, Divider, Grid, Menu, MenuItem, Stack, SxProps} from "@mui/material";
 import {KeyboardArrowRight as KeyboardArrowRightIcon, Menu as MenuIcon} from "@mui/icons-material";
 // own modules
 import ChildCategories from "../childCategories/ChildCategories";
@@ -9,10 +9,11 @@ import {useAppSelector} from "../../hooks/store.hook";
 import {ICategoryTree} from "../../models/ICategoryTree";
 
 interface ICatalogProps {
+    sx?: SxProps
     onClickOverride?: (id: number) => void
 }
 
-const Catalog: FC<ICatalogProps> = ({onClickOverride}) => {
+const Catalog: FC<ICatalogProps> = ({onClickOverride, sx}) => {
     const navigate = useNavigate();
     const categories = useAppSelector(state => state.categories.categories) as ICategoryTree[];
 
@@ -71,7 +72,7 @@ const Catalog: FC<ICatalogProps> = ({onClickOverride}) => {
                 id="catalog-menu-button"
                 variant="contained"
                 startIcon={<MenuIcon/>}
-                sx={{display: {xs: "none", sm: "flex"}, mr: "1rem", width: "max-content", padding: ".5rem 1.5rem"}}
+                sx={{display: {xs: "none", sm: "flex"}, minWidth: "auto", padding: ".5rem  1.5rem", ...sx}}
                 onClick={onOpen}
                 aria-controls={isOpen ? "catalog-dropdown-menu" : undefined}
                 aria-haspopup="true"

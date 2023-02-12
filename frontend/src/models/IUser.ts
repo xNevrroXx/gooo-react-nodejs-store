@@ -1,7 +1,8 @@
 export interface IUserDto {
     id: IUser["id"],
     email: IUser["email"],
-    username: IUser["username"]
+    username: IUser["username"],
+    isAdmin: IUser["isAdmin"]
 }
 
 

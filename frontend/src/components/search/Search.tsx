@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {TextField, InputAdornment, Box, SxProps} from "@mui/material";
 import {Search as SearchIcon} from "@mui/icons-material";
 
-const Search = (props: {sx: SxProps}) => {
+const Search = (props: {sx?: SxProps}) => {
   const [value, setValue] = useState("");
 
   return (
@@ -23,7 +23,7 @@ const Search = (props: {sx: SxProps}) => {
           ),
         }}
         variant="standard"
-        sx={{width: {xs: "100%", sm: "50%"}}}
+        sx={{width: {xs: "100%"}}}
         value={value}
         onChange={event => setValue(event.target.value)}
       />
