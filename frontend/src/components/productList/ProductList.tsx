@@ -1,7 +1,8 @@
 import React, {FC, useEffect, useRef} from 'react';
 // own modules
-import {loadingProductsThunk} from "../../actions/product";
 import {useAppDispatch, useAppSelector} from "../../hooks/store.hook";
+// actions
+import {productsFetchingServer} from "../../store/thunks/products";
 // types
 import {IProduct} from "../../models/IProduct";
 import ProductCard from "../productCard/ProductCard";
@@ -15,7 +16,7 @@ const ProductList: FC = () => {
     useEffect(() => {
         if(dataFetchedRef.current) return;
         dataFetchedRef.current = true;
-        dispatch(loadingProductsThunk());
+        dispatch(productsFetchingServer());
     }, [])
 
 

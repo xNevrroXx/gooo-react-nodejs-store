@@ -28,10 +28,11 @@ class productController {
             }
 
             const product: IProductRequest = request.body;
-            await productService.create(product);
+            const createdProduct = await productService.create(product);
 
             response.status(200).json({
-                message: "success"
+                message: "success",
+                product: createdProduct
             })
         }
         catch (error) {

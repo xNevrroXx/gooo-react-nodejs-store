@@ -5,7 +5,6 @@ import * as Yup from "yup";
 
 // own modules
 import DadataService from "../../services/DadataService";
-import {registrationThunk} from "../../actions/authentication";
 import {
     emailValidation,
     lastnameValidation,
@@ -14,6 +13,8 @@ import {
     usernameValidation, locationValidation
 } from "../../validation/validation";
 import {useAppDispatch} from "../../hooks/store.hook";
+// actions
+import {registration} from "../../store/thunks/authentication";
 // types
 import {DaDataAddress, DaDataSuggestion} from "react-dadata";
 import {IUserRegistration} from "../../models/IUser";
@@ -41,7 +42,7 @@ const Registration: FC<{ sx?: SxProps }> = ({sx}) => {
             location: locationValidation
         }),
         onSubmit: (values, {setSubmitting}) => {
-            dispatch(registrationThunk(values))
+            dispatch(registration(values))
             setSubmitting(false);
         },
         validateOnBlur: false

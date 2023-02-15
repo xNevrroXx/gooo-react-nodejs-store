@@ -1,17 +1,19 @@
-import React, {FC} from "react";
+import React, {FC, useMemo} from "react";
 import {Box, Button, Stack, SxProps, TextField} from "@mui/material";
+import {ExpandMore as ExpandMoreIcon, ChevronRight as ChevronRightIcon} from "@mui/icons-material";
+import {TreeView, TreeItem} from "@mui/lab";
 import {useFormik} from "formik";
 import * as Yup from "yup";
-
 // own modules
-import Catalog from "../catalog/Catalog";
 import MainStyledButton from "../styledComponents/MainStyledButton";
-import {useAppDispatch} from "../../hooks/store.hook";
-import {createCategoryThunk} from "../../actions/category";
+import {useAppDispatch, useAppSelector} from "../../hooks/store.hook";
 import {categoryIdValidation, labelCategoryValidation, technicalNameCategoryValidation} from "../../validation/validation";
+// actions
+import {categoryCreateServer} from "../../store/thunks/categories";
 
 const CreateCategory: FC = (sx?: SxProps) => {
     const dispatch = useAppDispatch();
+    const categories = useAppSelector(state => state.categories.categories) ;
 
     const formik = useFormik({
         initialValues: {
@@ -25,10 +27,18 @@ const CreateCategory: FC = (sx?: SxProps) => {
             label: labelCategoryValidation
         }),
         onSubmit: (values, {setSubmitting}) => {
-            dispatch(createCategoryThunk(values));
+            dispatch(categoryCreateServer(values));
             setSubmitting(false);
         }
     });
+
+    // const categoryTree = useMemo(() => {
+    //     return categories.map(category => {
+    //         <TreeItem nodeId="1" label="Applications">
+    //             <TreeItem nodeId="2" label="Calendar" />
+    //         </TreeItem>
+    //     })
+    // }, [categories])
 
     return (
         <Box
@@ -76,7 +86,23 @@ const CreateCategory: FC = (sx?: SxProps) => {
                         readOnly: true
                     }}
                 />
-                <Catalog onClickOverride={(id) => formik.setFieldValue("parentId", id)} />
+                {/*<Catalog onClickOverride={(id) => formik.setFieldValue("parentId", id)} />*/}
+                <TreeView
+                    aria-label="category navigator"
+                    defaultCollapseIcon={<ExpandMoreIcon />}
+                    defaultExpandIcon={<ChevronRightIcon />}
+                    sx={{ height: 240, flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}
+                >
+                    <TreeItem nodeId="1" label="Applications">
+                        <TreeItem nodeId="2" label="Calendar" />
+                    </TreeItem>
+                    <TreeItem nodeId="5" label="Documents">
+                        <TreeItem nodeId="10" label="OSS" />
+                        <TreeItem nodeId="6" label="MUI">
+                            <TreeItem nodeId="8" label="index.js" />
+                        </TreeItem>
+                    </TreeItem>
+                </TreeView>
                 <MainStyledButton
                     sx={{height: "100%", width: "max-content"}}
                     onClick={() => formik.setFieldValue("parentId", 0)}

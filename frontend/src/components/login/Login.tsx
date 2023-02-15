@@ -1,12 +1,13 @@
+// third-party modules
 import React, {FC} from 'react';
 import {Stack, Button, SxProps, TextField, Typography} from "@mui/material";
 import {useFormik} from "formik";
 import * as Yup from "yup";
-
 // own modules
-import {loginThunk} from "../../actions/authentication";
 import {emailValidation, loginPasswordValidation} from "../../validation/validation";
 import {useAppDispatch} from "../../hooks/store.hook";
+// actions
+import {login} from "../../store/thunks/authentication";
 
 const Login: FC<{ sx?: SxProps }> = ({sx}) => {
     const dispatch = useAppDispatch();
@@ -18,7 +19,7 @@ const Login: FC<{ sx?: SxProps }> = ({sx}) => {
                 password: loginPasswordValidation
         }),
         onSubmit: (values, {setSubmitting}) => {
-            dispatch(loginThunk(values));
+            dispatch(login(values));
             setSubmitting(false);
         },
         validateOnBlur: false

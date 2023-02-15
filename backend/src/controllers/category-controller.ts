@@ -29,9 +29,11 @@ class CategoryController {
 
             const {name, parentId, label}: ICategoryRequest = request.body;
             await categoryService.create({name, parentId, label});
+            const categoryTree = await categoryService.getAll();
 
             response.status(200).json({
-                message: "success"
+                message: "success",
+                categories: categoryTree
             })
         }
         catch (error) {

@@ -70,8 +70,8 @@ class CategoryActions {
             parentId: parent_id
         }
     }
-    async create ({name, parentId, createdAt, label}: ICategoryCreation) {
-        return new Promise((resolve, reject) => {
+    async create ({name, parentId, createdAt, label}: ICategoryCreation): Promise<ICategory["id"]> {
+        return new Promise<ICategory["id"]>((resolve, reject) => {
             dbPool.getConnection((error: MysqlError, connection: PoolConnection) => {
                 const createSQLString = "INSERT INTO product_category (name, parent_id, created_at, label) VALUES (?, ?, ?, ?)";
                 const createSQLQuery = mysql.format(createSQLString, [name, parentId, createdAt, label]);
@@ -82,7 +82,7 @@ class CategoryActions {
                         reject(error);
                     }
 
-                    resolve(result);
+                    resolve(result.inserId);
                 })
             })
         })

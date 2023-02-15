@@ -1,5 +1,9 @@
 import {IProduct} from "../IProduct";
 
-export interface IProductResponse {
+export interface IProductFetchingResponse {
     products: IProduct[]
+}
+
+export interface IProductCreationResponse {
+    product: IProduct
 }

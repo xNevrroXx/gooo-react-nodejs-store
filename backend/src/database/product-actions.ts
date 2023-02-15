@@ -13,7 +13,7 @@ type TArgumentFindProduct = {
 }
 
 class ProductActions {
-    normalization({id, name, price, weight, weight_units, short_description, long_description, image, thumb, category_id, location, stock, created_at}: IProductDB): IProduct {
+    normalization({id, name, price, weight, weight_units, short_description, long_description, image, thumb, category_id, stock, created_at}: IProductDB): IProduct {
         return {
             id,
             name,
@@ -25,16 +25,15 @@ class ProductActions {
             image,
             thumb,
             categoryId: category_id,
-            location,
             stock,
             createdAt: created_at,
         }
     }
-    async create ({name, price, weight, weightUnits, shortDescription, longDescription, image, thumb, location, stock, categoryId, createdAt}: IProductCreation) {
-        return new Promise((resolve, reject) => {
+    async create ({name, price, weight, weightUnits, shortDescription, longDescription, image, thumb, stock, categoryId, createdAt}: IProductCreation): Promise<IProduct["id"]> {
+        return new Promise<IProduct["id"]>((resolve, reject) => {
             dbPool.getConnection((error: MysqlError, connection: PoolConnection) => {
-                const createSQLString = "INSERT INTO product (name, price, weight, weight_units, short_description, long_description, image, thumb, location, stock, category_id, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                const createSQLQuery = mysql.format(createSQLString, [name, price, weight, weightUnits, shortDescription, longDescription, image, thumb, location, stock, categoryId, createdAt]);
+                const createSQLString = "INSERT INTO product (name, price, weight, weight_units, short_description, long_description, image, thumb, stock, category_id, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                const createSQLQuery = mysql.format(createSQLString, [name, price, weight, weightUnits, shortDescription, longDescription, image, thumb, stock, categoryId, createdAt]);
 
                 connection.query(createSQLQuery, (error, result) => {
                     connection.release();
@@ -42,7 +41,7 @@ class ProductActions {
                         reject(error);
                     }
 
-                    resolve(result);
+                    resolve(result.insertId);
                 })
             })
         })

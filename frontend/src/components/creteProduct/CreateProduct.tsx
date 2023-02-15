@@ -3,10 +3,10 @@ import {Box, Button, Stack, SxProps, TextField, Typography} from "@mui/material"
 import {useFormik} from "formik";
 
 // own modules
-import {useAppDispatch} from "../../hooks/store.hook";
-import {createProductThunk} from "../../actions/product";
+import {useAppDispatch} from "../../hooks/store.hook"
 import Catalog from "../catalog/Catalog";
-import MainStyledButton from "../styledComponents/MainStyledButton";
+// actions
+import {productCreateServer} from "../../store/thunks/products";
 
 const CreateProduct: FC = (sx?: SxProps) => {
     const dispatch = useAppDispatch();
@@ -25,7 +25,7 @@ const CreateProduct: FC = (sx?: SxProps) => {
             stock: 0,
         },
         onSubmit: (values, {setSubmitting}) => {
-            dispatch(createProductThunk(values));
+            dispatch(productCreateServer(values));
             setSubmitting(false);
         }
     });

@@ -1,15 +1,15 @@
 // third-party modules
-import React, {lazy, useEffect, useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {createTheme, ThemeProvider} from "@mui/material";
 import {RouterProvider,} from "react-router-dom";
-
 // own components
 import NotificationList from "../components/notifier/NotificationList";
-import {checkAuthenticationThunk} from "../actions/authentication";
 import {useAppDispatch} from "../hooks/store.hook";
-import {loadingCategoriesServer} from "../actions/category";
 import {router} from "../router";
-import {createTimeoutNotificationThunk} from "../actions/notifications";
+// actions
+import {checkAuthentication} from "../store/thunks/authentication";
+import {createTimeoutNotification} from "../store/thunks/notifications";
+import {categoriesFetchingServer} from "../store/thunks/categories";
 
 const theme = createTheme({
     typography: {
@@ -29,15 +29,19 @@ function App() {
     useEffect(() => {
         if (dataFetchedRef.current) return;
         dataFetchedRef.current = true;
-        dispatch(createTimeoutNotificationThunk({
-            type: "information",
-            title: "Здравствуйте",
-            description: "Спасибо, что уделили время данному проекту. Пожалуйста, дайте знать, понравилось ли вам его использование. Если нет - почему."
-        }, 9000));
-        dispatch(loadingCategoriesServer());
+        dispatch(createTimeoutNotification({
+            notification: {
+                type: "information",
+                title: "Здравствуйте",
+                description: "Спасибо, что уделили время данному проекту. Пожалуйста, дайте знать, понравилось ли вам его использование. Если нет - почему."
+            },
+            expirationTime: 9000
+            }
+        ));
+        dispatch(categoriesFetchingServer());
 
         if (localStorage.getItem("token")) {
-            dispatch(checkAuthenticationThunk());
+            dispatch(checkAuthentication());
         }
     }, [])
 

@@ -5,7 +5,8 @@ import * as Yup from "yup";
 // own modules
 import {emailValidation} from "../../validation/validation";
 import {useAppDispatch} from "../../hooks/store.hook";
-import {recoveryPasswordGetLinkThunk} from "../../actions/authentication";
+// actions
+import {recoveryPasswordGetLink} from "../../store/thunks/authentication";
 // types
 import {IUser} from "../../models/IUser";
 
@@ -19,7 +20,7 @@ const RecoveryPasswordStart: FC = () => {
             email: emailValidation
         }),
         onSubmit: (values, {setSubmitting}) => {
-            dispatch(recoveryPasswordGetLinkThunk(values));
+            dispatch(recoveryPasswordGetLink(values));
             setSubmitting(false);
         }
     });

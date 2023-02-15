@@ -1,6 +1,6 @@
+// third-party modules
 import {createBrowserRouter} from "react-router-dom";
 import React from "react";
-
 // own modules
 import Index from "../pages/Index";
 import NotFound from "../pages/NotFound";

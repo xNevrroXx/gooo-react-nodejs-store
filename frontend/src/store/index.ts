@@ -8,11 +8,11 @@ import {
 import ReduxThunk from "redux-thunk";
 
 // own modules
-import filters from "../reducers/filters";
-import products from "../reducers/products";
-import notifications from "../reducers/notifications";
-import authentication from "../reducers/authentication";
-import categories from "../reducers/categories";
+import notifications from "./slices/notifications";
+import authentication from "./slices/authentication";
+import filters from "./slices/filters";
+import products from "./slices/products";
+import categories from "./slices/categories";
 
 
 // middlewares
@@ -34,9 +34,15 @@ const loggerEnhancer = (createStore: any) => (...args: any) => {
     return store;
 }
 
-// reducers && store
+// slices && store
 const store = configureStore({
-    reducer: combineReducers({filters, products, notifications, authentication, categories}),
+    reducer: {
+        notifications: notifications,
+        authentication: authentication,
+        filters: filters,
+        products: products,
+        categories: categories
+    },
     middleware: [ReduxThunk],
     preloadedState: undefined,
     devTools: process.env.NODE_ENV !== "production",

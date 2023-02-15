@@ -1,4 +1,4 @@
-import {ICategoryDB, ICategoryRequest} from "../models/ICategory";
+import {ICategory, ICategoryDB, ICategoryRequest} from "../models/ICategory";
 
 import ApiError from "../exceptions/api-error";
 import categoryActions from "../database/category-actions";
@@ -11,7 +11,7 @@ class CategoryService {
 
         return categoryTree;
     }
-    async create({name, parentId, label}: ICategoryRequest) {
+    async create({name, parentId, label}: ICategoryRequest): Promise<ICategory> {
         if(parentId !== 0) {
             const parentCategory = await categoryActions.find({id: parentId}) as ICategoryDB;
             if(!parentCategory) {
@@ -19,7 +19,14 @@ class CategoryService {
             }
         }
         const timestamp = new Date().toISOString().slice(0, 19).replace("T", " ");
-        await categoryActions.create({name, parentId, createdAt: timestamp, label});
+        const categoryId = await categoryActions.create({name, parentId, createdAt: timestamp, label});
+        return {
+            id: categoryId,
+            name,
+            parentId,
+            label,
+            createdAt: timestamp
+        }
     }
 }
 

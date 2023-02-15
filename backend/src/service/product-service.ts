@@ -1,4 +1,4 @@
-import {IProductDB, IProductRequest} from "../models/IProduct";
+import {IProduct, IProductDB, IProductRequest} from "../models/IProduct";
 
 import ApiError from "../exceptions/api-error";
 import categoryActions from "../database/category-actions";
@@ -10,7 +10,7 @@ class ProductService {
         const normalizedProducts = products.map(item => productActions.normalization(item));
         return normalizedProducts;
     }
-    async create(product: IProductRequest) {
+    async create(product: IProductRequest): Promise<IProduct> {
         if(product.categoryId !== 0) {
             const parentCategory = await categoryActions.find({id: product.categoryId});
             if(!parentCategory) {
@@ -18,7 +18,12 @@ class ProductService {
             }
         }
         const timestamp = new Date().toISOString().slice(0, 19).replace("T", " ");
-        await productActions.create({...product, createdAt: timestamp});
+        const id = await productActions.create({...product, createdAt: timestamp});
+        return {
+            ...product,
+            id,
+            createdAt: timestamp
+        }
     }
 }
 

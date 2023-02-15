@@ -28,16 +28,16 @@ import {
 import Search from "../search/Search";
 import Catalog from "../catalog/Catalog";
 import {useAppDispatch, useAppSelector} from "../../hooks/store.hook";
-import {logoutThunk} from "../../actions/authentication";
 import {createPath} from "../../router/createPath";
 import {ROUTE} from "../../router";
+// actions
+import {logout} from "../../store/thunks/authentication";
 // types
 import {RootState} from "../../store";
-import LinkTypography from "../styledComponents/LinkTypography";
 
 
 function AppHeader() {
-  const user: RootState["authentication"]["user"] = useAppSelector(state => state.authentication.user);
+  const user = useAppSelector(state => state.authentication.user);
   const [mobileAnchorEl, setMobileAnchorEl] = useState<null | HTMLElement>(null);
 
   const onOpenMobileMenu = useCallback((event: React.MouseEvent<HTMLButtonElement>) => setMobileAnchorEl(event.currentTarget), []);
@@ -244,7 +244,7 @@ const AuthenticationView: FC<IAuthenticationView> = ({user}) => {
           </MenuItem>
           <MenuItem onClick={() => {
             onClose();
-            dispatch(logoutThunk());
+            dispatch(logout());
           }}>
             <ListItemIcon>
               <Logout fontSize="small" />

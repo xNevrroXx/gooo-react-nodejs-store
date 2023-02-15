@@ -5,7 +5,8 @@ import {Button, Stack, TextField} from "@mui/material";
 // own modules
 import {useAppDispatch} from "../../hooks/store.hook";
 import {passwordValidation} from "../../validation/validation";
-import {recoveryPasswordChangePasswordThunk} from "../../actions/authentication";
+// actions
+import {recoveryPasswordChangePassword} from "../../store/thunks/authentication";
 // types
 import {IUser} from "../../models/IUser";
 import {useParams} from "react-router-dom";
@@ -24,7 +25,7 @@ const RecoveryPasswordFinish: FC = () => {
             confirmationPassword: passwordValidation.oneOf([Yup.ref("password"), "null"], "Пароли должны совпадать"),
         }),
         onSubmit: (values, {setSubmitting}) => {
-            dispatch(recoveryPasswordChangePasswordThunk({code: recoveryLink as string, password: values.password}))
+            dispatch(recoveryPasswordChangePassword({code: recoveryLink as string, password: values.password}))
             setSubmitting(false);
         }
     });

@@ -1,5 +1,7 @@
-import $api, {API_URL} from "../http";
 import axios, {AxiosResponse} from "axios";
+// own modules
+import $api, {API_URL} from "../http";
+// types
 import {AuthResponse} from "../models/response/AuthResponse";
 import {IUserRegistration} from "../models/IUser";
 
