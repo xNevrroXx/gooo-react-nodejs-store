@@ -16,7 +16,6 @@ router.post("/",
     body("image").not().isEmpty(),
     body("thumb").not().isEmpty(),
     body("categoryId").not().isEmpty(),
-    body("location").not().isEmpty(),
     body("stock").not().isEmpty(),
     authMiddleware,
     productController.create

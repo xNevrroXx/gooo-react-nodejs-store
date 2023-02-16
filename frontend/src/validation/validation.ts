@@ -38,19 +38,19 @@ export const lastnameValidation =
         .min(2, "Минимум 2 символа")
         .max(150, "Максимум 150 символов");
 
-export const technicalNameCategoryValidation =
+export const technicalNameValidation =
     Yup.string()
         .required("*Обязательное поле")
         .min(2, "Минимум 2 символа")
         .max(150, "Максимум 150 символов")
         .matches(/^[a-z]+(-[a-z]+)*$/, "Только на английском языке в формате: name-of-the-category");
 
-export const labelCategoryValidation =
+export const labelValidation =
     Yup.string()
         .required("*Обязательное поле")
         .min(2, "Минимум 2 символа")
         .max(150, "Максимум 150 символов")
-        .matches(/^[а-яёА-ЯЁa-z]+( [а-яёА-ЯЁa-z]+)*$/i, "Только на русском и английском языке в формате: Машинки для стрижки и триммеры");
+        .matches(/^[а-яёА-ЯЁa-z\d,]+( [а-яёА-ЯЁa-z\d,]+)*$/i, "Только на русском и английском языке в формате: Машинки для стрижки и триммеры");
 
 export const categoryIdValidation =
     Yup.string()
@@ -68,3 +68,34 @@ export const isAdminValidation =
         .required("*Обязательное поле")
         .min(0, "Возможно выбрать либо <b>да(1)</b>, либо <b>нет(0)</b>.")
         .max(1, "Возможно выбрать либо <b>да(1)</b>, либо <b>нет(0)</b>.")
+
+export const positiveNumberValidation =
+    Yup.number()
+        .required("*Обязательное поле")
+        .test(
+            'Положительное число?',
+            'Число должно быть больше 0',
+            (value) => {
+                if(value) {
+                    return value > 0
+                }
+                return false;
+            }
+        );
+
+export const weightUnitsValidation =
+    Yup.string()
+        .required("*Обязательное поле")
+        .oneOf(["kilogram", "gram"], 'Возможно использовать либо "килограмм", либо "грамм"')
+
+export const shortDescriptionValidation =
+    Yup.string()
+        .required("*Обязательное поле")
+        .min(100, "Минимум 100 символов")
+        .max(1000, "Максимум 1000 символов")
+
+export const longDescriptionValidation =
+    Yup.string()
+        .required("*Обязательное поле")
+        .min(500, "Минимум 100 символов")
+        .max(5000, "Максимум 1000 символов")

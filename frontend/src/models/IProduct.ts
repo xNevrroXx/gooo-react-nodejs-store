@@ -1,7 +1,7 @@
 export interface IProductCreation {
     name: string,
-    price: string,
-    weight: string,
+    price: number,
+    weight: number,
     weightUnits: string,
     shortDescription: string,
     longDescription: string,

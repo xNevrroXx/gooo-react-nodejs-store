@@ -1,21 +1,32 @@
 import React, {FC} from "react";
-import {Box, Button, Stack, SxProps, TextField, Typography} from "@mui/material";
+import {Box, Button, Stack, SxProps, TextField, InputLabel, Select, FormControl, MenuItem} from "@mui/material";
 import {useFormik} from "formik";
-
+import * as Yup from "yup";
 // own modules
 import {useAppDispatch} from "../../hooks/store.hook"
-import Catalog from "../catalog/Catalog";
+import CategoryTree from "../categoryTree/CategoryTree";
 // actions
 import {productCreateServer} from "../../store/thunks/products";
+import {createTimeoutNotification} from "../../store/thunks/notifications";
+// types
+import {ICategoryTree} from "../../models/ICategoryTree";
+import {IProductCreation} from "../../models/IProduct";
+import {
+    labelValidation,
+    longDescriptionValidation,
+    positiveNumberValidation,
+    shortDescriptionValidation,
+    weightUnitsValidation
+} from "../../validation/validation";
 
 const CreateProduct: FC = (sx?: SxProps) => {
     const dispatch = useAppDispatch();
 
-    const formik = useFormik({
+    const formik = useFormik<IProductCreation>({
         initialValues: {
             name: "",
-            price: "",
-            weight: "",
+            price: 0,
+            weight: 0,
             weightUnits: "",
             shortDescription: "",
             longDescription: "",
@@ -24,11 +35,30 @@ const CreateProduct: FC = (sx?: SxProps) => {
             categoryId: 0,
             stock: 0,
         },
+        validationSchema: Yup.object({
+            name: labelValidation,
+            price: positiveNumberValidation,
+            weight: positiveNumberValidation,
+            weightUnits: weightUnitsValidation,
+            shortDescription: shortDescriptionValidation,
+            longDescription: longDescriptionValidation,
+            stock: positiveNumberValidation,
+            categoryId: Yup.number().min(1, "Для родительской категории должна быть выбрана такая категория, которая не имеет потомков")
+        }),
         onSubmit: (values, {setSubmitting}) => {
             dispatch(productCreateServer(values));
             setSubmitting(false);
         }
     });
+
+    const onSelectCategory = (category: ICategoryTree) => {
+        if(category.children.length === 0) {
+            formik.setFieldValue("categoryId", category.id);
+        }
+        else {
+            formik.setFieldError("categoryId", "Для родительской категории должна быть выбрана такая категория, которая не имеет потомков");
+        }
+    }
 
     return (
         <Box
@@ -55,6 +85,7 @@ const CreateProduct: FC = (sx?: SxProps) => {
                 helperText={formik.errors.name}
             />
             <TextField
+                type="number"
                 error={!!(formik.errors.price && formik.touched.price)}
                 name="price"
                 onChange={formik.handleChange}
@@ -64,6 +95,7 @@ const CreateProduct: FC = (sx?: SxProps) => {
                 helperText={formik.errors.price}
             />
             <TextField
+                type="number"
                 error={!!(formik.errors.weight && formik.touched.weight)}
                 name="weight"
                 onChange={formik.handleChange}
@@ -72,15 +104,22 @@ const CreateProduct: FC = (sx?: SxProps) => {
                 variant="outlined"
                 helperText={formik.errors.weight}
             />
-            <TextField
-                error={!!(formik.errors.weightUnits && formik.touched.weightUnits)}
-                name="weightUnits"
-                onChange={formik.handleChange}
-                value={formik.values.weightUnits}
-                label="Вес(единица измерения)"
-                variant="outlined"
-                helperText={formik.errors.weightUnits}
-            />
+            <FormControl fullWidth>
+                <InputLabel id="weight-units-select-label">Вес(единица измерения)</InputLabel>
+                <Select
+                    id="weight-units-select"
+                    error={!!(formik.errors.weightUnits && formik.touched.weightUnits)}
+                    labelId="weight-units-select-label"
+                    value={formik.values.weightUnits}
+                    label="Вес(единица измерения)"
+                    name="weightUnits"
+                    onChange={formik.handleChange}
+                    // helperText={formik.errors.weightUnits}
+                >
+                    <MenuItem value="kilogram">килограмм</MenuItem>
+                    <MenuItem value="gram">грамм</MenuItem>
+                </Select>
+            </FormControl>
             <TextField
                 error={!!(formik.errors.shortDescription && formik.touched.shortDescription)}
                 name="shortDescription"
@@ -117,7 +156,7 @@ const CreateProduct: FC = (sx?: SxProps) => {
                 variant="outlined"
                 helperText={formik.errors.thumb}
             />
-            <Stack direction="row" spacing={2}>
+            <Stack direction="row" spacing={2} height="100%">
                 <TextField
                     sx={{flexGrow: 1}}
                     error={!!(formik.errors.categoryId && formik.touched.categoryId)}
@@ -130,9 +169,10 @@ const CreateProduct: FC = (sx?: SxProps) => {
                         readOnly: true
                     }}
                 />
-                <Catalog onClickOverride={(id) => formik.setFieldValue("categoryId", id)} />
+                <CategoryTree onSelectCategory={onSelectCategory}/>
             </Stack>
             <TextField
+                type="number"
                 error={!!(formik.errors.stock && formik.touched.stock)}
                 name="stock"
                 onChange={formik.handleChange}

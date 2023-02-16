@@ -29,7 +29,7 @@ const ProductCard: FC<IProduct> = ({id, name, stock, shortDescription, longDescr
             </CardActionArea>
 
             <CardContent>
-                <LinkTypography onClick={onOpenProduct} variant="h6" color="#3757c5">{name}</LinkTypography>
+                <LinkTypography onClick={onOpenProduct} variant="h6" color="#3757c5" sx={{mb: "1rem"}}>{name}</LinkTypography>
                 <Typography>{shortDescription}</Typography>
             </CardContent>
 

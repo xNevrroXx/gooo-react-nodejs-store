@@ -2,8 +2,9 @@
 import axios, {AxiosError, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig} from "axios";
 // own modules
 import AuthService from "../services/AuthService";
+// import store from "../store/index";
 // actions
-// import {createTimeoutNotification} from "../thunks/notifications";
+// import {createTimeoutNotification} from "../store/thunks/notifications";
 
 interface AxiosRequestConfigExtra extends AxiosRequestConfig {
     _isRetry: boolean
@@ -36,8 +37,6 @@ $api.interceptors.response.use(function(config: AxiosResponse) {
 }, async function(error: AxiosError) {
     if(axios.isAxiosError(error) && error.response) {
         if (error.response.status === 401) {
-            // dispatch(createTimeoutNotification({notification: {type: "error", title: "Ошибка 401", description: "Вы не авторизованы"}}))
-
             if (error.config && isAxiosRequestConfigExtra(error.config) && !error.config._isRetry) {
                 error.config._isRetry = true;
                 const originalRequest = error.config;
@@ -46,12 +45,6 @@ $api.interceptors.response.use(function(config: AxiosResponse) {
                 return $api.request(originalRequest);
             }
         }
-        // else if (error.response.data.message) {
-        //     dispatch(createTimeoutNotification({notification: {type: "error", title: `Ошибка ${error.response.status}`, description: error.response.data.message}}) )
-        // }
-        // else if(error.response.status) {
-        //     dispatch(createTimeoutNotification({notification: {type: "error", title: `Ошибка ${error.response.status}`, description: error.response.statusText}}) )
-        // }
     }
     return Promise.reject(error);
 })

@@ -34,6 +34,7 @@ import {ROUTE} from "../../router";
 import {logout} from "../../store/thunks/authentication";
 // types
 import {RootState} from "../../store";
+import {IUserDto} from "../../models/IUser";
 
 
 function AppHeader() {
@@ -105,7 +106,7 @@ function AppHeader() {
 
         <Stack component="nav" direction="row" spacing={2}>
           <AdminRouteLinksView
-              isAdmin={user?.isAdmin || false}
+              isAdmin={user?.isAdmin || 0}
           />
 
           <Button component={RouterLink} to="/favourites" sx={{display: {xs: "none", sm: "flex"}, alignItems: "center", flexDirection: "column", color: "inherit"}}>
@@ -147,7 +148,7 @@ function AppHeader() {
 }
 
 interface IAdminRouteLinksView {
-  isAdmin: RootState["authentication"]["user"]["isAdmin"]
+  isAdmin: IUserDto["isAdmin"]
 }
 const AdminRouteLinksView: FC<IAdminRouteLinksView> = ({isAdmin}) => {
   const navigate = useNavigate();
@@ -183,10 +184,16 @@ const AdminRouteLinksView: FC<IAdminRouteLinksView> = ({isAdmin}) => {
                 'aria-labelledby': 'admin-routes-button',
               }}
           >
-            <MenuItem onClick={ () => navigate( createPath({path: ROUTE.ADMIN_CATEGORY_CREATE}) ) }>
+            <MenuItem onClick={() => {
+              onClose();
+              navigate( createPath({path: ROUTE.ADMIN_CATEGORY_CREATE}) )
+            }}>
               Создание категорий товаров
             </MenuItem>
-            <MenuItem onClick={ () => navigate( createPath({path: ROUTE.ADMIN_PRODUCT_CREATE}) ) }>
+            <MenuItem onClick={ () => {
+              onClose();
+              navigate(createPath({path: ROUTE.ADMIN_PRODUCT_CREATE}))
+            }}>
               Создание товаров
             </MenuItem>
           </Menu>

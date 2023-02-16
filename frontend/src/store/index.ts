@@ -1,12 +1,10 @@
 import {
-    combineReducers,
     configureStore,
     Action,
     Dispatch,
     Middleware,
 } from "@reduxjs/toolkit";
-import ReduxThunk from "redux-thunk";
-
+import reduxThunk from "redux-thunk";
 // own modules
 import notifications from "./slices/notifications";
 import authentication from "./slices/authentication";
@@ -27,9 +25,9 @@ const loggerEnhancer = (createStore: any) => (...args: any) => {
     const store = createStore(...args);
     const oldDispatch = store.dispatch;
     store.dispatch = (action: any) => {
-        console.log("will dispatch: ", action);
+        // console.log("will dispatch: ", action);
         oldDispatch(action);
-        console.log("state after dispatch: ", store.getState());
+        // console.log("state after dispatch: ", store.getState());
     }
     return store;
 }
@@ -43,7 +41,7 @@ const store = configureStore({
         products: products,
         categories: categories
     },
-    middleware: [ReduxThunk],
+    middleware: [reduxThunk],
     preloadedState: undefined,
     devTools: process.env.NODE_ENV !== "production",
     enhancers: [loggerEnhancer]

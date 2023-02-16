@@ -1,5 +1,5 @@
-import React, {FC, useMemo} from "react";
-import {Box, Button, Stack, SxProps, TextField} from "@mui/material";
+import React, {FC, useCallback, useMemo, useState} from "react";
+import {Box, Button, Menu, Stack, SxProps, TextField} from "@mui/material";
 import {ExpandMore as ExpandMoreIcon, ChevronRight as ChevronRightIcon} from "@mui/icons-material";
 import {TreeView, TreeItem} from "@mui/lab";
 import {useFormik} from "formik";
@@ -7,15 +7,18 @@ import * as Yup from "yup";
 // own modules
 import MainStyledButton from "../styledComponents/MainStyledButton";
 import {useAppDispatch, useAppSelector} from "../../hooks/store.hook";
-import {categoryIdValidation, labelCategoryValidation, technicalNameCategoryValidation} from "../../validation/validation";
+import {categoryIdValidation, labelValidation, technicalNameValidation} from "../../validation/validation";
 // actions
 import {categoryCreateServer} from "../../store/thunks/categories";
+// types
+import {ICategoryTree} from "../../models/ICategoryTree";
+import {ICategoryCreation} from "../../models/ICategory";
+import CategoryTree from "../categoryTree/CategoryTree";
 
 const CreateCategory: FC = (sx?: SxProps) => {
     const dispatch = useAppDispatch();
-    const categories = useAppSelector(state => state.categories.categories) ;
 
-    const formik = useFormik({
+    const formik = useFormik<ICategoryCreation>({
         initialValues: {
             name: "",
             label: "",
@@ -23,8 +26,8 @@ const CreateCategory: FC = (sx?: SxProps) => {
         },
         validationSchema: Yup.object({
             parentId: categoryIdValidation,
-            name: technicalNameCategoryValidation,
-            label: labelCategoryValidation
+            name: technicalNameValidation,
+            label: labelValidation
         }),
         onSubmit: (values, {setSubmitting}) => {
             dispatch(categoryCreateServer(values));
@@ -32,13 +35,6 @@ const CreateCategory: FC = (sx?: SxProps) => {
         }
     });
 
-    // const categoryTree = useMemo(() => {
-    //     return categories.map(category => {
-    //         <TreeItem nodeId="1" label="Applications">
-    //             <TreeItem nodeId="2" label="Calendar" />
-    //         </TreeItem>
-    //     })
-    // }, [categories])
 
     return (
         <Box
@@ -60,7 +56,7 @@ const CreateCategory: FC = (sx?: SxProps) => {
                 name="name"
                 onChange={formik.handleChange}
                 value={formik.values.name}
-                label="Название(техническое - на латинице)"
+                label="Название(Техническое - на латинице)"
                 variant="outlined"
                 helperText={formik.errors.name}
             />
@@ -86,23 +82,7 @@ const CreateCategory: FC = (sx?: SxProps) => {
                         readOnly: true
                     }}
                 />
-                {/*<Catalog onClickOverride={(id) => formik.setFieldValue("parentId", id)} />*/}
-                <TreeView
-                    aria-label="category navigator"
-                    defaultCollapseIcon={<ExpandMoreIcon />}
-                    defaultExpandIcon={<ChevronRightIcon />}
-                    sx={{ height: 240, flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}
-                >
-                    <TreeItem nodeId="1" label="Applications">
-                        <TreeItem nodeId="2" label="Calendar" />
-                    </TreeItem>
-                    <TreeItem nodeId="5" label="Documents">
-                        <TreeItem nodeId="10" label="OSS" />
-                        <TreeItem nodeId="6" label="MUI">
-                            <TreeItem nodeId="8" label="index.js" />
-                        </TreeItem>
-                    </TreeItem>
-                </TreeView>
+                <CategoryTree onSelectCategory={(category) => formik.setFieldValue("parentId", category.id)}/>
                 <MainStyledButton
                     sx={{height: "100%", width: "max-content"}}
                     onClick={() => formik.setFieldValue("parentId", 0)}
