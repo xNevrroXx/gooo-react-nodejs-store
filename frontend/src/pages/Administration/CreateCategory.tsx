@@ -1,7 +1,7 @@
 import React from "react";
 
 // own modules
-import AdministrationFormHOC from "../../components/HOC/AdministrationFormHOC";
+import AdministrationFormHOC from "../../HOC/AdministrationFormHOC";
 import CreateCategoryForm from "../../components/createCategory/CreateCategory";
 
 const CreateCategory = () => {

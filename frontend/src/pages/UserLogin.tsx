@@ -1,14 +1,14 @@
-import {Box, Divider, Stack, Typography, Grid} from "@mui/material";
-
+import {Divider, Stack, Typography, Grid} from "@mui/material";
 // own modules
 import Login from "../components/login/Login";
 import {LinkRouterButton} from "../components/styledComponents/LinkRouterButton";
 import {createPath} from "../router/createPath";
 import {ROUTE} from "../router";
+import OnlyNotAuthorizedHOC from "../HOC/OnlyNotAuthorizedHOC";
 
 const UserLogin = () => {
     return (
-        <>
+        <OnlyNotAuthorizedHOC>
             <Typography variant="h1" textAlign="center" >Привет, мы тебя ждали!</Typography>
             <Divider />
             <Stack justifyContent="center" component="main" sx={{height: "60vh"}}>
@@ -34,7 +34,7 @@ const UserLogin = () => {
                     </Grid>
                 </Grid>
             </Stack>
-        </>
+        </OnlyNotAuthorizedHOC>
     );
 };
 

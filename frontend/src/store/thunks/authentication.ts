@@ -93,7 +93,6 @@ export const checkAuthentication = createAsyncThunk(
         try {
             const response = await AuthService.refreshToken();
             localStorage.setItem("token", response.data.accessToken);
-            router.navigate(createPath({path: ROUTE.MAIN}))
             return response.data;
         }
         catch (error) {

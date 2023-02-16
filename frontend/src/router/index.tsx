@@ -41,7 +41,6 @@ export enum ROUTE {
     USER_RECOVERY_PASSWORD_FINISH = "/user/recovery/:recoveryLink",
 
     // admin
-    ADMIN_LOGIN = "/administration/login",
     ADMIN_PRODUCT_CREATE = "/administration/product/create",
     ADMIN_CATEGORY_CREATE = "/administration/category/create",
 

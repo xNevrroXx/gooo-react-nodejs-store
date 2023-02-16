@@ -2,10 +2,11 @@ import React from 'react';
 import {Box, Divider, Grid, Stack, Typography} from "@mui/material";
 // own modules
 import Registration from "../components/registration/Registration";
+import OnlyNotAuthorizedHOC from "../HOC/OnlyNotAuthorizedHOC";
 
 const UserRegistration = () => {
     return (
-        <>
+        <OnlyNotAuthorizedHOC>
             <Typography variant="h1" textAlign="center" >Привет, рады знакомству с тобой!</Typography>
             <Divider sx={{mb: "2rem"}}/>
             <Box component="main" sx={{display: "flex", flexDirection: "column", justifyContent: "center"}}>
@@ -27,7 +28,7 @@ const UserRegistration = () => {
                     </Grid>
                 </Grid>
             </Box>
-        </>
+        </OnlyNotAuthorizedHOC>
     );
 };
 
