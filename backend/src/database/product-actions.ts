@@ -9,7 +9,7 @@ type TArgumentFindProduct = {
     name?: never
 } | {
     id?: never,
-    name?: string
+    name: string
 }
 
 class ProductActions {
@@ -49,7 +49,7 @@ class ProductActions {
     async find ({id, name}: TArgumentFindProduct): Promise<IProductDB> {
         return new Promise<IProductDB>((resolve, reject) => {
             dbPool.getConnection((error: MysqlError, connection: PoolConnection) => {
-                let findSQLString = "SELECT * FROM product_category WHERE ";
+                let findSQLString = "SELECT * FROM product WHERE ";
                 if(id) {
                     findSQLString += `id = "${id}"`;
                 }

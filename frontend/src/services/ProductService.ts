@@ -1,7 +1,11 @@
 import $api from "../http";
 // types
 import {AxiosResponse} from "axios";
-import {IProductCreationResponse, IProductFetchingResponse} from "../models/response/ProductResponse";
+import {
+    IProductCreationResponse,
+    IProductFetchingById,
+    IProductFetchingResponse
+} from "../models/response/ProductResponse";
 import {IProduct, IProductCreation} from "../models/IProduct";
 
 
@@ -15,6 +19,9 @@ class ProductService {
     }
     static async delete(id: IProduct["id"]) {
         return $api.delete(this.base + `/${id}`);
+    }
+    static async fetchById(id: IProduct["id"]): Promise<AxiosResponse<IProductFetchingById>> {
+        return $api.get<IProductFetchingById>(this.base + `/${id}`);
     }
 }
 

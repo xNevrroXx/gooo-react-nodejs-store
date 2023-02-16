@@ -2,7 +2,7 @@ import React from 'react';
 import {Box, CircularProgress, SxProps} from "@mui/material";
 
 interface IProps {
-  sx: SxProps
+  sx?: SxProps
 }
 
 function Loading(props: IProps) {

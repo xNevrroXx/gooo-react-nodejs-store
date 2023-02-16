@@ -9,7 +9,7 @@ export const product: RouteObject = {
     path: "/product",
     children: [
         {
-            path: ":id",
+            path: ":productId",
             element: <ProductPage/>
         }
     ]

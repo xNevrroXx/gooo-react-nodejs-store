@@ -6,6 +6,7 @@ import productController from "../../controllers/product-controller";
 const router = Router();
 
 router.get("/", productController.getAll);
+router.get("/:id", productController.getById);
 router.post("/",
     body("name").not().isEmpty(),
     body("price").not().isEmpty(),

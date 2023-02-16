@@ -5,6 +5,11 @@ import categoryActions from "../database/category-actions";
 import productActions from "../database/product-actions";
 
 class ProductService {
+    async getById(id: IProduct["id"]): Promise<IProduct> {
+        const product = await productActions.find({id});
+        const normalizedProduct = productActions.normalization(product);
+        return normalizedProduct;
+    }
     async getAll() {
         const products = await productActions.findAll();
         const normalizedProducts = products.map(item => productActions.normalization(item));

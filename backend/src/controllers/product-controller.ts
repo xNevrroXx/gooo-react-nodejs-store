@@ -6,6 +6,20 @@ import {validationResult} from "express-validator";
 import ApiError from "../exceptions/api-error";
 
 class productController {
+    async getById(request: Request, response: Response, next: NextFunction) {
+        try {
+            const id = request.params.id;
+            const product = await productService.getById(+id);
+
+            response.status(200).json({
+                message: "success",
+                product: product
+            })
+        }
+        catch (error) {
+            next(error);
+        }
+    }
     async getAll(request: Request, response: Response, next: NextFunction) {
         try {
             const products = await productService.getAll();

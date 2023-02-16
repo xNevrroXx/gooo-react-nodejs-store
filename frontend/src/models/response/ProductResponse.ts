@@ -7,3 +7,6 @@ export interface IProductFetchingResponse {
 export interface IProductCreationResponse {
     product: IProduct
 }
+export interface IProductFetchingById {
+    product: IProduct
+}

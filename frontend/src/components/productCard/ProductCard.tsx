@@ -1,18 +1,20 @@
 import React, {FC} from 'react';
-import {Card, CardActionArea, CardActions, CardContent, CardMedia, styled, Typography} from "@mui/material";
+import {Card, CardActionArea, CardActions, CardContent, CardMedia, Typography} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 // own modules
 import MainStyledButton from "../styledComponents/MainStyledButton";
 import LinkTypography from "../styledComponents/LinkTypography";
 // types
 import {IProduct} from "../../models/IProduct";
+import {createPath} from "../../router/createPath";
+import {ROUTE} from "../../router";
 
 const ProductCard: FC<IProduct> = ({id, name, stock, shortDescription, longDescription,
                                        image, createdAt, price, thumb, weight,
                                        weightUnits, categoryId}) => {
     const navigate = useNavigate();
     const onOpenProduct = () => {
-        navigate(`/product/${id}`);
+        navigate(createPath({path: ROUTE.PRODUCT, params: {productId: id}}));
     }
 
     return (
