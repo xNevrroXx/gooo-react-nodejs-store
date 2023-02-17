@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 
 // own modules
-import CreateProductForm from "../../components/creteProduct/CreateProduct";
+import CreateProductForm from "../../components/createProduct/CreateProduct";
 import AdministrationFormHOC from "../../HOC/AdministrationFormHOC";
 
 const CreateProduct: FC = () => {

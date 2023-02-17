@@ -99,3 +99,13 @@ export const longDescriptionValidation =
         .required("*Обязательное поле")
         .min(500, "Минимум 100 символов")
         .max(5000, "Максимум 1000 символов")
+
+export const linkValidation =
+    Yup.string()
+        .required("*Обязательное поле")
+        .matches(/^https?:\/\/[-a-zA-Z0-9@:%._+~#=\/]+$/, "Строка должна быть ссылкой")
+
+export const arrayLinksValidation =
+    Yup.array()
+        .min(1, "Добавьте хотя бы 1-ну ссылку на фотографию товара")
+        .of(linkValidation)

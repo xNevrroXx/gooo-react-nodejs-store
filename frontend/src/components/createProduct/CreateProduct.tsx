@@ -7,11 +7,11 @@ import {useAppDispatch} from "../../hooks/store.hook"
 import CategoryTree from "../categoryTree/CategoryTree";
 // actions
 import {productCreateServer} from "../../store/thunks/products";
-import {createTimeoutNotification} from "../../store/thunks/notifications";
 // types
 import {ICategoryTree} from "../../models/ICategoryTree";
 import {IProductCreation} from "../../models/IProduct";
 import {
+    arrayLinksValidation,
     labelValidation,
     longDescriptionValidation,
     positiveNumberValidation,
@@ -42,10 +42,10 @@ const CreateProduct: FC = (sx?: SxProps) => {
             shortDescription: shortDescriptionValidation,
             longDescription: longDescriptionValidation,
             stock: positiveNumberValidation,
+            images: arrayLinksValidation,
             categoryId: Yup.number().min(1, "Для родительской категории должна быть выбрана такая категория, которая не имеет потомков")
         }),
         onSubmit: (values, {setSubmitting}) => {
-            console.log("form data: ", values);
             dispatch(productCreateServer(values));
             setSubmitting(false);
         }
@@ -60,6 +60,8 @@ const CreateProduct: FC = (sx?: SxProps) => {
         }
     }
 
+    console.log("images: ", formik.values.images);
+    console.log("images errors: ", formik.errors.images);
     return (
         <Box
             sx={{
@@ -114,7 +116,6 @@ const CreateProduct: FC = (sx?: SxProps) => {
                     label="Вес(единица измерения)"
                     name="weightUnits"
                     onChange={formik.handleChange}
-                    // helperText={formik.errors.weightUnits}
                 >
                     <MenuItem value="kilogram">килограмм</MenuItem>
                     <MenuItem value="gram">грамм</MenuItem>
@@ -176,6 +177,11 @@ const CreateProduct: FC = (sx?: SxProps) => {
                                         as={TextField}
                                         name={`images[${index}]`}
                                         label={`Ссылка на фотографию продукта ${index + 1}`}
+                                        error={!!(
+                                            (formik.errors.images ? formik.errors.images[index] : false)
+                                            && formik.touched.images
+                                        )}
+                                        helperText={formik.errors.images ? formik.errors.images[index] : null}
                                     />
                                     {index > 0 && (
                                         <Button type="button" onClick={() => remove(index)}> - </Button>
