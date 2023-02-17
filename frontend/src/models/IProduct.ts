@@ -5,8 +5,7 @@ export interface IProductCreation {
     weightUnits: string,
     shortDescription: string,
     longDescription: string,
-    image: string,
-    thumb: string,
+    images: string[],
     categoryId: number,
     stock: number,
 }

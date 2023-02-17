@@ -1,6 +1,6 @@
 import React, {FC} from "react";
 import {Box, Button, Stack, SxProps, TextField, InputLabel, Select, FormControl, MenuItem} from "@mui/material";
-import {useFormik} from "formik";
+import {useFormik, FieldArray, FormikProvider, Field} from "formik";
 import * as Yup from "yup";
 // own modules
 import {useAppDispatch} from "../../hooks/store.hook"
@@ -30,8 +30,7 @@ const CreateProduct: FC = (sx?: SxProps) => {
             weightUnits: "",
             shortDescription: "",
             longDescription: "",
-            image: "",
-            thumb: "",
+            images: [""],
             categoryId: 0,
             stock: 0,
         },
@@ -46,6 +45,7 @@ const CreateProduct: FC = (sx?: SxProps) => {
             categoryId: Yup.number().min(1, "Для родительской категории должна быть выбрана такая категория, которая не имеет потомков")
         }),
         onSubmit: (values, {setSubmitting}) => {
+            console.log("form data: ", values);
             dispatch(productCreateServer(values));
             setSubmitting(false);
         }
@@ -65,7 +65,7 @@ const CreateProduct: FC = (sx?: SxProps) => {
             sx={{
                 display: "grid",
                 justifyContent: "flex-start",
-                gridTemplateColumns: "1fr 1fr 1fr 1fr",
+                gridTemplateColumns: "repeat(4, 1fr)",
                 gap: "2rem",
                 "> *": {
                   gridColumn: "span 2"
@@ -138,24 +138,6 @@ const CreateProduct: FC = (sx?: SxProps) => {
                 variant="outlined"
                 helperText={formik.errors.longDescription}
             />
-            <TextField
-                error={!!(formik.errors.image && formik.touched.image)}
-                name="image"
-                onChange={formik.handleChange}
-                value={formik.values.image}
-                label="Image"
-                variant="outlined"
-                helperText={formik.errors.image}
-            />
-            <TextField
-                error={!!(formik.errors.thumb && formik.touched.thumb)}
-                name="thumb"
-                onChange={formik.handleChange}
-                value={formik.values.thumb}
-                label="Thumb"
-                variant="outlined"
-                helperText={formik.errors.thumb}
-            />
             <Stack direction="row" spacing={2} height="100%">
                 <TextField
                     sx={{flexGrow: 1}}
@@ -181,7 +163,32 @@ const CreateProduct: FC = (sx?: SxProps) => {
                 variant="outlined"
                 helperText={formik.errors.stock}
             />
-
+            <Stack spacing={1} width="100%">
+                <FormikProvider value={formik}>
+                    <FieldArray
+                        name='images'
+                        render={fieldArrayProps => {
+                            const {push, remove} = fieldArrayProps;
+                            return formik.values.images.map((link, index) => (
+                                <Stack direction="row" key={index} width="100%">
+                                    <Field
+                                        sx={{flexGrow: 1}}
+                                        as={TextField}
+                                        name={`images[${index}]`}
+                                        label={`Ссылка на фотографию продукта ${index + 1}`}
+                                    />
+                                    {index > 0 && (
+                                        <Button type="button" onClick={() => remove(index)}> - </Button>
+                                    )}
+                                    {index < 4 && (
+                                        <Button type="button" onClick={() => push('')}> + </Button>
+                                    )}
+                                </Stack>
+                            ))
+                        }}
+                    />
+                </FormikProvider>
+            </Stack>
             <Button
                 sx={{gridColumnStart: 2, gridColumnEnd: 4}}
                 type="submit"

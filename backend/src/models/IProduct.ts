@@ -5,8 +5,7 @@ export interface IProductRequest {
     weightUnits: "грамм" | "килограмм",
     shortDescription: string,
     longDescription: string,
-    image: string,
-    thumb: string,
+    images: string[],
     categoryId: number,
     stock: number,
 }
@@ -26,10 +25,15 @@ export interface IProductDB {
     weight_units: "грамм" | "килограмм",
     short_description: string,
     long_description: string,
-    image: string,
-    thumb: string,
     category_id: number,
-    location: string,
     stock: number,
     created_at: string
+}
+export interface IProductWithImagesDB extends IProductDB {
+    images: IProductImages[]
+}
+export interface IProductImages {
+    id: number,
+    product_id: IProductDB["id"],
+    link: string
 }

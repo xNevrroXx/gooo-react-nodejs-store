@@ -10,7 +10,7 @@ import {createPath} from "../../router/createPath";
 import {ROUTE} from "../../router";
 
 const ProductCard: FC<IProduct> = ({id, name, stock, shortDescription, longDescription,
-                                       image, createdAt, price, thumb, weight,
+                                       images, createdAt, price, weight,
                                        weightUnits, categoryId}) => {
     const navigate = useNavigate();
     const onOpenProduct = () => {
@@ -27,7 +27,7 @@ const ProductCard: FC<IProduct> = ({id, name, stock, shortDescription, longDescr
             boxShadow: "0 0 1px gray"
         }}>
             <CardActionArea onClick={onOpenProduct} sx={{height: "100%", maxWidth: "10rem"}}>
-                <CardMedia src={thumb} alt={name} component="img" sx={{height: "100%", objectFit: "contain"}}/>
+                <CardMedia src={images[0]} alt={name} component="img" sx={{height: "100%", objectFit: "contain"}}/>
             </CardActionArea>
 
             <CardContent>

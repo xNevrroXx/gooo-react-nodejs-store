@@ -51,7 +51,7 @@ const Product = () => {
             <Typography component="h1" variant="h4" mb="2rem">{product.name}</Typography>
             <Stack direction="row" spacing={3} height="25rem" mb="3rem">
                 <Box
-                    src={product.image}
+                    src={product.images[0]}
                     sx={{width: "60%", height: "100%", objectFit: "contain"}}
                     component="img"/>
                 <Paper elevation={3} sx={{height: "max-content", padding: "1rem 1rem"}}>
