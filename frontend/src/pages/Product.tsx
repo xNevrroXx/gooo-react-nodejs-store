@@ -1,6 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {useParams} from "react-router-dom";
-import {Typography, Box, Stack, Paper} from "@mui/material";
+import {Typography, Box, Stack, Paper, Tab, Tabs} from "@mui/material";
+import {TabPanel, TabContext, TabList} from "@mui/lab";
 // own modules
 import {useAppDispatch} from "../hooks/store.hook";
 import MainStyledButton from "../components/styledComponents/MainStyledButton";
@@ -10,6 +11,7 @@ import {createTimeoutErrorNotification} from "../store/thunks/notifications";
 import {getNumberWithSpaces} from "../components/supportingFunctions/getNumberWithSpaces";
 // types
 import {IProduct} from "../models/IProduct";
+import ImageSlider from "../components/imageSlider/ImageSlider";
 
 const CircleSvg = () => (
     <svg width="5px" height="5px" fill="rgba(0,0,0,.5)" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -18,6 +20,7 @@ const CircleSvg = () => (
 )
 
 const Product = () => {
+    const [tabValue, setTabValue] = useState<number>(0);
     const dispatch = useAppDispatch();
     const params = useParams();
     const fetchedProductRef = useRef<boolean>(false);
@@ -41,6 +44,9 @@ const Product = () => {
         }
     }, [params])
 
+    const onChangeTab = (event: React.SyntheticEvent, newValue: number) => {
+        setTabValue(newValue);
+    }
 
     if(!product) {
         return <Loading/>
@@ -49,11 +55,10 @@ const Product = () => {
     return (
         <>
             <Typography component="h1" variant="h4" mb="2rem">{product.name}</Typography>
-            <Stack direction="row" spacing={3} height="25rem" mb="3rem">
-                <Box
-                    src={product.images[0]}
-                    sx={{width: "60%", height: "100%", objectFit: "contain"}}
-                    component="img"/>
+            <Stack direction="row" justifyContent="space-between" spacing={3} height="600px" mb="3rem">
+                <Box width="50%">
+                    <ImageSlider images={product.images} alt={product.name}/>
+                </Box>
                 <Paper elevation={3} sx={{height: "max-content", padding: "1rem 1rem"}}>
                     <Stack>
                         <Box>
