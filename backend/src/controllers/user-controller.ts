@@ -118,6 +118,46 @@ class UserController {
             next(error);
         }
     }
+
+    async getProductsFromCart(request: Request, response: Response, next: NextFunction) {
+        try {
+            const user = request.user!;
+            const products = await userService.getProductsFromCart(user.id);
+
+            response.json({
+                products: products
+            })
+        }
+        catch (error) {
+            next(error);
+        }
+    };
+
+    async addProductToCart(request: Request, response: Response, next: NextFunction) {
+        try {
+            const user = request.user!;
+            const productId = request.params.productId;
+            await userService.addProductToCart(user.id, +productId);
+
+            response.sendStatus(200);
+        }
+        catch (error) {
+            next(error);
+        }
+    }
+
+    async deleteProductFromCart(request: Request, response: Response, next: NextFunction) {
+        try {
+            const user = request.user!;
+            const productId = request.params.productId
+            await userService.deleteProductFromCart(user.id, +productId);
+
+            response.sendStatus(200);
+        }
+        catch (error) {
+            next(error);
+        }
+    };
 }
 
 export default new UserController();

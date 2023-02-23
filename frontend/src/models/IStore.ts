@@ -1,19 +1,26 @@
-import {IProduct} from "./IProduct";
+import {IProduct, IProductInCart} from "./IProduct";
 import {INotifier} from "./INotifier";
 import {IUserDto} from "./IUser";
-import {ICategory} from "./ICategory";
 import {ICategoryTree} from "./ICategoryTree";
+
+type loadingStatus = "idle" | "loading" | "error";
 
 // products
 export interface IProducts {
     products: IProduct[],
-    productLoadingStatus: "idle" | "loading" | "error"
+    productLoadingStatus: loadingStatus
+}
+
+// shopping cart
+export interface IProductsInCart {
+    productsInCart: IProductInCart[],
+    cartLoadingStatus: loadingStatus
 }
 
 // category
 export interface ICategories {
     categories: ICategoryTree[],
-    categoryLoadingStatus: "idle" | "loading" | "error"
+    categoryLoadingStatus: loadingStatus
 }
 
 // filters
@@ -22,7 +29,7 @@ type ActiveFilter = typeof filters[number];
 export interface IFilters {
     filters: typeof filters,
     activeFilters: ActiveFilter[],
-    filterLoadingStatus: "idle" | "loading" | "error"
+    filterLoadingStatus: loadingStatus
 }
 
 // notifications

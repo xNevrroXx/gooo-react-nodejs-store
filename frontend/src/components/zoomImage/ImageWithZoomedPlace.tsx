@@ -1,5 +1,5 @@
-import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
-import {Box, styled} from "@mui/material";
+import React, {FC, useCallback, useEffect, useState} from 'react';
+import {styled} from "@mui/material";
 import ZoomImage from "./ZoomImage";
 
 interface IImageWithZoomedPlace {
@@ -21,7 +21,7 @@ const ZoomPlaceOnImage = styled("div")`
   position: absolute;
 `;
 const ImageWithZoomedPlace: FC<IImageWithZoomedPlace> = ({image, alt, sideZoomPlaceProp = 200}) => {
-    const [zoomPosition, setZoomPosition] = useState<{x: number, y: number} /*| null*/>({x: 0, y: 0});
+    const [zoomPosition, setZoomPosition] = useState<{x: number, y: number} | null>(null);
     const [sideZoomPlace, setSideZoomPlace] = useState<{x: number, y: number}>({x: sideZoomPlaceProp, y: sideZoomPlaceProp});
     const [imgAnchor, setImgAnchor] = useState<null | HTMLElement>(null);
     const [width, setWidth] = useState<number>(0);
@@ -41,11 +41,11 @@ const ImageWithZoomedPlace: FC<IImageWithZoomedPlace> = ({image, alt, sideZoomPl
     }, [imgAnchor])
 
     const onMouseMove = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
-/*        if(event.pageX < offsetLeft || event.pageX > offsetLeft + width
+        if(event.pageX < offsetLeft || event.pageX > offsetLeft + width
         || event.pageY < offsetTop || event.pageY > offsetTop + height) {
             setZoomPosition(null);
         }
-        else */if (event.pageX - (sideZoomPlace.x / 2) > offsetLeft && event.pageX + (sideZoomPlace.x / 2) < offsetLeft + width
+        else if (event.pageX - (sideZoomPlace.x / 2) > offsetLeft && event.pageX + (sideZoomPlace.x / 2) < offsetLeft + width
             && event.pageY - (sideZoomPlace.y / 2) > offsetTop && event.pageY + (sideZoomPlace.y / 2) < offsetTop + height) {
             setZoomPosition({
                 x: event.pageX - (sideZoomPlace.x / 2),
@@ -104,16 +104,15 @@ const ImageWithZoomedPlace: FC<IImageWithZoomedPlace> = ({image, alt, sideZoomPl
         }
     }, [imgAnchor, offsetLeft, offsetTop, width, height, sideZoomPlace])
 
-    console.log({
-        x: (zoomPosition.x - offsetLeft) / (width / 100),
-        y: (zoomPosition.y - offsetTop) / (height / 100)
-    })
     return (
         <ContentImage sx={{display: "flex", justifyContent: "center", alignItems: "center"}} onMouseMove={onMouseMove} /*onMouseLeave={() => setZoomPosition(null)}*/>
             <Img onLoad={event => setImgAnchor(event.currentTarget)} src={image} alt={alt}/>
-
-                <ZoomPlaceOnImage style={{top: zoomPosition.y, left: zoomPosition.x, width: sideZoomPlace.x + "px", height: sideZoomPlace.y + "px"}}/>
-                <ZoomImage x={(zoomPosition.x - offsetLeft) / (width / 100)} y={(zoomPosition.y - offsetTop) / (height / 100)} image={image}/>
+            {zoomPosition != null && (
+                <>
+                    <ZoomPlaceOnImage style={{top: zoomPosition.y, left: zoomPosition.x, width: sideZoomPlace.x + "px", height: sideZoomPlace.y + "px"}}/>
+                    <ZoomImage x={(zoomPosition.x - offsetLeft) / (width / 100)} y={(zoomPosition.y - offsetTop) / (height / 100)} image={image}/>
+                </>
+            )}
         </ContentImage>
     );
 };

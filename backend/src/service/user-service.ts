@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import {v4 as uuidv4} from "uuid";
+// own modules
 import recoveryActions from "../database/recovery-actions";
 import mailService from "./mail-service";
 import tokenService from "./token-service";
@@ -9,7 +10,12 @@ import customQuery from "../database/custom-query";
 import activationActions from "../database/activation-actions";
 import tokenActions from "../database/token-actions";
 import ApiError from "../exceptions/api-error";
-import {IUserRegistration} from "../models/IUser";
+// types
+import {IUser, IUserRegistration} from "../models/IUser";
+import {IProduct} from "../models/IProduct";
+import shoppingCartActions from "../database/shopping-cart-actions";
+import productActions from "../database/product-actions";
+import ProductService from "./product-service";
 
 class UserService {
     async registration({
@@ -128,6 +134,22 @@ class UserService {
                 return obj;
             }
         );
+    }
+
+    async getProductsFromCart(userId: IUser["id"]): Promise<IProduct[]> {
+        const shoppingCartItemsDB = await shoppingCartActions.getProductsFromCart(userId);
+        const normalizedItems = shoppingCartItemsDB.map(dbItem => shoppingCartActions.normalization(dbItem));
+        const products = Promise.all(normalizedItems.map(async cartItem => await ProductService.getById(cartItem.productId)))
+        return products;
+    }
+
+    async addProductToCart(userId: IUser["id"], productId: IProduct["id"]): Promise<void> {
+        const timestamp = new Date().toISOString().slice(0, 19).replace("T", " ");
+        await shoppingCartActions.addProductToCart(userId, productId, timestamp);
+    }
+
+    async deleteProductFromCart(userId: IUser["id"], productId: IProduct["id"]): Promise<void> {
+        await shoppingCartActions.deleteProductFromCart(userId, productId);
     }
 }
 

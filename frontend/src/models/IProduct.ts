@@ -14,3 +14,7 @@ export interface IProduct extends IProductCreation {
     id: number,
     createdAt: string
 }
+
+export interface IProductInCart extends IProduct {
+    isSelected: boolean
+}

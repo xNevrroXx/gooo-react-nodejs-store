@@ -1,7 +1,5 @@
-import React, {FC, useCallback, useMemo, useRef, useState} from 'react';
+import React, {FC, useMemo, useState} from 'react';
 import {Stack, styled, Zoom} from "@mui/material";
-import {Transition} from "react-transition-group";
-import ZoomImage from "../zoomImage/ZoomImage";
 import ImageWithZoomedPlace from "../zoomImage/ImageWithZoomedPlace";
 
 interface IImageSliderProps {

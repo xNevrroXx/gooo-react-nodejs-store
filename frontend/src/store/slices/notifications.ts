@@ -24,5 +24,5 @@ const notifications = createSlice({
     }
 })
 
-const {reducer, actions} = notifications;
+const {reducer} = notifications;
 export default reducer;

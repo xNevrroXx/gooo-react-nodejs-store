@@ -3,7 +3,6 @@ import categoryActions from "../database/category-actions";
 import productActions from "../database/product-actions";
 // types
 import {IProduct, IProductRequest, IProductWithImagesDB} from "../models/IProduct";
-import product from "../router/product/product";
 
 class ProductService {
     async getById(id: IProduct["id"]): Promise<IProduct> {

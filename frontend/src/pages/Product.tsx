@@ -1,7 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {useParams} from "react-router-dom";
-import {Typography, Box, Stack, Paper, Tab, Tabs} from "@mui/material";
-import {TabPanel, TabContext, TabList} from "@mui/lab";
+import {Typography, Box, Stack, Paper} from "@mui/material";
 // own modules
 import {useAppDispatch} from "../hooks/store.hook";
 import MainStyledButton from "../components/styledComponents/MainStyledButton";
@@ -13,14 +12,7 @@ import {getNumberWithSpaces} from "../components/supportingFunctions/getNumberWi
 import {IProduct} from "../models/IProduct";
 import ImageSlider from "../components/imageSlider/ImageSlider";
 
-const CircleSvg = () => (
-    <svg width="5px" height="5px" fill="rgba(0,0,0,.5)" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <circle r="50" cx="50" cy="50" />
-    </svg>
-)
-
 const Product = () => {
-    const [tabValue, setTabValue] = useState<number>(0);
     const dispatch = useAppDispatch();
     const params = useParams();
     const fetchedProductRef = useRef<boolean>(false);
@@ -43,10 +35,6 @@ const Product = () => {
                 });
         }
     }, [params])
-
-    const onChangeTab = (event: React.SyntheticEvent, newValue: number) => {
-        setTabValue(newValue);
-    }
 
     if(!product) {
         return <Loading/>
