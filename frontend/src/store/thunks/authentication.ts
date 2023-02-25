@@ -13,12 +13,12 @@ export const recoveryPasswordGetLink = createAsyncThunk(
     "authentication/recoveryPasswordGetLink",
     async ({email}: {email: IUser["email"]}, thunkApi) => {
         try {
-            const response = await AuthService.recoveryPasswordGetLink(email);
+            await AuthService.recoveryPasswordGetLink(email);
             thunkApi.dispatch(createTimeoutNotification({notification: {type: "success", title: "Успешно", description: "Ссылка для восстановления была отправлена на ваш почтовый адрес"}}) );
             return;
         }
         catch (error) {
-            thunkApi.dispatch(createTimeoutErrorNotification(error as any));
+            thunkApi.dispatch(createTimeoutErrorNotification(error));
             return thunkApi.rejectWithValue(error);
         }
     }
@@ -27,12 +27,12 @@ export const recoveryPasswordChangePassword = createAsyncThunk(
     "authentication/recoveryPasswordChangePassword",
     async ({code, password}: {code: string, password: IUser["password"]}, thunkApi) => {
         try {
-            const response = await AuthService.recoveryPasswordSetNew(code, password);
+            await AuthService.recoveryPasswordSetNew(code, password);
             thunkApi.dispatch(createTimeoutNotification({notification: {type: "success", title: "Успешно", description: "Пароль успешно изменен"}}));
             return;
         }
         catch (error) {
-            thunkApi.dispatch(createTimeoutErrorNotification(error as any));
+            thunkApi.dispatch(createTimeoutErrorNotification(error));
             return thunkApi.rejectWithValue(error);
         }
     }
@@ -48,7 +48,7 @@ export const login = createAsyncThunk(
             return response.data;
         }
         catch (error) {
-            thunkApi.dispatch(createTimeoutErrorNotification(error as any));
+            thunkApi.dispatch(createTimeoutErrorNotification(error));
             return thunkApi.rejectWithValue(error);
         }
     }
@@ -66,7 +66,7 @@ export const registration = createAsyncThunk(
             }))
             return response.data;
         } catch (error) {
-            thunkApi.dispatch(createTimeoutErrorNotification(error as any));
+            thunkApi.dispatch(createTimeoutErrorNotification(error));
             return thunkApi.rejectWithValue(error);
         }
     }
@@ -82,7 +82,7 @@ export const logout = createAsyncThunk(
             return;
         }
         catch (error) {
-            thunkApi.dispatch(createTimeoutErrorNotification(error as any));
+            thunkApi.dispatch(createTimeoutErrorNotification(error));
             return thunkApi.rejectWithValue(error);
         }
     }
@@ -96,7 +96,7 @@ export const checkAuthentication = createAsyncThunk(
             return response.data;
         }
         catch (error) {
-            thunkApi.dispatch(createTimeoutErrorNotification(error as any));
+            thunkApi.dispatch(createTimeoutErrorNotification(error));
             return thunkApi.rejectWithValue(error);
         }
     }

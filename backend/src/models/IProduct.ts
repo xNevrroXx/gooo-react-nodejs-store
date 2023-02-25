@@ -37,3 +37,8 @@ export interface IProductImages {
     product_id: IProductDB["id"],
     link: string
 }
+
+export interface IProductInCart extends IProduct {
+    isSelected: boolean
+    amountInCart: number
+}

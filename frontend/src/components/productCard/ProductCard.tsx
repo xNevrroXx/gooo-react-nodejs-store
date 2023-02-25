@@ -1,21 +1,51 @@
-import React, {FC} from 'react';
+import React, {FC, useCallback, useMemo} from 'react';
 import {Card, CardActionArea, CardActions, CardContent, CardMedia, Typography} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 // own modules
 import MainStyledButton from "../styledComponents/MainStyledButton";
 import LinkTypography from "../styledComponents/LinkTypography";
-// types
-import {IProduct} from "../../models/IProduct";
 import {createPath} from "../../router/createPath";
 import {ROUTE} from "../../router";
+import {useAppDispatch, useAppSelector} from "../../hooks/store.hook";
+import {getNumberWithSpaces} from "../supportingFunctions/getNumberWithSpaces";
+// actions & thunks
+import {
+    addProductToShoppingCart,
+    deleteProductFromShoppingCart,
+    reduceQuantityShoppingCart
+} from "../../store/thunks/shopping-cart";
+// types
+import {IProduct, IProductInCart} from "../../models/IProduct";
+import AmountCounterButton from "../amountCounterButton/AmountCounterButton";
 
 const ProductCard: FC<IProduct> = ({id, name, stock, shortDescription, longDescription,
                                        images, createdAt, price, weight,
                                        weightUnits, categoryId}) => {
     const navigate = useNavigate();
-    const onOpenProduct = () => {
+    const dispatch = useAppDispatch();
+    const productsInCart = useAppSelector(state => state.shoppingCart.productsInCart) as IProductInCart[];
+
+    const productInShoppingCart = useMemo(() => {
+        return productsInCart.find(product => product.id === id)
+    }, [productsInCart])
+
+    const onOpenProduct = useCallback(() => {
         navigate(createPath({path: ROUTE.PRODUCT, params: {productId: id}}));
-    }
+    }, [])
+
+    const onClickToShoppingCart = useCallback(() => {
+        dispatch(addProductToShoppingCart({productId: id}));
+    }, [])
+
+    const onMinusFromShoppingCart = useCallback(() => {
+        dispatch(reduceQuantityShoppingCart({productId: id}));
+    }, [])
+
+    const onDeleteFromShoppingCart = useCallback(() => {
+        dispatch(deleteProductFromShoppingCart({productId: id}));
+    }, [])
+
+    const onPlusToShoppingCart = useCallback(onClickToShoppingCart, [onClickToShoppingCart])
 
     return (
         <Card sx={{
@@ -35,13 +65,27 @@ const ProductCard: FC<IProduct> = ({id, name, stock, shortDescription, longDescr
                 <Typography>{shortDescription}</Typography>
             </CardContent>
 
-            <CardActions sx={{display: "flex", flexDirection: "column", gap: "1rem"}}>
-                <LinkTypography variant="body1">
-                    <span>{price}</span>
-                    &nbsp;
-                    <span>₽</span>
+            <CardActions sx={{display: "flex", flexDirection: "column", justifyContent: "space-around"}}>
+                <LinkTypography whiteSpace="nowrap" variant="body1">
+                    <Typography variant="h6">{getNumberWithSpaces(price)}
+                        <Typography variant="body1" fontWeight="medium" component="span">₽</Typography>
+                    </Typography>
                 </LinkTypography>
-                <MainStyledButton>В корзину</MainStyledButton>
+
+                {productInShoppingCart ?
+                    <>
+                        <AmountCounterButton amount={productInShoppingCart.amountInCart} onReduce={onMinusFromShoppingCart} onAdd={onPlusToShoppingCart} maxAmount={stock} minAmount={1}/>
+                        <button style={{background: "transparent", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: ".2rem"}} >
+                            <svg color="gray" height="1.2rem" width="1.2rem" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3 3L17 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M17 3L3 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            <Typography display="inline" onClick={onDeleteFromShoppingCart}>Удалить</Typography>
+                        </button>
+                    </>
+                    :
+                    <MainStyledButton onClick={onClickToShoppingCart}>В корзину</MainStyledButton>
+                }
             </CardActions>
         </Card>
     );

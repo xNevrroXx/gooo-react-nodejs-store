@@ -30,9 +30,14 @@ router.get("/refresh", userController.refresh);
 router.get("/activate/:link", userController.activate);
 router.post("/recovery/get-link", userController.sendRecoveryLink);
 router.post("/recovery/:code", userController.changePassword);
-router.post("/shopping-cart/:productId", authMiddleware, userController.addProductToCart);
-router.delete("/shopping-cart/:productId", authMiddleware, userController.deleteProductFromCart);
 router.get("/shopping-cart", authMiddleware, userController.getProductsFromCart);
+router.post("/shopping-cart/:productId", authMiddleware, userController.addProductToCart);
+router.post("/shopping-cart/change-select/:productId",
+    body("isSelected").not().isEmpty().isBoolean(),
+    authMiddleware,
+    userController.changeSelect);
+router.post("/shopping-cart/reduce-quantity/:productId", authMiddleware, userController.reduceQuantity);
+router.delete("/shopping-cart/:productId", authMiddleware, userController.deleteProductFromCart);
 router.get("/all", authMiddleware, userController.getUsers);
 
 export default router;

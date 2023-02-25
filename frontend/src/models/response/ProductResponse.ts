@@ -1,12 +1,9 @@
 import {IProduct} from "../IProduct";
 
-export interface IProductFetchingResponse {
+export interface IProductsFetchingResponse {
     products: IProduct[]
 }
 
-export interface IProductCreationResponse {
-    product: IProduct
-}
-export interface IProductFetchingById {
+export interface IProductResponse {
     product: IProduct
 }

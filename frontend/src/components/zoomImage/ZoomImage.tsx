@@ -36,9 +36,6 @@ const ZoomImage: FC<IZoomImage> = ({image, x, y, mainWidth = 600, mainHeight = 6
 
         const img = new Image();
         img.onload = () => {
-            console.log("width: ", img.width);
-            console.log("height: ", img.height);
-
             let bgWidth = 0,
                 bgHeight = 0,
                 width = 0,

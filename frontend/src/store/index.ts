@@ -11,6 +11,7 @@ import authentication from "./slices/authentication";
 import filters from "./slices/filters";
 import products from "./slices/products";
 import categories from "./slices/categories";
+import shoppingCart from "./slices/shopping-cart";
 
 
 // middlewares
@@ -39,7 +40,8 @@ const store = configureStore({
         authentication: authentication,
         filters: filters,
         products: products,
-        categories: categories
+        categories: categories,
+        shoppingCart: shoppingCart
     },
     middleware: [reduxThunk],
     preloadedState: undefined,

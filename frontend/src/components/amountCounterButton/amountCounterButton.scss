@@ -1,0 +1,22 @@
+.amount-counter-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0;
+  width: 10rem;
+  height: 3rem;
+  border-radius: 1rem;
+  background-color: #f1f0ed;
+  & > * {
+    border: none;
+    background: none;
+  }
+  &__add, &__reduce {
+    font-weight: 600;
+    font-size: 1.3rem;
+  }
+  &__amount {
+    width: calc(4rem);
+    text-align: center;
+  }
+}

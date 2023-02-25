@@ -12,7 +12,7 @@ export interface IProducts {
 }
 
 // shopping cart
-export interface IProductsInCart {
+export interface IShoppingCart {
     productsInCart: IProductInCart[],
     cartLoadingStatus: loadingStatus
 }

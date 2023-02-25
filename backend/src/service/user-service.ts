@@ -12,7 +12,7 @@ import tokenActions from "../database/token-actions";
 import ApiError from "../exceptions/api-error";
 // types
 import {IUser, IUserRegistration} from "../models/IUser";
-import {IProduct} from "../models/IProduct";
+import {IProduct, IProductInCart} from "../models/IProduct";
 import shoppingCartActions from "../database/shopping-cart-actions";
 import productActions from "../database/product-actions";
 import ProductService from "./product-service";
@@ -136,20 +136,37 @@ class UserService {
         );
     }
 
-    async getProductsFromCart(userId: IUser["id"]): Promise<IProduct[]> {
+    async getProductsFromCart(userId: IUser["id"]): Promise<IProductInCart[]> {
         const shoppingCartItemsDB = await shoppingCartActions.getProductsFromCart(userId);
         const normalizedItems = shoppingCartItemsDB.map(dbItem => shoppingCartActions.normalization(dbItem));
-        const products = Promise.all(normalizedItems.map(async cartItem => await ProductService.getById(cartItem.productId)))
+        const products = Promise.all( normalizedItems.map(async cartItem => {
+            const product = await ProductService.getById(cartItem.productId);
+            return {
+                ...product,
+                isSelected: cartItem.isSelected,
+                amountInCart: cartItem.quantity
+            } as IProductInCart
+        }) )
         return products;
     }
 
-    async addProductToCart(userId: IUser["id"], productId: IProduct["id"]): Promise<void> {
+    async addProductToCart(userId: IUser["id"], productId: IProduct["id"]): Promise<IProduct> {
         const timestamp = new Date().toISOString().slice(0, 19).replace("T", " ");
         await shoppingCartActions.addProductToCart(userId, productId, timestamp);
+        const product = await ProductService.getById(productId);
+        return product;
     }
 
     async deleteProductFromCart(userId: IUser["id"], productId: IProduct["id"]): Promise<void> {
         await shoppingCartActions.deleteProductFromCart(userId, productId);
+    }
+
+    async changeSelect(userId: IUser["id"], productId: IProduct["id"], isSelected: IProductInCart["isSelected"]) {
+        await shoppingCartActions.changeSelect(userId, productId, isSelected);
+    }
+
+    async reduceQuantity(userId: IUser["id"], productId: IProduct["id"]) {
+        await shoppingCartActions.reduceQuantity(userId, productId);
     }
 }
 

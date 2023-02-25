@@ -10,6 +10,7 @@ import {router} from "../router";
 import {checkAuthentication} from "../store/thunks/authentication";
 import {createTimeoutNotification} from "../store/thunks/notifications";
 import {categoriesFetchingServer} from "../store/thunks/categories";
+import {fetchShoppingCart} from "../store/thunks/shopping-cart";
 
 const theme = createTheme({
     typography: {
@@ -28,6 +29,7 @@ function App() {
 
     useEffect(() => {
         if (dataFetchedRef.current) return;
+
         dataFetchedRef.current = true;
         dispatch(createTimeoutNotification({
             notification: {
@@ -42,6 +44,7 @@ function App() {
 
         if (localStorage.getItem("token")) {
             dispatch(checkAuthentication());
+            dispatch(fetchShoppingCart());
         }
     }, [])
 

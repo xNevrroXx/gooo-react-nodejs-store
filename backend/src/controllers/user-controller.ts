@@ -56,7 +56,6 @@ class UserController {
 
     async logout(request: Request, response: Response, next: NextFunction) {
         try {
-            const {refreshToken} = request.cookies;
             response.clearCookie("refreshToken");
             response.sendStatus(205);
         }
@@ -137,7 +136,41 @@ class UserController {
         try {
             const user = request.user!;
             const productId = request.params.productId;
-            await userService.addProductToCart(user.id, +productId);
+            const product = await userService.addProductToCart(user.id, +productId);
+
+            response.json({
+                product
+            });
+        }
+        catch (error) {
+            next(error);
+        }
+    }
+
+    async changeSelect(request: Request, response: Response, next: NextFunction) {
+        try {
+            const errors = validationResult(request);
+            if(!errors.isEmpty()) {
+                return next(ApiError.BadRequest("Ошибка при валидации", errors.array()));
+            }
+
+            const isSelected = request.body.isSelected;
+            const user = request.user!;
+            const productId = request.params.productId;
+            await userService.changeSelect(user.id, +productId, isSelected);
+
+            response.sendStatus(200);
+        }
+        catch (error) {
+            next(error);
+        }
+    }
+
+    async reduceQuantity(request: Request, response: Response, next: NextFunction) {
+        try {
+            const user = request.user!;
+            const productId = request.params.productId;
+            await userService.reduceQuantity(user.id, +productId);
 
             response.sendStatus(200);
         }

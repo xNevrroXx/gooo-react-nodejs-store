@@ -16,5 +16,6 @@ export interface IProduct extends IProductCreation {
 }
 
 export interface IProductInCart extends IProduct {
-    isSelected: boolean
+    isSelected: boolean,
+    amountInCart: number
 }

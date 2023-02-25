@@ -25,6 +25,7 @@ export const createTimeoutNotification = createAsyncThunk(
 export const createTimeoutErrorNotification = createAsyncThunk(
     "notifications/createTimeoutNotifications",
     (error: any, thunkApi) => {
+        console.log("error: ", error);
         if (axios.isAxiosError(error) && error.response) {
             if (error.response.status === 401) {
                 thunkApi.dispatch(createTimeoutNotification({notification: {type: "error", title: "Ошибка 401", description: "Вы не авторизованы"}}))
