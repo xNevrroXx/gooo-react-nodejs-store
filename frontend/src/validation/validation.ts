@@ -92,13 +92,13 @@ export const shortDescriptionValidation =
     Yup.string()
         .required("*Обязательное поле")
         .min(100, "Минимум 100 символов")
-        .max(1000, "Максимум 1000 символов")
+        .max(250, "Максимум 250 символов")
 
 export const longDescriptionValidation =
     Yup.string()
         .required("*Обязательное поле")
-        .min(500, "Минимум 100 символов")
-        .max(5000, "Максимум 1000 символов")
+        .min(500, "Минимум 500 символов")
+        .max(5000, "Максимум 5000 символов")
 
 export const linkValidation =
     Yup.string()

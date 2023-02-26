@@ -1,17 +1,36 @@
 import React, {FC, useEffect, useRef} from 'react';
+import {Box} from "@mui/material";
+import {createSelector} from "@reduxjs/toolkit";
 // own modules
 import {useAppDispatch, useAppSelector} from "../../hooks/store.hook";
+import ProductCard from "../productCard/ProductCard";
 // actions
 import {productsFetchingServer} from "../../store/thunks/products";
 // types
 import {IProduct} from "../../models/IProduct";
-import ProductCard from "../productCard/ProductCard";
-import {Box} from "@mui/material";
+import {RootState} from "../../store";
+import {IFilter} from "../../models/IFilter";
 
 const ProductList: FC = () => {
     const dataFetchedRef = useRef<boolean>(false);
     const dispatch = useAppDispatch();
-    const products = useAppSelector(state => state.products.products) as IProduct[];
+
+
+    const filteredProductsSelector = createSelector(
+        (state: RootState) => state.filters.filters,
+        (state: RootState) => state.products.products,
+        (filters: IFilter, products: IProduct[]) => {
+            let filteredProducts: IProduct[] = products;
+
+            if(filters.nameQuery) {
+                filteredProducts = products.filter( product => product.name.toLowerCase().includes(filters.nameQuery!.toLowerCase()) )
+            }
+
+            return filteredProducts;
+        }
+    );
+
+    const filteredProducts = useAppSelector(filteredProductsSelector);
 
     useEffect(() => {
         if(dataFetchedRef.current) return;
@@ -22,7 +41,7 @@ const ProductList: FC = () => {
 
     return (
         <Box>
-            {products.map(item =>
+            {filteredProducts.map(item =>
                 <ProductCard key={item.id+item.price} {...item}/>
             )}
         </Box>

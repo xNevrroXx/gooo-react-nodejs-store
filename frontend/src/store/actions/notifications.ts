@@ -1,4 +1,5 @@
 import {createAction} from "@reduxjs/toolkit";
+// types
 import {INotification} from "../../models/IStore";
 
 export const createNotification = createAction<INotification>("notifications/createNotification");

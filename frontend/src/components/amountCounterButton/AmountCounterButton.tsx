@@ -16,9 +16,9 @@ const AmountCounterButton: FC<IAmountCounterButton> = ({amount, onReduce, onAdd,
             <button className="amount-counter-button__reduce" onClick={onReduce} disabled={amount === minAmount}>
                 <svg width="2rem" height="2rem" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1.5"
                         d="M6 12H 12"
                         stroke={amount === minAmount ? "gray" : "black"}
                     />
@@ -30,9 +30,9 @@ const AmountCounterButton: FC<IAmountCounterButton> = ({amount, onReduce, onAdd,
                     <path
                         d="M12 7V17M7 12H17"
                         stroke={amount === maxAmount ? "gray" : "black"}
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                     />
                 </svg>
             </button>

@@ -27,7 +27,6 @@ $api.interceptors.request.use(function(config: InternalAxiosRequestConfig) {
 })
 
 $api.interceptors.response.use(function(config: AxiosResponse) {
-    console.log("response: ", config);
     return config;
 }, async function(error: AxiosError) {
     if(axios.isAxiosError(error) && error.response) {

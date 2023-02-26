@@ -60,8 +60,6 @@ const CreateProduct: FC = (sx?: SxProps) => {
         }
     }
 
-    console.log("images: ", formik.values.images);
-    console.log("images errors: ", formik.errors.images);
     return (
         <Box
             sx={{
