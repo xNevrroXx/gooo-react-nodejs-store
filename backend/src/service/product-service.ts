@@ -3,6 +3,7 @@ import categoryActions from "../database/category-actions";
 import productActions from "../database/product-actions";
 // types
 import {IProduct, IProductRequest, IProductWithImagesDB} from "../models/IProduct";
+import category from "../router/category/category";
 
 class ProductService {
     async getById(id: IProduct["id"]): Promise<IProduct> {
@@ -27,11 +28,15 @@ class ProductService {
     async create(product: IProductRequest): Promise<IProduct> {
         if(product.categoryId !== 0) {
             const parentCategory = await categoryActions.find({id: product.categoryId});
-            if(!parentCategory) {
+            if (!parentCategory) {
                 throw ApiError.Conflict("Поле categoryId содержит недопустимое значение/несуществующую родительскую категорию.");
             }
+            const childsCategories = await categoryActions.findChildCategory(product.categoryId);
+            if (childsCategories.length > 0) {
+                throw ApiError.Conflict("У данной категории есть как минимум одна дочерняя категория. Для создания продукта необходимо выбрать категорию, которая не имеет потомков.");
+            }
         }
-        else if(product.categoryId === 0) {
+        else if (product.categoryId === 0) {
             throw ApiError.Conflict("Для продукта не может быть назначена категория с Id равным 0. Должна быть выбрана дочерняя категории без потомков.")
         }
         const timestamp = new Date().toISOString().slice(0, 19).replace("T", " ");

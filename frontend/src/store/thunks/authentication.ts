@@ -96,6 +96,7 @@ export const checkAuthentication = createAsyncThunk(
             return response.data;
         }
         catch (error) {
+            localStorage.removeItem("token");
             thunkApi.dispatch(createTimeoutErrorNotification(error));
             return thunkApi.rejectWithValue(error);
         }

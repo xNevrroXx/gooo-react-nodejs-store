@@ -126,6 +126,23 @@ class CategoryActions {
             })
         })
     }
+
+    async findChildCategory (categoryId: ICategory["id"]): Promise<ICategoryDB[]> {
+        return new Promise<ICategoryDB[]>((resolve, reject) => {
+            dbPool.getConnection((error: MysqlError, connection: PoolConnection) => {
+                const findSQLString = `SELECT * FROM product_category WHERE parent_id = ${categoryId}`;
+
+                connection.query(findSQLString, (error, result) => {
+                    connection.release();
+                    if(error) {
+                        reject(error);
+                    }
+
+                    resolve(result);
+                })
+            })
+        })
+    }
 }
 
 export default new CategoryActions();
