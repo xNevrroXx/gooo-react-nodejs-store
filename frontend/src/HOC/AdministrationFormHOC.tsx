@@ -34,7 +34,7 @@ const AdministrationFormHOC: FC<IAdministrationFormHOC> = ({label, children, wra
     return (
         <>
             <Typography variant="h1" textAlign="center">{label}</Typography>
-            <Divider sx={{mb: "2rem"}} />
+            <Divider sx={{mb: "4rem"}} />
             <Box component="main" sx={wrapperFormSX}>
                 {children}
             </Box>

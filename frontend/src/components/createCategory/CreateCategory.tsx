@@ -1,19 +1,16 @@
-import React, {FC, useCallback, useMemo, useState} from "react";
-import {Box, Button, Menu, Stack, SxProps, TextField} from "@mui/material";
-import {ExpandMore as ExpandMoreIcon, ChevronRight as ChevronRightIcon} from "@mui/icons-material";
-import {TreeView, TreeItem} from "@mui/lab";
+import React, {FC} from "react";
+import {Box, Button, Grid, Stack, SxProps, TextField} from "@mui/material";
 import {useFormik} from "formik";
 import * as Yup from "yup";
 // own modules
 import MainStyledButton from "../styledComponents/MainStyledButton";
-import {useAppDispatch, useAppSelector} from "../../hooks/store.hook";
+import {useAppDispatch} from "../../hooks/store.hook";
 import {categoryIdValidation, labelValidation, technicalNameValidation} from "../../validation/validation";
+import CategoryTreeWithButton from "../categoryTree/CategoryTreeWithButton";
 // actions
 import {categoryCreateServer} from "../../store/thunks/categories";
 // types
-import {ICategoryTree} from "../../models/ICategoryTree";
 import {ICategoryCreation} from "../../models/ICategory";
-import CategoryTree from "../categoryTree/CategoryTree";
 
 const CreateCategory: FC = (sx?: SxProps) => {
     const dispatch = useAppDispatch();
@@ -82,7 +79,7 @@ const CreateCategory: FC = (sx?: SxProps) => {
                         readOnly: true
                     }}
                 />
-                <CategoryTree onSelectCategory={(category) => formik.setFieldValue("parentId", category.id)}/>
+                <CategoryTreeWithButton onSelectCategory={(category) => formik.setFieldValue("parentId", category.id)}/>
                 <MainStyledButton
                     sx={{height: "100%", width: "max-content"}}
                     onClick={() => formik.setFieldValue("parentId", 0)}

@@ -1,17 +1,19 @@
-import React, {ChangeEvent, ChangeEventHandler, useCallback, useMemo, useState, useTransition} from 'react';
+import React, {ChangeEvent, useCallback, useTransition} from 'react';
 import {TextField, InputAdornment, Box, SxProps} from "@mui/material";
 import {Search as SearchIcon} from "@mui/icons-material";
+// own modules
 import {useAppDispatch, useAppSelector} from "../../hooks/store.hook";
+// actions & thunks & selectors
 import {addFilter} from "../../store/actions/filters";
 
 const Search = (props: {sx?: SxProps}) => {
-    const query = useAppSelector(state => state.filters.filters.name);
+    const query = useAppSelector(state => state.filters.filters.nameQuery);
     const dispatch = useAppDispatch();
     const [isPending, startTransition] = useTransition();
 
     const onValueChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
         const text = event.target.value;
-        startTransition(() => dispatch(addFilter({filterType: "nameQuery", value: text === "" ? null : text} )))
+        startTransition(() => dispatch(addFilter({filterType: "nameQuery", value: text} )))
     }, [])
 
     return (

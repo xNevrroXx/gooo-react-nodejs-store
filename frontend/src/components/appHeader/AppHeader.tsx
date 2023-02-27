@@ -14,7 +14,6 @@ import {
   Box,
   Stack
 } from "@mui/material";
-
 import {
   AccountCircleOutlined,
   FavoriteBorderOutlined, Logout,
@@ -89,7 +88,7 @@ function AppHeader() {
 
   return (
     <>
-    <AppBar position="relative" sx={{zIndex: "100"}} >
+    <AppBar position="fixed" sx={{zIndex: "100"}} >
       <Toolbar>
         <IconButton
             component={RouterLink}

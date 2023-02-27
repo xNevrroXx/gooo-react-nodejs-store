@@ -1,16 +1,16 @@
 import {createSlice} from "@reduxjs/toolkit";
 // actions & thunks
-import {addFilter} from "../actions/filters";
+import {addFilter, resetFilters} from "../actions/filters";
 // types
 import {IFilters} from "../../models/IStore";
-import {IFilter, TFilterField} from "../../models/IFilter";
+import {IFilter} from "../../models/IFilter";
 
 const initialState: IFilters = {
     filters: {
-        nameQuery: null,
+        nameQuery: "",
         categoryId: null,
-        price: null,
-        weight: null
+        price: {min: 0, max: 0},
+        weight: {min: 0, max: 0}
     },
 }
 
@@ -41,6 +41,16 @@ const filters = createSlice({
 
                 // @ts-ignore
                 state.filters[key] = value;
+            })
+            .addCase(resetFilters, (state, action) => {
+                // function changeFilterTS<Obj extends IFilters["filters"], Key extends keyof IFilters["filters"]>(obj: Obj, key: Key, value: Obj[Key]) {
+                //     obj[key] = value;
+                // }
+                for (const fieldKey of action.payload.filterFieldsToReset) {
+                    // changeFilterTS(state.filters, fieldKey, initialState.filters[fieldKey]);
+                    // @ts-ignore
+                    state.filters[fieldKey] = initialState.filters[fieldKey];
+                }
             })
     }
 })

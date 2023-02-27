@@ -8,7 +8,7 @@ import Loading from "../components/loading/Loading";
 const Index: FC = () => (
     <>
         <AppHeader/>
-        <Container maxWidth="xl" sx={{paddingTop: "2rem", paddingBottom: "2rem"}}>
+        <Container maxWidth="xl" sx={{paddingTop: "5rem", paddingBottom: "2rem", minHeight: "100vh"}}>
             <Suspense fallback={<Loading sx={{position: "absolute", top: "0", left: "0", height: "100vh", width: "100%"}}/>}>
                 <Outlet/>
             </Suspense>

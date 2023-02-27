@@ -83,8 +83,8 @@ const ProductCard: FC<IProduct> = ({id, name, stock, shortDescription, longDescr
                                 <AmountCounterButton amount={productInShoppingCart.amountInCart} onReduce={onMinusFromShoppingCart} onAdd={onPlusToShoppingCart} maxAmount={stock} minAmount={1}/>
                                 <button style={{background: "transparent", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: ".2rem"}} >
                                     <svg color="gray" height="1.2rem" width="1.2rem" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M3 3L17 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                        <path d="M17 3L3 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                        <path d="M3 3L17 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                                        <path d="M17 3L3 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
                                     </svg>
                                     <Typography display="inline" onClick={onDeleteFromShoppingCart}>Удалить</Typography>
                                 </button>

@@ -4,12 +4,7 @@ import {useFormik, FieldArray, FormikProvider, Field} from "formik";
 import * as Yup from "yup";
 // own modules
 import {useAppDispatch} from "../../hooks/store.hook"
-import CategoryTree from "../categoryTree/CategoryTree";
-// actions
-import {productCreateServer} from "../../store/thunks/products";
-// types
-import {ICategoryTree} from "../../models/ICategoryTree";
-import {IProductCreation} from "../../models/IProduct";
+import CategoryTreeWithButton from "../categoryTree/CategoryTreeWithButton";
 import {
     arrayLinksValidation,
     labelValidation,
@@ -18,6 +13,11 @@ import {
     shortDescriptionValidation,
     weightUnitsValidation
 } from "../../validation/validation";
+// actions
+import {productCreateServer} from "../../store/thunks/products";
+// types
+import {ICategoryTree} from "../../models/ICategoryTree";
+import {IProductCreation} from "../../models/IProduct";
 
 const CreateProduct: FC = (sx?: SxProps) => {
     const dispatch = useAppDispatch();
@@ -150,7 +150,7 @@ const CreateProduct: FC = (sx?: SxProps) => {
                         readOnly: true
                     }}
                 />
-                <CategoryTree onSelectCategory={onSelectCategory}/>
+                <CategoryTreeWithButton onSelectCategory={onSelectCategory}/>
             </Stack>
             <TextField
                 type="number"
