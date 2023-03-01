@@ -38,7 +38,7 @@ export const filteredProductsSelector = createSelector(
             // search child categories for filtering
             const childrenCategoryIds: ICategory["id"][] = [];
 
-            const deepSearch = function deepSearch (categoryTree: ICategoryTree, isChildTargetCategory: boolean) {
+            const deepSearch = function (categoryTree: ICategoryTree, isChildTargetCategory: boolean) {
                 if(categoryTree.id === filters.categoryId || isChildTargetCategory) {
                     childrenCategoryIds.push(categoryTree.id);
                     categoryTree.children.forEach(categoryTreeChild => deepSearch(categoryTreeChild, true));

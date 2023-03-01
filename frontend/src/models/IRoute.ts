@@ -3,9 +3,11 @@ import {ROUTE} from "../router";
 // types
 import {IUser} from "./IUser";
 import {IProduct} from "./IProduct";
+import {ICategory} from "./ICategory";
 
 export type TRouteArgs =
     | { path: ROUTE.MAIN }
+    | { path: ROUTE.MAIN_WITH_FILTERS, params: { categoryId: ICategory["id"] } }
 
     // user
     | { path: ROUTE.USER_LOGIN }

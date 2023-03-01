@@ -6,6 +6,7 @@ import ProductCard from "../productCard/ProductCard";
 // actions & selectors
 import {productsFetchingServer} from "../../store/thunks/products";
 import {filteredProductsSelector} from "../../store/selectors/products";
+import Breadcrumbs from "../breadcrumbs/Breadcrumbs";
 
 const ProductList: FC = () => {
     const dataFetchedRef = useRef<boolean>(false);
@@ -20,11 +21,13 @@ const ProductList: FC = () => {
 
 
     return (
-        <Box>
-            {filteredProducts.map(item =>
-                <ProductCard key={item.id+item.price} {...item}/>
-            )}
-        </Box>
+        <>
+            <Box>
+                {filteredProducts.map(item =>
+                    <ProductCard key={item.id+item.price} {...item}/>
+                )}
+            </Box>
+        </>
     );
 };
 

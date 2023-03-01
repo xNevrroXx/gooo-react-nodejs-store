@@ -34,6 +34,7 @@ export const router = createBrowserRouter([
 
 export enum ROUTE {
     MAIN = "/main",
+    MAIN_WITH_FILTERS = "/main?category=:categoryId",
 
     // user
     USER_LOGIN = "/user/login",

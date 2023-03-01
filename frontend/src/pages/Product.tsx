@@ -2,19 +2,21 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useParams} from "react-router-dom";
 import {Typography, Box, Stack, Paper} from "@mui/material";
 // own modules
+import Breadcrumbs from "../components/breadcrumbs/Breadcrumbs";
 import {useAppDispatch} from "../hooks/store.hook";
 import MainStyledButton from "../components/styledComponents/MainStyledButton";
 import ProductService from "../services/ProductService";
 import Loading from "../components/loading/Loading";
-import {createTimeoutErrorNotification} from "../store/thunks/notifications";
 import {getNumberWithSpaces} from "../components/supportingFunctions/getNumberWithSpaces";
+import ImageSlider from "../components/imageSlider/ImageSlider";
+// actions & thunks & selectors
+import {createTimeoutErrorNotification} from "../store/thunks/notifications";
 // types
 import {IProduct} from "../models/IProduct";
-import ImageSlider from "../components/imageSlider/ImageSlider";
 
 const Product = () => {
-    const dispatch = useAppDispatch();
     const params = useParams();
+    const dispatch = useAppDispatch();
     const fetchedProductRef = useRef<boolean>(false);
     const [product, setProduct] = useState<IProduct | null>(null);
 
@@ -42,6 +44,7 @@ const Product = () => {
 
     return (
         <>
+            <Breadcrumbs targetCategoryId={product.categoryId} isLastLink={true} />
             <Typography component="h1" variant="h4" mb="2rem">{product.name}</Typography>
             <Stack direction="row" justifyContent="space-between" spacing={3} height="600px" mb="3rem">
                 <Box width="50%">
@@ -58,7 +61,7 @@ const Product = () => {
                 </Paper>
             </Stack>
             <Typography component="h2" variant="h4" mb="1rem">Описание</Typography>
-            <Typography >{product.longDescription}</Typography>
+            <Typography>{product.longDescription}</Typography>
         </>
     );
 };
