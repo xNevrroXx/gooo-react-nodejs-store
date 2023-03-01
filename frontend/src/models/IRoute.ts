@@ -3,11 +3,12 @@ import {ROUTE} from "../router";
 // types
 import {IUser} from "./IUser";
 import {IProduct} from "./IProduct";
-import {ICategory} from "./ICategory";
+import {TFilterSearchLinkAll, TFilterSearchLinkCategory} from "./IFilter";
 
 export type TRouteArgs =
     | { path: ROUTE.MAIN }
-    | { path: ROUTE.MAIN_WITH_FILTERS, params: { categoryId: ICategory["id"] } }
+    | { path: ROUTE.FILTERING_ALL, params: TFilterSearchLinkAll }
+    | { path: ROUTE.FILTERING_CATEGORY, params: TFilterSearchLinkCategory }
 
     // user
     | { path: ROUTE.USER_LOGIN }
@@ -26,5 +27,6 @@ export type TRouteArgs =
     // shopping cart
     | { path: ROUTE.SHOPPING_CART }
     ;
+type test = TRouteArgs
 
 export type TRouteWithParams = {path: string, params: any}

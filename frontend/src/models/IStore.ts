@@ -3,7 +3,7 @@ import {INotifier} from "./INotifier";
 import {IUserDto} from "./IUser";
 import {ICategoryTree} from "./ICategoryTree";
 import {ICategory} from "./ICategory";
-import {IFilter} from "./IFilter";
+import {IFilter, TSorting} from "./IFilter";
 
 type loadingStatus = "idle" | "loading" | "error";
 
@@ -27,7 +27,8 @@ export interface ICategories {
 
 // filters
 export interface IFilters {
-    filters: IFilter
+    filters: IFilter,
+    sorting: TSorting
 }
 
 // notifications

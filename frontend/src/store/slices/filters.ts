@@ -1,38 +1,25 @@
 import {createSlice} from "@reduxjs/toolkit";
 // actions & thunks
-import {addFilter, resetFilters} from "../actions/filters";
+import {addFilter, changeSortMethod, resetFilters, setFilters} from "../actions/filters";
 // types
 import {IFilters} from "../../models/IStore";
 import {IFilter} from "../../models/IFilter";
 
-const initialState: IFilters = {
+export const filtersInitialState: IFilters = {
     filters: {
         nameQuery: "",
         categoryId: null,
         price: {min: 0, max: 0},
         weight: {min: 0, max: 0}
     },
+    sorting: {label: "По возрастанию цены", filterParam: "price", startFrom: "min"}
 }
 
 
 const filters = createSlice({
     name: "filters",
-    initialState: initialState,
-    reducers: {
-        // filterFetching: (state, action) => {
-        //     state.filterLoadingStatus = "loading";
-        // },
-        // filterFetched: (state, action) => {
-        //     state.filters = action.payload;
-        //     state.filterLoadingStatus = "idle";
-        // },
-        // filterFetchingError: (state, action) => {
-        //     state.filterLoadingStatus = "error";
-        // },
-        // activeFilters: (state, action) => {
-        //     state.activeFilters = action.payload
-        // }
-    },
+    initialState: filtersInitialState,
+    reducers: {},
     extraReducers: (builder) => {
         builder
             .addCase(addFilter, (state, action) => {
@@ -49,8 +36,14 @@ const filters = createSlice({
                 for (const fieldKey of action.payload.filterFieldsToReset) {
                     // changeFilterTS(state.filters, fieldKey, initialState.filters[fieldKey]);
                     // @ts-ignore
-                    state.filters[fieldKey] = initialState.filters[fieldKey];
+                    state.filters[fieldKey] = filtersInitialState.filters[fieldKey];
                 }
+            })
+            .addCase(setFilters, (state, action) => {
+                state.filters = action.payload;
+            })
+            .addCase(changeSortMethod, (state, action) => {
+                state.sorting = action.payload;
             })
     }
 })

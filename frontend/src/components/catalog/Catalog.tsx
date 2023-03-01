@@ -4,9 +4,12 @@ import {Button, Divider, Grid, Menu, MenuItem, Stack, SxProps} from "@mui/materi
 import {KeyboardArrowRight as KeyboardArrowRightIcon, Menu as MenuIcon} from "@mui/icons-material";
 // own modules
 import ChildCategories from "../childCategories/ChildCategories";
-import {useAppSelector} from "../../hooks/store.hook";
+import {useAppDispatch, useAppSelector} from "../../hooks/store.hook";
 // types
 import {ICategoryTree} from "../../models/ICategoryTree";
+import {createPath} from "../../router/createPath";
+import {ROUTE} from "../../router";
+import {addFilter} from "../../store/actions/filters";
 
 interface ICatalogProps {
     sx?: SxProps
@@ -14,6 +17,7 @@ interface ICatalogProps {
 }
 
 const Catalog: FC<ICatalogProps> = ({onClickOverride, sx}) => {
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const categories = useAppSelector(state => state.categories.categories) as ICategoryTree[];
 
@@ -43,7 +47,8 @@ const Catalog: FC<ICatalogProps> = ({onClickOverride, sx}) => {
             onClickOverride(categoryTree.id);
         }
         else {
-            navigate("/catalog/"+categoryTree.name)
+            dispatch(addFilter({ filterType: "categoryId", value: categoryTree.id }))
+            navigate(createPath({ path: ROUTE.FILTERING_CATEGORY, params: {category: categoryTree.id} }))
         }
     }
 

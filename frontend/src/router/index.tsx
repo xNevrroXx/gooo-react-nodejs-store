@@ -10,6 +10,7 @@ import {product} from "./product/product";
 import {shoppingCart} from "./shopping-cart/shoppingCart";
 // pages
 import Main from "../pages/Main";
+import Filtering from "../pages/Filtering";
 
 export const router = createBrowserRouter([
     {
@@ -25,6 +26,10 @@ export const router = createBrowserRouter([
                 element: <Main/>
             },
             {
+                path: "/filtering",
+                element: <Filtering/>
+            },
+            {
                 element: <NotFound/>,
                 path: "*"
             }
@@ -34,7 +39,8 @@ export const router = createBrowserRouter([
 
 export enum ROUTE {
     MAIN = "/main",
-    MAIN_WITH_FILTERS = "/main?category=:categoryId",
+    FILTERING_ALL = "/filtering?category=:category&minprice=:minPrice&maxprice=:maxPrice&minweight=:minWeight",
+    FILTERING_CATEGORY = "/filtering?category=:category",
 
     // user
     USER_LOGIN = "/user/login",

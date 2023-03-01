@@ -72,10 +72,9 @@ const ProductCard: FC<IProduct> = ({id, name, stock, shortDescription, longDescr
                 </Grid>
                 <Grid height="100%" item xs={2}>
                     <CardActions sx={{height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-around"}}>
-                        <LinkTypography whiteSpace="nowrap" variant="body1">
-                            <Typography variant="h6">{getNumberWithSpaces(price)}
-                                <Typography variant="body1" fontWeight="medium" component="span">₽</Typography>
-                            </Typography>
+                        <LinkTypography whiteSpace="nowrap" variant="h6">
+                            { getNumberWithSpaces(price) }
+                            <Typography variant="body1" fontWeight="medium" component="span">₽</Typography>
                         </LinkTypography>
 
                         {productInShoppingCart ?
