@@ -28,6 +28,7 @@ export const recoveryPasswordChangePassword = createAsyncThunk(
     async ({code, password}: {code: string, password: IUser["password"]}, thunkApi) => {
         try {
             await AuthService.recoveryPasswordSetNew(code, password);
+            router.navigate(createPath({path: ROUTE.USER_LOGIN}));
             thunkApi.dispatch(createTimeoutNotification({notification: {type: "success", title: "Успешно", description: "Пароль успешно изменен"}}));
             return;
         }

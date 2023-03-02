@@ -1,4 +1,4 @@
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import React, {FC, MouseEvent, useCallback, useEffect, useMemo, useState} from "react";
 import {Button, Divider, Grid, Menu, MenuItem, Stack, SxProps} from "@mui/material";
 import {KeyboardArrowRight as KeyboardArrowRightIcon, Menu as MenuIcon} from "@mui/icons-material";
@@ -19,6 +19,7 @@ interface ICatalogProps {
 const Catalog: FC<ICatalogProps> = ({onClickOverride, sx}) => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const location = useLocation();
     const categories = useAppSelector(state => state.categories.categories) as ICategoryTree[];
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -48,7 +49,9 @@ const Catalog: FC<ICatalogProps> = ({onClickOverride, sx}) => {
         }
         else {
             dispatch(addFilter({ filterType: "categoryId", value: categoryTree.id }))
-            navigate(createPath({ path: ROUTE.FILTERING_CATEGORY, params: {category: categoryTree.id} }))
+            if (location.pathname !== ROUTE.FILTERING) {
+                navigate(createPath({ path: ROUTE.FILTERING_CATEGORY, params: {category: categoryTree.id} }))
+            }
         }
     }
 

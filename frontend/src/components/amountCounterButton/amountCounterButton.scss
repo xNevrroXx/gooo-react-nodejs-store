@@ -18,5 +18,6 @@
   &__amount {
     width: calc(4rem);
     text-align: center;
+    flex-grow: 1;
   }
 }

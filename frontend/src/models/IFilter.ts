@@ -12,5 +12,6 @@ export type TSorting = {label: "По возрастанию цены", filterPar
 export type TFilterSearchLinkAll = { category?: ICategory["id"], minPrice?: number, maxPrice?: number, minWeight?: number, maxWeight?: number, nameQuery?: string };
 export type TFilterSearchLinkAllString = { category?: string, minprice?: string, maxprice?: string, minweight?: string, maxweight?: string, namequery?: string };
 export type TFilterSearchLinkCategory = { category: ICategory["id"] };
+export type TFilterSearchLinkName = { nameQuery: string };
 
 export type TFilterField<T extends keyof IFilter> = {filterType: T, value: IFilter[T]};

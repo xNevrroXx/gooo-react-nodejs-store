@@ -13,6 +13,7 @@ import ImageSlider from "../components/imageSlider/ImageSlider";
 import {createTimeoutErrorNotification} from "../store/thunks/notifications";
 // types
 import {IProduct} from "../models/IProduct";
+import AddToCartButton from "../components/addToCartButton/AddToCartButton";
 
 const Product = () => {
     const params = useParams();
@@ -51,12 +52,13 @@ const Product = () => {
                     <ImageSlider images={product.images} alt={product.name}/>
                 </Box>
                 <Paper elevation={3} sx={{height: "max-content", padding: "1rem 1rem"}}>
-                    <Stack>
-                        <Box>
+                    <Stack width="15rem">
+                        <Box mb="1rem">
                             <Typography variant="body1" color="gray" sx={{textDecoration: "line-through"}}>{getNumberWithSpaces(Math.round(product.price+product.price*0.1))} ₽</Typography>
                             <Typography variant="h5">{getNumberWithSpaces(product.price)} ₽</Typography>
                         </Box>
-                        <MainStyledButton sx={{width: "15rem", height: "3rem"}}>Добавить в корзину</MainStyledButton>
+
+                        <AddToCartButton styleButtons={{width: "100%"}} productId={product.id} stock={product.stock}/>
                     </Stack>
                 </Paper>
             </Stack>

@@ -184,7 +184,7 @@ const CreateProduct: FC = (sx?: SxProps) => {
                                     {index > 0 && (
                                         <Button type="button" onClick={() => remove(index)}> - </Button>
                                     )}
-                                    {index < 4 && (
+                                    {index < 4 && formik.values.images.length < 5 && (
                                         <Button type="button" onClick={() => push('')}> + </Button>
                                     )}
                                 </Stack>

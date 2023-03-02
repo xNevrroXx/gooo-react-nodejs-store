@@ -1,19 +1,16 @@
 import React, {FC, useEffect, useRef} from 'react';
 import {Grid} from "@mui/material";
-import {Navigate, useLocation, useSearchParams} from "react-router-dom";
+import {useLocation, useSearchParams} from "react-router-dom";
 // own modules
 import {useAppDispatch, useAppSelector} from "../hooks/store.hook";
 import Filters from "../components/filters/Filters";
 import FilteredProductList from "../components/productLists/FilteredProductList";
 import Breadcrumbs from "../components/breadcrumbs/Breadcrumbs";
-import {createPath} from "../router/createPath";
-import {ROUTE} from "../router";
+import SortingSwitch from "../components/sortingSwitch/SortingSwitch";
 // actions & thunks & selectors
-import {countActiveFiltersSelector} from "../store/selectors/filters";
 import {setFilters} from "../store/actions/filters";
 // types
 import {IFilter, TFilterSearchLinkAllString} from "../models/IFilter";
-import SortingSwitch from "../components/sortingSwitch/SortingSwitch";
 
 const Filtering: FC = () => {
     const {search} = useLocation();
@@ -21,64 +18,67 @@ const Filtering: FC = () => {
     const dispatch = useAppDispatch();
     const filters = useAppSelector(state => state.filters.filters) as IFilter;
     const checkedSearchQueryRef = useRef<boolean>(false);
-    const location = useLocation();
-    const countActiveFilters = useAppSelector(countActiveFiltersSelector);
+    const checkedSearchParamsRef = useRef<boolean>(false);
 
     useEffect(() => {
-        if (checkedSearchQueryRef.current) return;
+        if (checkedSearchQueryRef.current) return; // false => return
+        checkedSearchQueryRef.current = true;
 
+        // adds up all the query search params to the convenient to use object
         const values = search.slice(1,).split("&").reduce<TFilterSearchLinkAllString>((accumulator, current) => {
             const searchAndValue = current.split("=");
 
             return {
                 ...accumulator,
-                [searchAndValue[0].toLowerCase()]: searchAndValue[1]
+                [decodeURI(searchAndValue[0].toLowerCase())]: decodeURI(searchAndValue[1])
             };
         }, {});
 
-        let extractedFilters: IFilter = {} as IFilter;
+        let deeplyCopiedFilters: IFilter = {} as IFilter;
+        function copyFieldTS <Obj extends {}, Key extends keyof Obj> (sourceObj: Obj, targetObj: Obj, key: Key) {
+            targetObj[key] = sourceObj[key];
+        }
         for ( const filterKey of Object.keys(filters) as (keyof IFilter)[] ) {
             const value = filters[filterKey];
 
             if (value != null && typeof value === "object") {
                 for ( const deepKey of Object.keys(filters[filterKey]!) ) {
-                    // @ts-ignore
-                    if (!extractedFilters[filterKey]) {
-                        // @ts-ignore
-                        extractedFilters[filterKey] = {};
+                    if (!deeplyCopiedFilters[filterKey]) {
+                        deeplyCopiedFilters[filterKey] = {} as never;
                     }
-                    // @ts-ignore
-                    extractedFilters[filterKey][deepKey] = filters[filterKey][deepKey];
+                    copyFieldTS(value, deeplyCopiedFilters[filterKey] as {}, deepKey as never);
                 }
             }
             else {
-                // @ts-ignore
-                extractedFilters[filterKey] = filters[filterKey];
+                copyFieldTS(filters, deeplyCopiedFilters, filterKey);
             }
         }
 
-        if ( values.category && extractedFilters.categoryId != +values.category ) {
-            extractedFilters.categoryId = +values.category;
+        if ( values.category && deeplyCopiedFilters.categoryId != +values.category ) {
+            deeplyCopiedFilters.categoryId = +values.category;
         }
-        if ( values.minprice && extractedFilters.price.min != +values.minprice ) {
-            extractedFilters.price.min = +values.minprice;
+        if ( values.minprice && deeplyCopiedFilters.price.min != +values.minprice ) {
+            deeplyCopiedFilters.price.min = +values.minprice;
         }
-        if ( values.maxprice && extractedFilters.price.max != +values.maxprice ) {
-            extractedFilters.price.max = +values.maxprice;
+        if ( values.maxprice && deeplyCopiedFilters.price.max != +values.maxprice ) {
+            deeplyCopiedFilters.price.max = +values.maxprice;
         }
-        if ( values.minweight && extractedFilters.weight.min != +values.minweight ) {
-            extractedFilters.weight.min = +values.minweight;
+        if ( values.minweight && deeplyCopiedFilters.weight.min != +values.minweight ) {
+            deeplyCopiedFilters.weight.min = +values.minweight;
         }
-        if ( values.maxweight && extractedFilters.weight.max != +values.maxweight ) {
-            extractedFilters.weight.max = +values.maxweight;
+        if ( values.maxweight && deeplyCopiedFilters.weight.max != +values.maxweight ) {
+            deeplyCopiedFilters.weight.max = +values.maxweight;
+        }
+        if ( values.namequery && deeplyCopiedFilters.nameQuery !== values.namequery ) {
+            deeplyCopiedFilters.nameQuery = values.namequery;
         }
 
-        dispatch(setFilters(extractedFilters))
-        checkedSearchQueryRef.current = true;
+        dispatch(setFilters(deeplyCopiedFilters));
     }, [search])
 
     useEffect(() => {
-        if (!checkedSearchQueryRef) return;
+        if (!checkedSearchQueryRef.current && checkedSearchParamsRef.current) return; //
+        checkedSearchParamsRef.current = true;
 
         let searchObj: TFilterSearchLinkAllString = {};
         if(filters.categoryId) searchObj.category = filters.categoryId.toString();
@@ -88,12 +88,8 @@ const Filtering: FC = () => {
         if(filters.weight.max) searchObj.maxweight = filters.weight.max.toString();
         if(filters.nameQuery) searchObj.namequery = filters.nameQuery;
 
-        setSearchParams(searchObj, {replace: true})
+        setSearchParams(searchObj);
     }, [filters])
-
-    if(countActiveFilters === 0 || location.search.length === 0) {
-        return <Navigate to={ createPath({path: ROUTE.MAIN}) } />
-    }
 
     return (
         <main>

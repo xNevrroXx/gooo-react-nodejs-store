@@ -3,12 +3,14 @@ import {ROUTE} from "../router";
 // types
 import {IUser} from "./IUser";
 import {IProduct} from "./IProduct";
-import {TFilterSearchLinkAll, TFilterSearchLinkCategory} from "./IFilter";
+import {TFilterSearchLinkAll, TFilterSearchLinkCategory, TFilterSearchLinkName} from "./IFilter";
 
 export type TRouteArgs =
     | { path: ROUTE.MAIN }
+    | { path: ROUTE.FILTERING }
     | { path: ROUTE.FILTERING_ALL, params: TFilterSearchLinkAll }
     | { path: ROUTE.FILTERING_CATEGORY, params: TFilterSearchLinkCategory }
+    | { path: ROUTE.FILTERING_NAME, params: TFilterSearchLinkName }
 
     // user
     | { path: ROUTE.USER_LOGIN }

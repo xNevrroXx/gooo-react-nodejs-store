@@ -3,6 +3,7 @@ import {FormControl, FormControlLabel, RadioGroup, Radio} from "@mui/material";
 // actions
 import {useAppDispatch, useAppSelector} from "../../hooks/store.hook";
 import {changeSortMethod} from "../../store/actions/filters";
+// types
 import {TSorting} from "../../models/IFilter";
 
 const SortingSwitch: FC = () => {

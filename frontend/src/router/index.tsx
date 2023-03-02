@@ -39,8 +39,10 @@ export const router = createBrowserRouter([
 
 export enum ROUTE {
     MAIN = "/main",
+    FILTERING = "/filtering",
     FILTERING_ALL = "/filtering?category=:category&minprice=:minPrice&maxprice=:maxPrice&minweight=:minWeight",
     FILTERING_CATEGORY = "/filtering?category=:category",
+    FILTERING_NAME = "/filtering?namequery=:nameQuery",
 
     // user
     USER_LOGIN = "/user/login",

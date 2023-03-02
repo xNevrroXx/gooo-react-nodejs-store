@@ -1,4 +1,5 @@
-import React, {FC} from 'react';
+import React, {CSSProperties, FC} from 'react';
+import {SxProps} from "@mui/material";
 // style
 import "./amountCounterButton.scss";
 
@@ -7,12 +8,13 @@ interface IAmountCounterButton {
     onReduce: () => void,
     onAdd: () => void,
     maxAmount: null | number,
-    minAmount: null | number
+    minAmount: null | number,
+    style?: CSSProperties
 }
-const AmountCounterButton: FC<IAmountCounterButton> = ({amount, onReduce, onAdd, maxAmount = null, minAmount = 1}) => {
+const AmountCounterButton: FC<IAmountCounterButton> = ({amount, onReduce, onAdd, maxAmount = null, minAmount = 1, style}) => {
 
     return (
-        <div className="amount-counter-button">
+        <div style={style} className="amount-counter-button">
             <button className="amount-counter-button__reduce" onClick={onReduce} disabled={amount === minAmount}>
                 <svg width="2rem" height="2rem" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
@@ -24,7 +26,7 @@ const AmountCounterButton: FC<IAmountCounterButton> = ({amount, onReduce, onAdd,
                     />
                 </svg>
             </button>
-            <input className="amount-counter-button__amount" type="number" value={amount} readOnly/>
+            <input style={{}} className="amount-counter-button__amount" type="number" value={amount} readOnly/>
             <button className="amount-counter-button__add" onClick={onAdd} disabled={amount === maxAmount}>
                 <svg width="2rem" height="2rem" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path

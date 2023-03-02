@@ -1,5 +1,5 @@
 import React, {FC, useCallback, useMemo} from 'react';
-import {Box, Button, Checkbox, Divider, FormControlLabel, FormGroup, Paper, Stack, Typography} from "@mui/material";
+import {Checkbox, Divider, FormControlLabel, FormGroup, Paper, Stack, Typography} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 // own modules
 import {useAppDispatch, useAppSelector} from "../hooks/store.hook";
@@ -10,6 +10,7 @@ import {createPath} from "../router/createPath";
 import {ROUTE} from "../router";
 import {getNumberWithSpaces} from "../components/supportingFunctions/getNumberWithSpaces";
 import ProductCard from "../components/productCard/ProductCard";
+// actions & thunks & selectors
 import {changeSelectShoppingCart, deleteProductFromShoppingCart} from "../store/thunks/shopping-cart";
 // types
 import {IShoppingCart} from "../models/IStore";
@@ -70,7 +71,7 @@ const View: FC<IViewProps> = ({productsInCart, onChangeSelect, onDeleteAll}) => 
     }, {amount: 0, weight: 0, checked: 0, count: 0}), [productsInCart])
 
     const products = productsInCart.map((product, index) => (
-        <Stack direction="row" spacing={1} >
+        <Stack key={"shopping cart product" + product.id} direction="row" spacing={1} >
             <Checkbox
                 onChange={() => onChangeSelect(product.id, !product.isSelected)}
                 checked={product.isSelected}

@@ -3,13 +3,13 @@ import {Stack, Typography, TextField, Button} from "@mui/material";
 // own modules
 import CategoryTree from "../categoryTree/CategoryTree";
 import {useAppDispatch, useAppSelector} from "../../hooks/store.hook";
-// types
-import {ICategory} from "../../models/ICategory";
-import {IFilter} from "../../models/IFilter";
 // actions & thunks & selectors
 import {addFilter, resetFilters} from "../../store/actions/filters";
 import {filteredProductsSelector} from "../../store/selectors/products";
 import {countActiveFiltersSelector} from "../../store/selectors/filters";
+// types
+import {ICategory} from "../../models/ICategory";
+import {IFilter} from "../../models/IFilter";
 
 
 const Filters: FC = () => {

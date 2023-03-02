@@ -2,6 +2,7 @@ import React, {FC} from 'react';
 import {useFormik} from "formik";
 import * as Yup from "yup";
 import {Button, Stack, TextField} from "@mui/material";
+import {useParams} from "react-router-dom";
 // own modules
 import {useAppDispatch} from "../../hooks/store.hook";
 import {passwordValidation} from "../../validation/validation";
@@ -9,7 +10,6 @@ import {passwordValidation} from "../../validation/validation";
 import {recoveryPasswordChangePassword} from "../../store/thunks/authentication";
 // types
 import {IUser} from "../../models/IUser";
-import {useParams} from "react-router-dom";
 
 const RecoveryPasswordFinish: FC = () => {
     const dispatch = useAppDispatch();
@@ -25,7 +25,7 @@ const RecoveryPasswordFinish: FC = () => {
             confirmationPassword: passwordValidation.oneOf([Yup.ref("password"), "null"], "Пароли должны совпадать"),
         }),
         onSubmit: (values, {setSubmitting}) => {
-            dispatch(recoveryPasswordChangePassword({code: recoveryLink as string, password: values.password}))
+            dispatch(recoveryPasswordChangePassword({code: recoveryLink as string, password: values.password}));
             setSubmitting(false);
         }
     });

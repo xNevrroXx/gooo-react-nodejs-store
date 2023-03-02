@@ -108,4 +108,5 @@ export const linkValidation =
 export const arrayLinksValidation =
     Yup.array()
         .min(1, "Добавьте хотя бы 1-ну ссылку на фотографию товара")
+        .max(5, "Максимум 5 изображений")
         .of(linkValidation)
