@@ -14,7 +14,10 @@ export const filteredProductsSelector = createSelector(
         let filteredProducts: IProduct[] = products;
 
         if (filters.nameQuery) {
-            filteredProducts = filteredProducts.filter( product => product.name.toLowerCase().includes(filters.nameQuery!.toLowerCase()) )
+            filteredProducts = filteredProducts.filter( product => {
+                const arrWordsFromQuery = filters.nameQuery.split(" ");
+                return arrWordsFromQuery.every(wordFromQuery => product.name.toLowerCase().includes(wordFromQuery.toLowerCase()));
+            })
         }
         if (filters.price) {
             if (filters.price.min) {
