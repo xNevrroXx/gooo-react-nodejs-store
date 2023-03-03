@@ -1,5 +1,5 @@
 // third-party modules
-import {createBrowserRouter, Navigate} from "react-router-dom";
+import {createBrowserRouter,} from "react-router-dom";
 import React from "react";
 // own modules
 import Index from "../pages/Index";
@@ -8,7 +8,7 @@ import {admin} from "./admin/admin";
 import {user} from "./user/user";
 import {product} from "./product/product";
 import {shoppingCart} from "./shopping-cart/shoppingCart";
-// pages
+// main pages
 import Main from "../pages/Main";
 import Filtering from "../pages/Filtering";
 

@@ -1,4 +1,3 @@
-// third-party modules
 import {Link as RouterLink, useNavigate} from "react-router-dom";
 import React, {FC, useCallback, useState, MouseEvent} from 'react';
 import {
@@ -22,14 +21,13 @@ import {
   ShoppingCartOutlined,
   ViewModuleOutlined
 } from '@mui/icons-material';
-
 // own components
 import Search from "../search/Search";
 import Catalog from "../catalog/Catalog";
 import {useAppDispatch, useAppSelector} from "../../hooks/store.hook";
 import {createPath} from "../../router/createPath";
 import {ROUTE} from "../../router";
-// actions
+// actions & thunks
 import {logout} from "../../store/thunks/authentication";
 // types
 import {RootState} from "../../store";
@@ -64,7 +62,7 @@ function AppHeader() {
           <ListItemIcon>
             <FavoriteBorderOutlined/>
           </ListItemIcon>
-          <ListItemText>Избранное</ListItemText>
+          <ListItemText>Избранное(Fake route)</ListItemText>
         </Box>
       </MenuItem>
       <MenuItem onClick={onCloseMobileMenu}>
@@ -72,11 +70,11 @@ function AppHeader() {
           <ListItemIcon>
             <ViewModuleOutlined/>
           </ListItemIcon>
-          <ListItemText>Заказы</ListItemText>
+          <ListItemText>Заказы(Fake route)</ListItemText>
         </Box>
       </MenuItem>
       <MenuItem onClick={onCloseMobileMenu}>
-        <Box component={RouterLink} to="/cart">
+        <Box component={RouterLink} to={createPath({path: ROUTE.SHOPPING_CART})}>
           <ListItemIcon>
             <ShoppingCartOutlined/>
           </ListItemIcon>
@@ -104,23 +102,23 @@ function AppHeader() {
         <Box sx={{ flexGrow: 1 }} />
 
         <Stack component="nav" direction="row" spacing={2}>
-          <AdminRouteLinksView
+          <AdminMenuView
               isAdmin={user?.isAdmin || 0}
           />
 
           <Button component={RouterLink} to="/favourites" sx={{display: {xs: "none", sm: "flex"}, alignItems: "center", flexDirection: "column", color: "inherit"}}>
             <FavoriteBorderOutlined/>
             <Typography variant="body2" component="span">
-              Избранное
+              Избранное(Fake route)
             </Typography>
           </Button>
           <Button component={RouterLink} to="/purchases" sx={{display: {xs: "none", sm: "flex"}, alignItems: "center", flexDirection: "column", color: "inherit"}}>
             <ViewModuleOutlined />
             <Typography variant="body2" component="span">
-              Заказы
+              Заказы(Fake route)
             </Typography>
           </Button>
-          <Button component={RouterLink} to="/cart" sx={{display: {xs: "none", sm: "flex"}, alignItems: "center", flexDirection: "column", color: "inherit"}}>
+          <Button component={RouterLink} to={createPath({path: ROUTE.SHOPPING_CART})} sx={{display: {xs: "none", sm: "flex"}, alignItems: "center", flexDirection: "column", color: "inherit"}}>
             <ShoppingCartOutlined/>
             <Typography variant="body2" component="span">
               Корзина
@@ -128,7 +126,7 @@ function AppHeader() {
           </Button>
 
 
-          <AuthenticationView
+          <AuthenticationMenuView
               user={user}
           />
 
@@ -149,7 +147,7 @@ function AppHeader() {
 interface IAdminRouteLinksView {
   isAdmin: IUserDto["isAdmin"]
 }
-const AdminRouteLinksView: FC<IAdminRouteLinksView> = ({isAdmin}) => {
+const AdminMenuView: FC<IAdminRouteLinksView> = ({isAdmin}) => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const isOpen = Boolean(anchorEl);
@@ -207,7 +205,7 @@ const AdminRouteLinksView: FC<IAdminRouteLinksView> = ({isAdmin}) => {
 interface IAuthenticationView {
   user: RootState["authentication"]["user"]
 }
-const AuthenticationView: FC<IAuthenticationView> = ({user}) => {
+const AuthenticationMenuView: FC<IAuthenticationView> = ({user}) => {
   const dispatch = useAppDispatch();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const isOpen = Boolean(anchorEl);
@@ -246,8 +244,9 @@ const AuthenticationView: FC<IAuthenticationView> = ({user}) => {
             <ListItemIcon>
               <Settings fontSize="small" />
             </ListItemIcon>
-            Настройки
+            Настройки(Fake route)
           </MenuItem>
+
           <MenuItem onClick={() => {
             onClose();
             dispatch(logout());
