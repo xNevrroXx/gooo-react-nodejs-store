@@ -1,16 +1,18 @@
 // third-party modules
-import React, {FC} from 'react';
+import React, {FC, useState} from 'react';
 import {Stack, Button, SxProps, TextField, Typography} from "@mui/material";
 import {useFormik} from "formik";
 import * as Yup from "yup";
 // own modules
 import {emailValidation, loginPasswordValidation} from "../../validation/validation";
 import {useAppDispatch} from "../../hooks/store.hook";
+import {helperTextWithCapsLock, onTypingCapsLock} from "../supportingFunctions/helperTextWithCapsLock";
 // actions
 import {login} from "../../store/thunks/authentication";
 
 const Login: FC<{ sx?: SxProps }> = ({sx}) => {
     const dispatch = useAppDispatch();
+    const [isCapsLockUsing, setIsCapsLockUsing] = useState<boolean>(false);
     
     const formik = useFormik({
         initialValues: {email: "", password: ""},
@@ -32,6 +34,7 @@ const Login: FC<{ sx?: SxProps }> = ({sx}) => {
             component="form"
             className="login-content__form"
             onSubmit={formik.handleSubmit}
+            onKeyDown={(event) => onTypingCapsLock(event, setIsCapsLockUsing)}
         >
             <Typography variant="h5">Вход</Typography>
             <TextField
@@ -46,12 +49,13 @@ const Login: FC<{ sx?: SxProps }> = ({sx}) => {
 
             <TextField
                 error={!!(formik.errors.password && formik.touched.password)}
+                type="password"
                 name="password"
                 onChange={formik.handleChange}
                 value={formik.values.password}
                 label="Пароль"
                 variant="outlined"
-                helperText={formik.errors.password}
+                helperText={helperTextWithCapsLock(formik.errors.password, isCapsLockUsing)}
             />
 
             <Button

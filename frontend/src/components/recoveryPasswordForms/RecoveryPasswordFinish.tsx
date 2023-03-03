@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {EventHandler, KeyboardEvent, FC, useCallback, useState, ReactNode} from 'react';
 import {useFormik} from "formik";
 import * as Yup from "yup";
 import {Button, Stack, TextField} from "@mui/material";
@@ -6,6 +6,7 @@ import {useParams} from "react-router-dom";
 // own modules
 import {useAppDispatch} from "../../hooks/store.hook";
 import {passwordValidation} from "../../validation/validation";
+import {helperTextWithCapsLock, onTypingCapsLock} from "../supportingFunctions/helperTextWithCapsLock";
 // actions
 import {recoveryPasswordChangePassword} from "../../store/thunks/authentication";
 // types
@@ -14,6 +15,7 @@ import {IUser} from "../../models/IUser";
 const RecoveryPasswordFinish: FC = () => {
     const dispatch = useAppDispatch();
     const {recoveryLink} = useParams();
+    const [isCapsLockUsing, setIsCapsLockUsing] = useState<boolean>(false);
 
     const formik = useFormik<{password: IUser["password"], confirmationPassword: IUser["password"]}>({
         initialValues: {
@@ -30,8 +32,9 @@ const RecoveryPasswordFinish: FC = () => {
         }
     });
 
+
     return (
-        <Stack onSubmit={formik.handleSubmit} component="form" sx={{width: "50%", height: "30vh"}} justifyContent="center" gap="2rem">
+        <Stack onSubmit={formik.handleSubmit} component="form" sx={{width: "50%", height: "30vh"}} justifyContent="center" gap="2rem" onKeyDown={(event) => onTypingCapsLock(event, setIsCapsLockUsing)}>
             <TextField
                 error={!!(formik.errors.password && formik.touched.password)}
                 value={formik.values.password}
@@ -41,7 +44,7 @@ const RecoveryPasswordFinish: FC = () => {
                 name="password"
                 autoComplete="none"
                 type="password"
-                helperText={formik.errors.password}
+                helperText={helperTextWithCapsLock(formik.errors.password, isCapsLockUsing)}
             />
             <TextField
                 error={!!(formik.errors.confirmationPassword && formik.touched.confirmationPassword)}
@@ -52,7 +55,7 @@ const RecoveryPasswordFinish: FC = () => {
                 name="confirmationPassword"
                 autoComplete="none"
                 type="password"
-                helperText={formik.errors.confirmationPassword}
+                helperText={helperTextWithCapsLock(formik.errors.confirmationPassword, isCapsLockUsing)}
             />
 
             <Button

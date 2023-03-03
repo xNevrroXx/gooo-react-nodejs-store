@@ -24,13 +24,17 @@ const Filtering: FC = () => {
         if (checkedSearchQueryRef.current) return; // false => return
         checkedSearchQueryRef.current = true;
 
+        if (search === "") {
+            return;
+        }
+
         // adds up all the query search params to the convenient to use object
         const values = search.slice(1,).split("&").reduce<TFilterSearchLinkAllString>((accumulator, current) => {
             const searchAndValue = current.split("=");
 
             return {
                 ...accumulator,
-                [decodeURI(searchAndValue[0].toLowerCase())]: decodeURI(searchAndValue[1])
+                [decodeURI(searchAndValue[0].toLowerCase())]: decodeURI(searchAndValue[1].replace(/\+/g, " "))
             };
         }, {});
 
