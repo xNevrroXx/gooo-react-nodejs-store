@@ -80,6 +80,11 @@ class UserController {
 
     async sendRecoveryLink(request: Request, response: Response, next: NextFunction) {
         try {
+            const errors = validationResult(request);
+            if(!errors.isEmpty()) {
+                return next(ApiError.BadRequest("Ошибка при валидации", errors.array()));
+            }
+
             const email = request.body.email;
             const recoveryCode = await userService.createRecoveryCode(email);
             const recoveryLink = process.env.CLIENT_URL + "/user/recovery/" + recoveryCode;

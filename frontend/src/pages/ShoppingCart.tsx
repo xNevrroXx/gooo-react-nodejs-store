@@ -20,27 +20,49 @@ import {IProduct, IProductInCart} from "../models/IProduct";
 const ShoppingCart: FC = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const shoppingCart = useAppSelector(state => state.shoppingCart) as IShoppingCart;
+    const {productsInCart, cartLoadingStatus} = useAppSelector(state => state.shoppingCart) as IShoppingCart;
+
+    const isCheckedAll = useMemo(() => {
+        return productsInCart.every(product => product.isSelected);
+    }, [productsInCart])
 
     const onChangeSelect = useCallback((productId: IProduct["id"], isSelected: IProductInCart["isSelected"]) => {
         dispatch(changeSelectShoppingCart({productId, isSelected}))
     }, [])
 
-    const onDeleteAll = useCallback((productId: IProduct["id"]) => {
-        dispatch(deleteProductFromShoppingCart({productId}))
-    }, [])
+    const onChangeSelectAll = useCallback(() => {
+        if (isCheckedAll) {
+            productsInCart
+                .forEach(product => dispatch( changeSelectShoppingCart({productId: product.id, isSelected: false}) )
+            );
+        }
+        else {
+            productsInCart
+                .filter(product => !product.isSelected)
+                .forEach(product => dispatch( changeSelectShoppingCart({productId: product.id, isSelected: true}) )
+            );
+        }
+    }, [productsInCart, isCheckedAll])
+
+    const onDeleteAllChecked = useCallback(() => {
+        productsInCart
+            .filter(product => product.isSelected)
+            .forEach(product => dispatch(deleteProductFromShoppingCart({productId: product.id})))
+    }, [productsInCart])
 
     const view = useCallback(() => {
-        if( shoppingCart.cartLoadingStatus === "loading" ) return <Loading/>;
-        else if( shoppingCart.productsInCart.length > 0 ) return <View productsInCart={shoppingCart.productsInCart} onChangeSelect={onChangeSelect} onDeleteAll={onDeleteAll}/>
-        else if( shoppingCart.productsInCart.length === 0 ) return (
+        if( cartLoadingStatus === "loading" ) return <Loading/>;
+        else if( productsInCart.length > 0 ) {
+            return <View productsInCart={productsInCart} onChangeSelect={onChangeSelect} onDeleteAll={onDeleteAllChecked} isCheckedAll={isCheckedAll} onChangeSelectAll={onChangeSelectAll}/>
+        }
+        else if( productsInCart.length === 0 ) return (
             <Stack justifyContent="center" alignItems="center">
                 <Typography component="h2" variant="h4" mb="1rem">Сложите в корзину нужные товары</Typography>
                 <Typography component="h3" textAlign="center" fontWeight="normal" variant="h6" mb="1rem">А чтобы их найти, загляните на главную страницу</Typography>
                 <MainStyledButton onClick={ () => navigate(createPath({path: ROUTE.MAIN})) }>На главную</MainStyledButton>
             </Stack>
         )
-    }, [shoppingCart])
+    }, [cartLoadingStatus, productsInCart])
 
     return (
         <OnlyAuthorizedHOC>
@@ -53,10 +75,12 @@ const ShoppingCart: FC = () => {
 
 interface IViewProps {
     productsInCart: IShoppingCart["productsInCart"],
+    isCheckedAll: boolean
     onChangeSelect: (productId: IProduct["id"], isSelected: IProductInCart["isSelected"]) => void,
-    onDeleteAll: (productId: IProduct["id"]) => void
+    onChangeSelectAll: () => void,
+    onDeleteAll: () => void,
 }
-const View: FC<IViewProps> = ({productsInCart, onChangeSelect, onDeleteAll}) => {
+const View: FC<IViewProps> = ({productsInCart, onChangeSelect, onChangeSelectAll, onDeleteAll, isCheckedAll}) => {
     const cartParameters = useMemo(() => productsInCart.reduce((previousValue, productInCart) => {
         if (productInCart.isSelected) {
             previousValue = {
@@ -87,12 +111,15 @@ const View: FC<IViewProps> = ({productsInCart, onChangeSelect, onDeleteAll}) => 
                 <FormGroup>
                     <FormControlLabel
                         sx={{'.MuiFormControlLabel-label': {userSelect: "none"}}}
-                        control={<Checkbox sx={{'& .MuiSvgIcon-root': {fontSize: 28}}} defaultChecked/>}
+                        onChange={onChangeSelectAll}
+                        control={<Checkbox sx={{'& .MuiSvgIcon-root': {fontSize: 28}}} checked={isCheckedAll}/>}
                         label="Выбрать все"
                     />
                 </FormGroup>
                 {cartParameters.checked > 0 &&
-                    <button style={{background: "transparent", border: "none", cursor: "pointer", display: "flex", alignItems: "center", paddingBottom: "9px", gap: ".2rem"}} >
+                    <button
+                        onClick={onDeleteAll}
+                        style={{background: "transparent", border: "none", cursor: "pointer", display: "flex", alignItems: "center", paddingBottom: "9px", gap: ".2rem"}} >
                         <svg color="gray" height="1.2rem" width="1.2rem" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M3 3L17 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
                             <path d="M17 3L3 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>

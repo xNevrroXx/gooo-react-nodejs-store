@@ -28,7 +28,9 @@ router.post("/login",
 router.post("/logout", userController.logout);
 router.get("/refresh", userController.refresh);
 router.get("/activate/:link", userController.activate);
-router.post("/recovery/get-link", userController.sendRecoveryLink);
+router.post("/recovery/get-link",
+    body("email").isEmail(),
+    userController.sendRecoveryLink);
 router.post("/recovery/:code", userController.changePassword);
 router.get("/shopping-cart", authMiddleware, userController.getProductsFromCart);
 router.post("/shopping-cart/:productId", authMiddleware, userController.addProductToCart);
