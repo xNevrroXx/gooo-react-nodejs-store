@@ -4,16 +4,15 @@ import {Typography, Box, Stack, Paper} from "@mui/material";
 // own modules
 import Breadcrumbs from "../components/breadcrumbs/Breadcrumbs";
 import {useAppDispatch} from "../hooks/store.hook";
-import MainStyledButton from "../components/styledComponents/MainStyledButton";
 import ProductService from "../services/ProductService";
 import Loading from "../components/loading/Loading";
 import {getNumberWithSpaces} from "../components/supportingFunctions/getNumberWithSpaces";
 import ImageSlider from "../components/imageSlider/ImageSlider";
+import AddToCartButton from "../components/addToCartButton/AddToCartButton";
 // actions & thunks & selectors
 import {createTimeoutErrorNotification} from "../store/thunks/notifications";
 // types
 import {IProduct} from "../models/IProduct";
-import AddToCartButton from "../components/addToCartButton/AddToCartButton";
 
 const Product = () => {
     const params = useParams();

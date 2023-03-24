@@ -1,5 +1,6 @@
 import React, {FC, useCallback, useEffect, useState} from 'react';
 import {styled} from "@mui/material";
+// own modules
 import ZoomImage from "./ZoomImage";
 
 interface IImageWithZoomedPlace {
@@ -20,7 +21,7 @@ const ZoomPlaceOnImage = styled("div")`
   border: solid 1px gray;
   position: absolute;
 `;
-const ImageWithZoomedPlace: FC<IImageWithZoomedPlace> = ({image, alt, sideZoomPlaceProp = 200}) => {
+const ImageMagnifier: FC<IImageWithZoomedPlace> = ({image, alt, sideZoomPlaceProp = 200}) => {
     const [zoomPosition, setZoomPosition] = useState<{x: number, y: number} | null>(null);
     const [sideZoomPlace, setSideZoomPlace] = useState<{x: number, y: number}>({x: sideZoomPlaceProp, y: sideZoomPlaceProp});
     const [imgAnchor, setImgAnchor] = useState<null | HTMLElement>(null);
@@ -105,7 +106,7 @@ const ImageWithZoomedPlace: FC<IImageWithZoomedPlace> = ({image, alt, sideZoomPl
     }, [imgAnchor, offsetLeft, offsetTop, width, height, sideZoomPlace])
 
     return (
-        <ContentImage sx={{display: "flex", justifyContent: "center", alignItems: "center"}} onMouseMove={onMouseMove} /*onMouseLeave={() => setZoomPosition(null)}*/>
+        <ContentImage sx={{display: "flex", justifyContent: "center", alignItems: "center"}} onMouseMove={onMouseMove} onMouseLeave={() => setZoomPosition(null)}>
             <Img onLoad={event => setImgAnchor(event.currentTarget)} src={image} alt={alt}/>
             {zoomPosition != null && (
                 <>
@@ -117,4 +118,4 @@ const ImageWithZoomedPlace: FC<IImageWithZoomedPlace> = ({image, alt, sideZoomPl
     );
 };
 
-export default ImageWithZoomedPlace;
+export default ImageMagnifier;

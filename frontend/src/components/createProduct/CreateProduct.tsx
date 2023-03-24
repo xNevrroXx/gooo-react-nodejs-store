@@ -168,27 +168,32 @@ const CreateProduct: FC = (sx?: SxProps) => {
                         name='images'
                         render={fieldArrayProps => {
                             const {push, remove} = fieldArrayProps;
-                            return formik.values.images.map((link, index) => (
-                                <Stack direction="row" key={index} width="100%">
-                                    <Field
-                                        sx={{flexGrow: 1}}
-                                        as={TextField}
-                                        name={`images[${index}]`}
-                                        label={`Ссылка на фотографию продукта ${index + 1}`}
-                                        error={!!(
-                                            (formik.errors.images ? formik.errors.images[index] : false)
-                                            && formik.touched.images
+                            // console.log(formik.errors.images.length);
+                            return formik.values.images.map((link, index) => {
+                                let helperText = formik.errors.images ? (typeof formik.errors.images === "string" ? formik.errors.images : formik.errors.images[index]) : null;
+                                // @ts-ignore
+                                console.log("typeof: ", typeof formik.errors.images);
+                                console.log("error: ", formik.errors.images);
+
+                                return (
+                                    <Stack direction="row" key={index} width="100%">
+                                        <Field
+                                            sx={{flexGrow: 1}}
+                                            as={TextField}
+                                            name={`images[${index}]`}
+                                            label={`Ссылка на фотографию продукта ${index + 1}`}
+                                            error={!!(formik.errors.images && formik.errors.images[index] && formik.touched.images)}
+                                            helperText={helperText}
+                                        />
+                                        {index > 0 && (
+                                            <Button type="button" onClick={() => remove(index)}> - </Button>
                                         )}
-                                        helperText={formik.errors.images ? formik.errors.images[index] : null}
-                                    />
-                                    {index > 0 && (
-                                        <Button type="button" onClick={() => remove(index)}> - </Button>
-                                    )}
-                                    {index < 4 && formik.values.images.length < 5 && (
-                                        <Button type="button" onClick={() => push('')}> + </Button>
-                                    )}
-                                </Stack>
-                            ))
+                                        {index < 4 && formik.values.images.length < 5 && (
+                                            <Button type="button" onClick={() => push('')}> + </Button>
+                                        )}
+                                    </Stack>
+                                )
+                            })
                         }}
                     />
                 </FormikProvider>

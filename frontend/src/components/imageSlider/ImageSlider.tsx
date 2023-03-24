@@ -1,6 +1,7 @@
 import React, {FC, useMemo, useState} from 'react';
-import {Stack, styled, Zoom} from "@mui/material";
-import ImageWithZoomedPlace from "../zoomImage/ImageWithZoomedPlace";
+import {Stack, styled} from "@mui/material";
+// own modules
+import ImageMagnifier from "../imageMagnigier/ImageMagnifier";
 
 interface IImageSliderProps {
     images: string[],
@@ -30,20 +31,21 @@ const ImageSlider: FC<IImageSliderProps> = ({images, alt}) => {
         />
     )), [images, alt])
 
-    const tabsContent = useMemo(() => images.map((image, index) => {
-        if(index !== active) return null;
+    const activeImage = useMemo(() => {
+        const targetImage = images.find((image, index) => index === active);
 
+        if (!targetImage) return null;
         return (
-            <ImageWithZoomedPlace key={index + "image"} image={image} alt={alt} sideZoomPlaceProp={200}/>
+            <ImageMagnifier key={active + "image"} image={targetImage} alt={alt} sideZoomPlaceProp={200}/>
         )
-    }), [active])
+    }, [active])
 
     return (
         <Stack direction="row" width="100%" height="100%" spacing={20}>
             <Stack direction="column" width="3rem" height="max-content" spacing={1}>
                 {tabs}
             </Stack>
-            {tabsContent}
+            {activeImage}
         </Stack>
     );
 };
