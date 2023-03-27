@@ -7,7 +7,7 @@ import {useAppDispatch} from "../hooks/store.hook";
 import ProductService from "../services/ProductService";
 import Loading from "../components/loading/Loading";
 import {getNumberWithSpaces} from "../components/supportingFunctions/getNumberWithSpaces";
-import ImageSlider from "../components/imageSlider/ImageSlider";
+import ImageTabs from "../components/imageTabs/ImageTabs";
 import AddToCartButton from "../components/addToCartButton/AddToCartButton";
 // actions & thunks & selectors
 import {createTimeoutErrorNotification} from "../store/thunks/notifications";
@@ -48,7 +48,7 @@ const Product = () => {
             <Typography component="h1" variant="h4" mb="2rem">{product.name}</Typography>
             <Stack direction="row" justifyContent="space-between" spacing={3} height="600px" mb="3rem">
                 <Box width="50%">
-                    <ImageSlider images={product.images} alt={product.name}/>
+                    <ImageTabs images={product.images} alt={product.name}/>
                 </Box>
                 <Paper elevation={3} sx={{height: "max-content", padding: "1rem 1rem"}}>
                     <Stack width="15rem">

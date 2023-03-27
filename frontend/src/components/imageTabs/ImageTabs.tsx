@@ -19,7 +19,7 @@ const TabImage = styled("img")`
   }
 `;
 
-const ImageSlider: FC<IImageSliderProps> = ({images, alt}) => {
+const ImageTabs: FC<IImageSliderProps> = ({images, alt}) => {
     const [active, setActive] = useState<number>(0);
 
     const tabs = useMemo(() => images.map((image, index) => (
@@ -36,7 +36,15 @@ const ImageSlider: FC<IImageSliderProps> = ({images, alt}) => {
 
         if (!targetImage) return null;
         return (
-            <ImageMagnifier key={active + "image"} image={targetImage} alt={alt} sideZoomPlaceProp={200}/>
+            <ImageMagnifier
+                key={active + "image"}
+                imageSrc={targetImage}
+                alt={alt}
+                leftPositioningMagnifier="50vw"
+                topPositioningMagnifier="20vh"
+                maxSizeMagnifierArea={{width: 200, height: 200}}
+                maxHeightContent={600}
+            />
         )
     }, [active])
 
@@ -50,4 +58,4 @@ const ImageSlider: FC<IImageSliderProps> = ({images, alt}) => {
     );
 };
 
-export default ImageSlider;
+export default ImageTabs;

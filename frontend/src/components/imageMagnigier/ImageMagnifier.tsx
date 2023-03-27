@@ -1,120 +1,134 @@
-import React, {FC, useCallback, useEffect, useState} from 'react';
-import {styled} from "@mui/material";
+import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
 // own modules
-import ZoomImage from "./ZoomImage";
+import ApproximateArea from "./ApproximateArea";
+import {useResizeObserver} from "../../hooks/useResizeObserver";
 
-interface IImageWithZoomedPlace {
-    image: string,
-    sideZoomPlaceProp?: number,
-    alt?: string
+type TSizes = {width: number, height: number};
+
+interface IImageMagnifierProps {
+    imageSrc: string,
+    // max height of the image on the page in px
+    maxHeightContent: number,
+    // size of the magnifier area on the image in px
+    maxSizeMagnifierArea: { width: number, height: number },
+    // absolute positioning of the magnifier relative to the left edge of the window
+    leftPositioningMagnifier: string,
+    // absolute positioning of the magnifier relative to the top edge of the window
+    topPositioningMagnifier: string,
+    // color of the magnifier place on the content, default is "rgb(0 0 0 / 30%)"
+    colorMagnifierArea?: string,
+    // border color of the magnifier place on the content, default is "none"
+    borderMagnifierArea?: string,
+    // box shadow of the magnifier place on the content, default is "none"
+    boxShadowMagnifierArea?: string,
+    approximation?: number,
+    // max length of the approximate area in px, default is 600
+    maxLengthSideApproximateArea?: number,
+    alt?: string | undefined
 }
-const ContentImage = styled("div")`
-  width: calc(100% - 5rem - 3.5rem);
-  height: 100%;
-`;
-const Img = styled("img")`
-  object-fit: contain;
-  max-width: 100%;
-  max-height: 100%; 
-`;
-const ZoomPlaceOnImage = styled("div")`
-  border: solid 1px gray;
-  position: absolute;
-`;
-const ImageMagnifier: FC<IImageWithZoomedPlace> = ({image, alt, sideZoomPlaceProp = 200}) => {
-    const [zoomPosition, setZoomPosition] = useState<{x: number, y: number} | null>(null);
-    const [sideZoomPlace, setSideZoomPlace] = useState<{x: number, y: number}>({x: sideZoomPlaceProp, y: sideZoomPlaceProp});
-    const [imgAnchor, setImgAnchor] = useState<null | HTMLElement>(null);
-    const [width, setWidth] = useState<number>(0);
-    const [height, setHeight] = useState<number>(0);
-    const [offsetTop, setOffsetTop] = useState<number>(0);
-    const [offsetLeft, setOffsetLeft] = useState<number>(0);
+
+const ImageMagnifier: FC<IImageMagnifierProps> = ({
+                                                      imageSrc,
+                                                      approximation,
+                                                      maxLengthSideApproximateArea,
+                                                      maxHeightContent,
+                                                      maxSizeMagnifierArea,
+                                                      leftPositioningMagnifier,
+                                                      topPositioningMagnifier,
+                                                      colorMagnifierArea,
+                                                      boxShadowMagnifierArea,
+                                                      borderMagnifierArea,
+                                                      alt
+}) => {
+    const magnifierAreaRef = useRef<HTMLDivElement | null>(null);
+    const containerRef = useRef<HTMLDivElement | null>(null);
+    const imageRef = useRef<HTMLImageElement | null>(null);
+    const [isActiveMagnifier, setIsActiveMagnifier] = useState<boolean>(false);
+    const [imageSizes, setImageSizes] = useState<TSizes | null>(null);
+    const [magnifierAreaSizes, setMagnifierAreaSizes] = useState<TSizes>({
+        width: maxSizeMagnifierArea.width,
+        height: maxSizeMagnifierArea.height,
+    });
+    const [offsetMagnifierArea, setOffsetMagnifierArea] = useState<{left: number, top: number}>({left: 0, top: 0});
+    const resizeImageObserverRef = useResizeObserver((target) => {
+        setImageSizes({width: target.getBoundingClientRect().width, height: target.getBoundingClientRect().height});
+    })
 
     useEffect(() => {
-        if(!imgAnchor) return;
+        // if image width or height is bigger than side of the magnifier area
+        if (!imageSizes || !imageSizes.width || !imageSizes.height) return;
 
-        if(imgAnchor.offsetWidth < sideZoomPlaceProp) setSideZoomPlace({...sideZoomPlace, x: imgAnchor.offsetWidth});
-        if(imgAnchor.offsetHeight < sideZoomPlaceProp) setSideZoomPlace({...sideZoomPlace, y: imgAnchor.offsetHeight});
-        setWidth(imgAnchor.offsetWidth);
-        setHeight(imgAnchor.offsetHeight);
-        setOffsetTop(imgAnchor.getBoundingClientRect().top);
-        setOffsetLeft(imgAnchor.getBoundingClientRect().left);
-    }, [imgAnchor])
+        if (imageSizes.width < magnifierAreaSizes.width) {
+            setMagnifierAreaSizes({
+                ...magnifierAreaSizes,
+                width: imageSizes.width
+            })
+        }
+        if (imageSizes.height < magnifierAreaSizes.height) {
+            setMagnifierAreaSizes({
+                ...magnifierAreaSizes,
+                height: imageSizes.height
+            })
+        }
+    }, [imageSizes])
 
     const onMouseMove = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
-        if(event.pageX < offsetLeft || event.pageX > offsetLeft + width
-        || event.pageY < offsetTop || event.pageY > offsetTop + height) {
-            setZoomPosition(null);
-        }
-        else if (event.pageX - (sideZoomPlace.x / 2) > offsetLeft && event.pageX + (sideZoomPlace.x / 2) < offsetLeft + width
-            && event.pageY - (sideZoomPlace.y / 2) > offsetTop && event.pageY + (sideZoomPlace.y / 2) < offsetTop + height) {
-            setZoomPosition({
-                x: event.pageX - (sideZoomPlace.x / 2),
-                y: event.pageY - (sideZoomPlace.y / 2)
-            })
-        }
-        // Y is higher than necessary and X is lefter/righter than necessary
-        else if (event.pageY - (sideZoomPlace.y / 2) < offsetTop && event.pageX - (sideZoomPlace.x / 2) < offsetLeft) {
-            setZoomPosition({
-                x: offsetLeft,
-                y: offsetTop
-            })
-        }
-        else if (event.pageY - (sideZoomPlace.y / 2) < offsetTop && event.pageX + (sideZoomPlace.x / 2) > offsetLeft + width) {
-            setZoomPosition({
-                x: offsetLeft + width - sideZoomPlace.x,
-                y: offsetTop
-            })
-        }
-        // Y is lower than necessary X is lefter/righter than necessary
-        else if (event.pageY + (sideZoomPlace.y / 2) > offsetTop + height && event.pageX + (sideZoomPlace.x / 2) > offsetLeft + width) {
-            setZoomPosition({
-                x: offsetLeft + width - sideZoomPlace.x,
-                y: offsetTop + height - sideZoomPlace.y
-            })
-        }
-        else if (event.pageY + (sideZoomPlace.y / 2) > offsetTop + height && event.pageX - (sideZoomPlace.x / 2) < offsetLeft) {
-            setZoomPosition({
-                x: offsetLeft,
-                y: offsetTop + height - sideZoomPlace.y
-            })
-        }
-        else if (event.pageY - (sideZoomPlace.y / 2) < offsetTop) {
-            setZoomPosition({
-                x: event.pageX - (sideZoomPlace.x / 2),
-                y: offsetTop
-            })
-        }
-        else if (event.pageX - (sideZoomPlace.x / 2) < offsetLeft) {
-            setZoomPosition({
-                x: offsetLeft,
-                y: event.pageY - (sideZoomPlace.y / 2)
-            })
-        }
-        else if (event.pageY + (sideZoomPlace.y / 2) > offsetTop + height) {
-            setZoomPosition({
-                x: event.pageX - (sideZoomPlace.x / 2),
-                y: offsetTop + height - sideZoomPlace.y
-            })
-        }
-        else if (event.pageX + (sideZoomPlace.x / 2) > offsetLeft + width) {
-            setZoomPosition({
-                x: offsetLeft + width - sideZoomPlace.x,
-                y: event.pageY - (sideZoomPlace.y / 2)
-            })
-        }
-    }, [imgAnchor, offsetLeft, offsetTop, width, height, sideZoomPlace])
+        if (!imageSizes) return;
+        if (!containerRef.current) throw new Error("containerRef.current image magnifier cannot be null");
+        if (!magnifierAreaRef.current) throw new Error("magnifierAreaRef.current image cannot be null");
+
+        setIsActiveMagnifier(true);
+
+        const maxMagnifierAreaLeft = imageSizes.width - magnifierAreaSizes.width;
+        const maxMagnifierAreaTop = imageSizes.height - magnifierAreaSizes.height;
+
+        const magnifierAreaLeft = event.pageX - containerRef.current.getBoundingClientRect().left - (magnifierAreaSizes.width * 0.5);
+        const magnifierAreaTop = event.pageY - containerRef.current.getBoundingClientRect().top - (magnifierAreaSizes.height * 0.5);
+
+        setOffsetMagnifierArea({
+            left: maxMagnifierAreaLeft > (magnifierAreaLeft > 0 ? magnifierAreaLeft : 0) ? (magnifierAreaLeft > 0 ? magnifierAreaLeft : 0) : maxMagnifierAreaLeft,
+            top: maxMagnifierAreaTop > (magnifierAreaTop > 0 ? magnifierAreaTop : 0) ? (magnifierAreaTop > 0 ? magnifierAreaTop : 0) : maxMagnifierAreaTop
+        })
+    }, [imageSizes, magnifierAreaSizes])
 
     return (
-        <ContentImage sx={{display: "flex", justifyContent: "center", alignItems: "center"}} onMouseMove={onMouseMove} onMouseLeave={() => setZoomPosition(null)}>
-            <Img onLoad={event => setImgAnchor(event.currentTarget)} src={image} alt={alt}/>
-            {zoomPosition != null && (
-                <>
-                    <ZoomPlaceOnImage style={{top: zoomPosition.y, left: zoomPosition.x, width: sideZoomPlace.x + "px", height: sideZoomPlace.y + "px"}}/>
-                    <ZoomImage x={(zoomPosition.x - offsetLeft) / (width / 100)} y={(zoomPosition.y - offsetTop) / (height / 100)} image={image}/>
-                </>
-            )}
-        </ContentImage>
+        <>
+            <div ref={containerRef} onMouseMove={onMouseMove} onMouseLeave={() => setIsActiveMagnifier(false)} style={{maxWidth: "100%", position: "relative"}}>
+                <img ref={el => {
+                    resizeImageObserverRef.current = el;
+                    imageRef.current = el;
+                }} src={imageSrc} alt={alt} style={{display: "block", maxHeight: maxHeightContent, maxWidth: "100%"}}/>
+                <div
+                    ref={el => {
+                        magnifierAreaRef.current = el;
+                    }}
+                    style={{
+                        display: isActiveMagnifier ? "block" : "none",
+                        position: "absolute",
+                        left: offsetMagnifierArea ? offsetMagnifierArea.left : 0,
+                        top: offsetMagnifierArea ? offsetMagnifierArea.top : 0,
+                        width: magnifierAreaSizes.width,
+                        height: magnifierAreaSizes.height,
+                        border: borderMagnifierArea ? borderMagnifierArea : "none",
+                        backgroundColor: colorMagnifierArea ? colorMagnifierArea : "rgb(0 0 0 / 30%)",
+                        boxShadow: boxShadowMagnifierArea ? boxShadowMagnifierArea : "none"
+                    }}
+                />
+            </div>
+
+            {imageSizes &&
+                <ApproximateArea
+                    left={leftPositioningMagnifier}
+                    top={topPositioningMagnifier}
+                    isActive={isActiveMagnifier}
+                    imageSrc={imageSrc}
+                    imageSizes={imageSizes}
+                    magnifierAreaSizes={{...magnifierAreaSizes, ...offsetMagnifierArea}}
+                    approximation={approximation}
+                    maxLengthSide={maxLengthSideApproximateArea}
+                />
+            }
+        </>
     );
 };
 
