@@ -1,7 +1,7 @@
 ### Hello, this project write using React and Express.
 
 If you want to run project on your local machine - first of all you need to write **manually** your test Gmail address in the ```public.env``` file(```SMTP_EMAIL_ADDRESS``` env variable) in the ```./backend``` directory.
-Also you ought to create SMTP password in the Gmail account and copy this one to the ```SMTP_EMAIL_PASSWORD``` field in the same file.
+Also, you ought to create SMTP password in the Gmail account and copy this one to the ```SMTP_EMAIL_PASSWORD``` field in the same file.
 
 So, now we need to create database using MySql script. Just execute script named ```online-store-db.sql``` and the database will be created.
 
@@ -10,16 +10,16 @@ And now we can start to use the application. In the command line write: ```npm r
 Here it is!
 
 ***Working routes(front end):***
-1.  http://localhost:3000/main
-2.  http://localhost:3000/filtering
-3.  http://localhost:3000/user/login
-5.  http://localhost:3000/user/registration
-6.  http://localhost:3000/user/recovery/get-link
-7.  http://localhost:3000/user/recovery/:recoveryLink
-8.  http://localhost:3000/administration/product/create
-9.  http://localhost:3000/administration/category/create
-10.  http://localhost:3000/product/:productId
-11.  http://localhost:3000/cart
+1.  http://localhost:5173/main
+2.  http://localhost:5173/filtering
+3.  http://localhost:5173/user/login
+5.  http://localhost:5173/user/registration
+6.  http://localhost:5173/user/recovery/get-link
+7.  http://localhost:5173/user/recovery/:recoveryLink
+8.  http://localhost:5173/administration/product/create
+9.  http://localhost:5173/administration/category/create
+10.  http://localhost:5173/product/:productId
+11.  http://localhost:5173/cart
 
 
 ***Working routes(back end):***

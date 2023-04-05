@@ -1,5 +1,5 @@
 import React, {CSSProperties, FC, useCallback} from 'react';
-import {Stack, SxProps, Typography} from "@mui/material";
+import {Stack, Typography} from "@mui/material";
 // own modules
 import AmountCounterButton from "../amountCounterButton/AmountCounterButton";
 import MainStyledButton from "../styledComponents/MainStyledButton";

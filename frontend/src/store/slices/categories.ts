@@ -1,4 +1,4 @@
-import {createSlice, isAsyncThunkAction} from "@reduxjs/toolkit";
+import {createSlice} from "@reduxjs/toolkit";
 // actions
 import {categoriesFetchingServer, categoryCreateServer, categoryDeleteServer} from "../thunks/categories";
 // types

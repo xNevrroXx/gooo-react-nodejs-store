@@ -1,6 +1,7 @@
+import {AxiosResponse} from "axios";
+// own modules
 import $api from "../http";
 // types
-import {AxiosResponse} from "axios";
 import {
     IProductResponse,
     IProductsFetchingResponse

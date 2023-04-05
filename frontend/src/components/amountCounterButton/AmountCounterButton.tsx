@@ -1,5 +1,4 @@
 import React, {CSSProperties, FC} from 'react';
-import {SxProps} from "@mui/material";
 // style
 import "./amountCounterButton.scss";
 

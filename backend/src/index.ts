@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import errorMiddleware from "./middlewares/error-middleware";
+import path from "path";
 
 dotenv.config();
 
@@ -19,11 +20,16 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
-app.use("/api", router);
+app.use(express.static("public"));
+app.use("/api", router); 
 app.use(errorMiddleware);
 
+app.get("*", function(request, response) {
+    response.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
 const start = () => {
-    try {
+    try { 
         app.listen(PORT, () => {
             console.log(`App is listening on url: http://localhost:${PORT}`);
         })

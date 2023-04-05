@@ -5,11 +5,11 @@ import {KeyboardArrowRight as KeyboardArrowRightIcon, Menu as MenuIcon} from "@m
 // own modules
 import ChildCategories from "../childCategories/ChildCategories";
 import {useAppDispatch, useAppSelector} from "../../hooks/store.hook";
-// types
-import {ICategoryTree} from "../../models/ICategoryTree";
 import {createPath} from "../../router/createPath";
 import {ROUTE} from "../../router";
 import {addFilter} from "../../store/actions/filters";
+// types
+import {ICategoryTree} from "../../models/ICategoryTree";
 
 interface ICatalogProps {
     sx?: SxProps

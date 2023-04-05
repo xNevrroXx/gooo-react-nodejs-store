@@ -1,15 +1,14 @@
-import React, {FC, useCallback, useMemo} from 'react';
+import React, {FC, useCallback} from 'react';
 import {Card, CardActionArea, CardActions, CardContent, CardMedia, Grid, Typography} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 // own modules
 import LinkTypography from "../styledComponents/LinkTypography";
 import {createPath} from "../../router/createPath";
 import {ROUTE} from "../../router";
-import {useAppSelector} from "../../hooks/store.hook";
 import {getNumberWithSpaces} from "../supportingFunctions/getNumberWithSpaces";
 import AddToCartButton from "../addToCartButton/AddToCartButton";
 // types
-import {IProduct, IProductInCart} from "../../models/IProduct";
+import {IProduct} from "../../models/IProduct";
 
 const ProductCard: FC<IProduct> = ({id, name, stock, shortDescription, longDescription,
                                        images, createdAt, price, weight,

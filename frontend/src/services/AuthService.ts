@@ -4,8 +4,6 @@ import $api, {API_URL} from "../http";
 // types
 import {AuthResponse} from "../models/response/AuthResponse";
 import {IUserRegistration} from "../models/IUser";
-import {IProduct} from "../models/IProduct";
-import {IProductsFetchingResponse} from "../models/response/ProductResponse";
 
 class AuthService {
     protected static base = "/user";

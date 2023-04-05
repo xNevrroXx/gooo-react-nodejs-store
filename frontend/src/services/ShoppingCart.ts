@@ -1,6 +1,8 @@
-import {IProduct, IProductInCart} from "../models/IProduct";
 import {AxiosResponse} from "axios";
+// own modules
 import $api from "../http";
+// types
+import {IProduct, IProductInCart} from "../models/IProduct";
 import {IProductResponse} from "../models/response/ProductResponse";
 import {IShoppingCartResponse} from "../models/response/ShoppingCartResponse";
 

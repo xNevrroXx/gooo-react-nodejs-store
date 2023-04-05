@@ -11,7 +11,7 @@ const isAxiosRequestConfigExtra = (config: AxiosRequestConfig): config is AxiosR
 }
 
 
-export const API_URL = "http://localhost:5000/api";
+export const API_URL = import.meta.env.VITE_BACKEND;
 
 const $api = axios.create({
     withCredentials: true,

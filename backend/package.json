@@ -5,7 +5,7 @@
   "scripts": {
     "build": "cd src && npx tsc",
     "start": "node dist/index.js",
-    "dev": "concurrently \"cd src && npx tsc --watch\" \"nodemon -q node dist/index.js\""
+    "dev": "concurrently \"cd src && npx tsc --watch\" \"nodemon -q node ../dist/index.js\""
   },
   "author": "Vladimir",
   "license": "ISC",

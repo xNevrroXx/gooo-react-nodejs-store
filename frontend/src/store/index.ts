@@ -45,7 +45,7 @@ const store = configureStore({
     },
     middleware: [reduxThunk],
     preloadedState: undefined,
-    devTools: process.env.NODE_ENV !== "production",
+    devTools: import.meta.env.DEV,
     enhancers: [loggerEnhancer]
 })
 

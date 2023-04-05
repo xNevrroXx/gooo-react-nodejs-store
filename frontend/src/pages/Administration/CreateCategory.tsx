@@ -5,7 +5,7 @@ import CreateCategoryForm from "../../components/createCategory/CreateCategory";
 
 const CreateCategory = () => {
     return (
-        <AdministrationFormHOC label="Адиминистративная панель: создание категорий товаров">
+        <AdministrationFormHOC label="Административная панель: создание категорий товаров">
             <CreateCategoryForm />
         </AdministrationFormHOC>
     );

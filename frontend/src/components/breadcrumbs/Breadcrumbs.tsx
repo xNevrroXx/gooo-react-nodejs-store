@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useMemo} from 'react';
+import React, {FC, useCallback} from 'react';
 import {Breadcrumbs as MuiBreadcrumbs, Typography} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 // own modules

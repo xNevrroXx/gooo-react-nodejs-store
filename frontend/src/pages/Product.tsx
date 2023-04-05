@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {useParams} from "react-router-dom";
+import {useLocation, useParams} from "react-router-dom";
 import {Typography, Box, Stack, Paper} from "@mui/material";
 // own modules
 import Breadcrumbs from "../components/breadcrumbs/Breadcrumbs";
@@ -14,7 +14,9 @@ import {createTimeoutErrorNotification} from "../store/thunks/notifications";
 // types
 import {IProduct} from "../models/IProduct";
 
+
 const Product = () => {
+    const location = useLocation();
     const params = useParams();
     const dispatch = useAppDispatch();
     const fetchedProductRef = useRef<boolean>(false);
@@ -22,20 +24,17 @@ const Product = () => {
 
     useEffect(() => {
         if (fetchedProductRef.current) return;
+        if (!params.productId) return;
 
-        return () => {
-            const asyncFunc = async () => {
-                    if (params.productId) {
-                    const response = await ProductService.fetchById(+params.productId);
-                    setProduct(response.data.product);
-                    fetchedProductRef.current = true;
-                }
-            }
-            asyncFunc()
-                .catch((error) => {
-                    dispatch(createTimeoutErrorNotification(error));
-                });
+        const asyncFunc = async () => {
+            const response = await ProductService.fetchById(+params!.productId!);
+            setProduct(response.data.product);
+            fetchedProductRef.current = true;
         }
+        asyncFunc()
+            .catch((error) => {
+                dispatch(createTimeoutErrorNotification(error));
+            });
     }, [params])
 
     if(!product) {

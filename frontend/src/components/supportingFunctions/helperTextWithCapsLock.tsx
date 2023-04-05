@@ -1,4 +1,4 @@
-import {Dispatch, KeyboardEvent, ReactNode, SetStateAction, useCallback} from "react";
+import {Dispatch, KeyboardEvent, ReactNode, SetStateAction} from "react";
 
 const CAPS_LOCK_HELPER_NODE = <b>Caps Lock включен</b>
 export function helperTextWithCapsLock (firstStr: string | undefined, isCapsLockUsing: boolean): ReactNode | undefined {

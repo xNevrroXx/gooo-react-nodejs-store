@@ -9,7 +9,7 @@ class DadataService {
     static async getSuggestion(query: string): Promise<AxiosResponse<IDadataAddressSuggestionsResponse>> {
         return axios.post<IDadataAddressSuggestionsResponse>(this.base, {query}, {
             headers: {
-                "Authorization": "Token " + process.env.REACT_APP_DADATA_ADDRESS_SUGGESTION_API_KEY
+                "Authorization": "Token " + import.meta.env.VITE_DADATA_ADDRESS_SUGGESTION_API_KEY
             }
         })
     }

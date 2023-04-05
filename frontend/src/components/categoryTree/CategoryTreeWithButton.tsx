@@ -1,13 +1,12 @@
 import React, {FC, useCallback, useState} from 'react';
 import {Menu} from "@mui/material";
-import {TreeItem, TreeView} from "@mui/lab";
-import {ChevronRight as ChevronRightIcon, ExpandMore as ExpandMoreIcon} from "@mui/icons-material";
+import {TreeItem} from "@mui/lab";
 // own modules
 import {useAppSelector} from "../../hooks/store.hook";
 import MainStyledButton from "../styledComponents/MainStyledButton";
+import CategoryTree from "./CategoryTree";
 // types
 import {ICategoryTree} from "../../models/ICategoryTree";
-import CategoryTree from "./CategoryTree";
 
 interface ICategoryProps {
     onSelectCategory: (category: ICategoryTree) => void

@@ -5,7 +5,7 @@ import AdministrationFormHOC from "../../HOC/AdministrationFormHOC";
 
 const CreateProduct: FC = () => {
     return (
-        <AdministrationFormHOC label="Адиминистративная панель: создание товара">
+        <AdministrationFormHOC label="Административная панель: создание товара">
             <CreateProductForm />
         </AdministrationFormHOC>
     )

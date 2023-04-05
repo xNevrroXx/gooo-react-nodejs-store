@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently \"cd ./backend && npm run dev\" \"cd ./frontend && npm start\""
+    "build": "concurrently \"cd ./backend && npm run build\" \"cd ./frontend && npm run build\"",
+    "dev": "concurrently \"cd ./backend && npm run dev\" \"cd ./frontend && npm run dev\""
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,7 @@
     "ansi-regex": "^5.0.1",
     "ansi-styles": "^4.3.0",
     "chalk": "^4.1.2",
+    "classnames": "^2.3.2",
     "cliui": "^8.0.1",
     "color-convert": "^2.0.1",
     "color-name": "^1.1.4",
@@ -39,12 +41,14 @@
     "supports-color": "^8.1.1",
     "tree-kill": "^1.2.2",
     "tslib": "^2.4.1",
+    "uuid": "^9.0.0",
     "wrap-ansi": "^7.0.0",
     "y18n": "^5.0.8",
     "yargs": "^17.6.2",
     "yargs-parser": "^21.1.1"
   },
   "devDependencies": {
+    "@types/uuid": "^9.0.1",
     "concurrently": "^7.6.0"
   }
 }

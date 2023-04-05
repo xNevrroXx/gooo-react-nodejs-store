@@ -1,7 +1,7 @@
 CREATE DATABASE gooo_online_store;
 use gooo_online_store;
 
-create user "gooo_online_store_admin"@"localhost" identified BY "gooo_online_store_admin_password";
+create user "gooo_online_store_admin"@"localhost" identified BY "(i6zuRjj2QWPqMYSQL_gooo-store";
 grant all privileges on gooo_online_store.* to "gooo_online_store_admin"@"localhost";
 
 create table user (id int auto_increment primary key, username varchar(50) not null, password varchar(250) not null, firstname varchar(250) not null, lastname varchar(250) not null, email varchar(250) not null, created_at timestamp not null, is_admin tinyint(1) default 0, location varchar(250) default null, constraint unique (email));
