@@ -17,6 +17,9 @@ const theme = createTheme({
         button: {
             textTransform: "none"
         },
+        body1: {
+            fontSize: ".85rem"
+        },
         body2: {
             fontSize: ".7rem"
         }

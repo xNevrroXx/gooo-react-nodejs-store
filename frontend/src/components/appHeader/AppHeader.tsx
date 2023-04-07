@@ -1,5 +1,5 @@
-import {Link as RouterLink, useNavigate} from "react-router-dom";
-import React, {FC, useCallback, useState, MouseEvent} from 'react';
+import {Link as RouterLink} from "react-router-dom";
+import React, {useCallback, useState} from 'react';
 import {
     AppBar,
     Button,
@@ -14,24 +14,20 @@ import {
     Stack
 } from "@mui/material";
 import {
-    AccountCircleOutlined,
-    FavoriteBorderOutlined, Logout,
+    FavoriteBorderOutlined,
     ManageSearchOutlined,
-    Menu as MenuIcon, Settings,
+    Menu as MenuIcon,
     ShoppingCartOutlined,
     ViewModuleOutlined
 } from '@mui/icons-material';
 // own components
 import Search from "../search/Search";
 import Catalog from "../catalog/Catalog";
-import {useAppDispatch, useAppSelector} from "../../hooks/store.hook";
+import AuthenticationMenu from "./AuthenticationMenu";
+import AdminMenu from "./AdminMenu";
 import {createPath} from "../../router/createPath";
 import {ROUTE} from "../../router";
-// actions & thunks
-import {logout} from "../../store/thunks/authentication";
-// types
-import {RootState} from "../../store";
-import {IUserDto} from "../../models/IUser";
+import {useAppSelector} from "../../hooks/store.hook";
 
 
 function AppHeader() {
@@ -51,12 +47,7 @@ function AppHeader() {
             onClose={onCloseMobileMenu}
         >
             <MenuItem onClick={onCloseMobileMenu}>
-                <Box component={RouterLink} to="/catalog">
-                    <ListItemIcon>
-                        <ManageSearchOutlined/>
-                    </ListItemIcon>
-                    <ListItemText>Каталог</ListItemText>
-                </Box>
+                <Catalog variant="text" sx={{mr: "1rem", display: "flex"}}/>
             </MenuItem>
             <MenuItem onClick={onCloseMobileMenu}>
                 <Box component={RouterLink} to="/wishlist">
@@ -92,7 +83,7 @@ function AppHeader() {
                     <IconButton
                         component={RouterLink}
                         to={createPath({path: ROUTE.MAIN})}
-                        sx={{display: {xs: "none", sm: "block"}, justifyContent: "flex-start", mr: "1rem"}}
+                        sx={{justifyContent: "flex-start", mr: "1rem", width: "20%"}}
                     >
                         <svg width="214" height="34" viewBox="0 0 214 34" fill="none"
                              xmlns="http://www.w3.org/2000/svg">
@@ -101,13 +92,19 @@ function AppHeader() {
                                 fill="black"/>
                         </svg>
                     </IconButton>
-                    <Catalog sx={{mr: "1rem"}}/>
-                    <Search sx={{width: "30%"}}/>
+                    <Catalog variant="contained" sx={{mr: "1rem"}}/>
+                    <Search sx={{width: {xs: "55%", sm: "30%"} }}/>
                     <Box sx={{flexGrow: 1}}/>
 
-                    <Stack component="nav" direction="row" spacing={2}>
-                        <AdminMenuView
+                    <Stack
+                        component="nav"
+                        direction="row"
+                        spacing={2}
+                        sx={{ display: { xs: "none", sm: "flex" } }}
+                    >
+                        <AdminMenu
                             isAdmin={user?.isAdmin || 0}
+                            sx={{ display: "flex" }}
                         />
 
                         <Button component={RouterLink} to="/favourites" sx={{
@@ -145,168 +142,33 @@ function AppHeader() {
                         </Button>
 
 
-                        <AuthenticationMenuView
+                        <AuthenticationMenu
                             user={user}
                         />
+                    </Stack>
 
+                    <Stack
+                        component="nav"
+                        direction="row"
+                        spacing={1}
+                        sx={{ display: {xs: "flex", sm: "none"} }}
+                    >
+                        <AdminMenu
+                            sx={{ display: "flex", padding: ".5rem .5rem"}}
+                            variant="contained"
+                            isAdmin={user?.isAdmin || 0}
+                        />
                         <IconButton
-                            sx={{display: {xs: "block", sm: "none"}}}
                             onClick={onOpenMobileMenu}
                         >
                             <MenuIcon/>
                         </IconButton>
                     </Stack>
+                    {renderMobileMenu}
                 </Toolbar>
             </AppBar>
-            {renderMobileMenu}
         </>
     );
-}
-
-interface IAdminRouteLinksView {
-    isAdmin: IUserDto["isAdmin"]
-}
-
-const AdminMenuView: FC<IAdminRouteLinksView> = ({isAdmin}) => {
-    const navigate = useNavigate();
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-    const isOpen = Boolean(anchorEl);
-    const onOpen = (event: MouseEvent<HTMLButtonElement>) => {
-        setAnchorEl(event.currentTarget);
-    }
-    const onClose = () => {
-        setAnchorEl(null);
-    }
-
-    if (isAdmin) {
-        return (
-            <>
-                <Button
-                    id="admin-routes-button"
-                    variant="contained"
-                    onClick={onOpen}
-                    aria-controls={isOpen ? 'admin-routes-menu' : undefined}
-                    aria-haspopup="true"
-                    aria-expanded={isOpen ? 'true' : undefined}
-                    sx={{display: {xs: "none", sm: "flex"}, width: "max-content", padding: ".5rem 1.5rem"}}
-                >
-                    Admin routes
-                </Button>
-                <Menu
-                    id="admin-routes-menu"
-                    anchorEl={anchorEl}
-                    open={isOpen}
-                    onClose={onClose}
-                    MenuListProps={{
-                        'aria-labelledby': 'admin-routes-button',
-                    }}
-                >
-                    <MenuItem onClick={() => {
-                        onClose();
-                        navigate(createPath({path: ROUTE.ADMIN_CATEGORY_CREATE}))
-                    }}>
-                        Создание категорий товаров
-                    </MenuItem>
-                    <MenuItem onClick={() => {
-                        onClose();
-                        navigate(createPath({path: ROUTE.ADMIN_PRODUCT_CREATE}))
-                    }}>
-                        Создание товаров
-                    </MenuItem>
-                </Menu>
-            </>
-        )
-    } else {
-        return <></>
-    }
-}
-
-interface IAuthenticationView {
-    user: RootState["authentication"]["user"]
-}
-
-const AuthenticationMenuView: FC<IAuthenticationView> = ({user}) => {
-    const dispatch = useAppDispatch();
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-    const isOpen = Boolean(anchorEl);
-
-    const onOpen = useCallback((event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget), []);
-    const onClose = useCallback(() => setAnchorEl(null), []);
-
-    if (user) {
-        return (
-            <>
-                <Button
-                    id="profile-menu-button"
-                    aria-controls={isOpen ? "profile-dropdown-menu" : undefined}
-                    aria-haspopup="true"
-                    aria-expanded={isOpen ? 'true' : undefined}
-                    onClick={onOpen}
-                    sx={{
-                        display: {xs: "none", sm: "flex"},
-                        alignItems: "center",
-                        justifyContent: "center",
-                        flexDirection: "column",
-                        color: "inherit",
-                        textDecoration: "none"
-                    }}
-                >
-                    <AccountCircleOutlined/>
-                    <Typography variant="body2" component="span">
-                        {user.username}
-                    </Typography>
-                </Button>
-                <Menu
-                    id="profile-dropdown-menu"
-                    anchorEl={anchorEl}
-                    anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
-                    transformOrigin={{vertical: 'top', horizontal: 'center'}}
-                    open={isOpen}
-                    onClose={onClose}
-                    MenuListProps={{
-                        'aria-labelledby': 'profile-menu-button',
-                    }}
-                >
-                    <MenuItem onClick={onClose}>
-                        <ListItemIcon>
-                            <Settings fontSize="small"/>
-                        </ListItemIcon>
-                        Настройки(Fake route)
-                    </MenuItem>
-
-                    <MenuItem onClick={() => {
-                        onClose();
-                        dispatch(logout());
-                    }}>
-                        <ListItemIcon>
-                            <Logout fontSize="small"/>
-                        </ListItemIcon>
-                        Выйти
-                    </MenuItem>
-                </Menu>
-            </>
-        )
-    } else {
-        return (
-            <Button
-                component={RouterLink}
-                to={createPath({path: ROUTE.USER_LOGIN})}
-                sx={{
-                    display: {xs: "none", sm: "flex"},
-                    alignItems: "center",
-                    justifyContent: "center",
-                    flexDirection: "column",
-                    color: "inherit",
-                    textDecoration: "none"
-                }}
-            >
-                <AccountCircleOutlined/>
-                <Typography variant="body2" component="span">
-                    Войти
-                </Typography>
-            </Button>
-        )
-    }
 }
 
 export default AppHeader;

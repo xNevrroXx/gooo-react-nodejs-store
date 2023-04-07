@@ -1,7 +1,8 @@
 import {useEffect, useRef} from "react";
 
+
 const useResizeObserver = (callback: (target: HTMLElement) => void) => {
-    const ref = useRef<HTMLImageElement | null>(null);
+    const ref = useRef<HTMLElement | null>(null);
 
     useEffect(() => {
         if (!ref.current) return;

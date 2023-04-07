@@ -1,4 +1,4 @@
-import React, {FC, useMemo} from 'react';
+import React, {FC, forwardRef, useMemo} from 'react';
 import {Box, SxProps, Typography} from "@mui/material";
 import classNames from "classnames";
 // styles
@@ -33,7 +33,7 @@ const WARNING_SVG = (
 interface INotifierProps extends INotifier{
     style?: SxProps
 }
-const Notification: FC<INotifierProps> = ({type, title, description, style}) => {
+const Notification = forwardRef<HTMLDivElement, INotifierProps>(({type, title, description, style}, ref) => {
     const content: {className: string, svg: React.ReactNode} = useMemo(() => {
         switch (type) {
             case "error":
@@ -65,7 +65,7 @@ const Notification: FC<INotifierProps> = ({type, title, description, style}) => 
     }, [])
 
     return (
-        <Box className={content.className} sx={{...style}}>
+        <Box ref={ref} className={content.className} sx={{...style}}>
             <Box sx={{paddingTop: ".5rem"}}>{content.svg}</Box>
             <Box>
                 <Typography variant="h6">{title}</Typography>
@@ -73,6 +73,6 @@ const Notification: FC<INotifierProps> = ({type, title, description, style}) => 
             </Box>
         </Box>
     )
-};
+});
 
 export default Notification;

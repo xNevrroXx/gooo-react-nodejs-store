@@ -5,6 +5,6 @@ const LinkTypography = styled(Typography)`
     color: red;
     cursor: pointer;
   }
-`;
+` as typeof Typography;
 
 export default LinkTypography;

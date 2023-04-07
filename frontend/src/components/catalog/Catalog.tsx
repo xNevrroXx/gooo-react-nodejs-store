@@ -13,10 +13,11 @@ import {ICategoryTree} from "../../models/ICategoryTree";
 
 interface ICatalogProps {
     sx?: SxProps
-    onClickOverride?: (id: number) => void
+    onClickOverride?: (id: number) => void,
+    variant?: "contained" | "text" | "outlined" | undefined
 }
 
-const Catalog: FC<ICatalogProps> = ({onClickOverride, sx}) => {
+const Catalog: FC<ICatalogProps> = ({onClickOverride, sx, variant = "contained"}) => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const location = useLocation();
@@ -78,7 +79,7 @@ const Catalog: FC<ICatalogProps> = ({onClickOverride, sx}) => {
         <>
             <Button
                 id="catalog-menu-button"
-                variant="contained"
+                variant={variant}
                 startIcon={<MenuIcon/>}
                 sx={{display: {xs: "none", sm: "flex"}, minWidth: "auto", padding: ".5rem  1.5rem", ...sx}}
                 onClick={onOpen}

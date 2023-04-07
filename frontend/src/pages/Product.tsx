@@ -1,6 +1,6 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {useLocation, useParams} from "react-router-dom";
-import {Typography, Box, Stack, Paper} from "@mui/material";
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {useParams} from "react-router-dom";
+import {Typography, Box, Stack, Paper, styled} from "@mui/material";
 // own modules
 import Breadcrumbs from "../components/breadcrumbs/Breadcrumbs";
 import {useAppDispatch} from "../hooks/store.hook";
@@ -13,10 +13,16 @@ import AddToCartButton from "../components/addToCartButton/AddToCartButton";
 import {createTimeoutErrorNotification} from "../store/thunks/notifications";
 // types
 import {IProduct} from "../models/IProduct";
+import ImageSlider from "../components/imageSlider/ImageSlider";
 
+const StyledImage = styled("img")`
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  margin: 0 auto;
+`;
 
 const Product = () => {
-    const location = useLocation();
     const params = useParams();
     const dispatch = useAppDispatch();
     const fetchedProductRef = useRef<boolean>(false);
@@ -37,6 +43,16 @@ const Product = () => {
             });
     }, [params])
 
+    const imageSlides = useMemo(() => {
+        if (!product || !product.images) return;
+
+        return product.images.map((image, index) => (
+            <Box width="80vw" height="50vh" display="flex" justifyContent="center" alignItems="flex-start" >
+                <StyledImage src={image} alt={"product image " + index} />
+            </Box>
+        ))
+    }, [product])
+
     if(!product) {
         return <Loading/>
     }
@@ -44,10 +60,15 @@ const Product = () => {
     return (
         <>
             <Breadcrumbs targetCategoryId={product.categoryId} isLastLink={true} />
-            <Typography component="h1" variant="h4" mb="2rem">{product.name}</Typography>
-            <Stack direction="row" justifyContent="space-between" spacing={3} height="600px" mb="3rem">
-                <Box width="50%">
+            <Typography component="h1" variant="h6" mb="2rem">{product.name}</Typography>
+            <Stack direction={{ xs: "column", md: "row" }} justifyContent="space-between" spacing={3} mb="3rem" sx={{ height: {xs: "msx-content", md: "600px"} }}>
+                <Box sx={{ display: {xs: "none", md: "block"}, width: "50%" }}>
                     <ImageTabs images={product.images} alt={product.name}/>
+                </Box>
+                <Box sx={{ display: {xs: "block", md: "none"}, width: "80vw", height: "50vh", margin: "0 auto" }}>
+                    <ImageSlider>
+                        {imageSlides}
+                    </ImageSlider>
                 </Box>
                 <Paper elevation={3} sx={{height: "max-content", padding: "1rem 1rem"}}>
                     <Stack width="15rem">

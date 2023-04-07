@@ -21,12 +21,12 @@ const ProductList: FC = () => {
         dispatch(productsFetchingServer());
     }, [])
 
-
     return (
         <>
-            {products.length === 0 ? <Typography variant="h4">Здесь пока что нет продуктов</Typography>
+            {products.length === 0 ? <Typography sx={{ typography: { xs:"h5", sm: "h4" } }}>Здесь пока что нет продуктов</Typography>
                 :
                 <>
+                    <Typography component="h1" mb="2rem"  sx={{ typography: { xs:"h5", sm: "h4" } }}>Вам может понравиться</Typography>
                     {sortedProducts.map(item =>
                         <ProductCard key={item.id+item.price} {...item}/>
                     )}

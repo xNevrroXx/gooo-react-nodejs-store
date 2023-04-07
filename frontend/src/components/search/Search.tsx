@@ -45,7 +45,7 @@ const Search = (props: {sx?: SxProps}) => {
                     ),
                 }}
                 variant="standard"
-                sx={{width: {xs: "100%"}}}
+                sx={{width: "100%"}}
                 value={query}
                 onChange={onValueChange}
                 onKeyDown={onKeydownEnter}
