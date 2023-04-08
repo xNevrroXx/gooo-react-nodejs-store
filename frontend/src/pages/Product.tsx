@@ -47,7 +47,7 @@ const Product = () => {
         if (!product || !product.images) return;
 
         return product.images.map((image, index) => (
-            <Box width="80vw" height="50vh" display="flex" justifyContent="center" alignItems="flex-start" >
+            <Box key={"image slide" + index} width="80vw" height="50vh" display="flex" justifyContent="center" alignItems="flex-start" >
                 <StyledImage src={image} alt={"product image " + index} />
             </Box>
         ))

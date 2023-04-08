@@ -82,8 +82,8 @@ const ImageMagnifier: FC<IImageMagnifierProps> = ({
         const maxMagnifierAreaLeft = imageSizes.width - magnifierAreaSizes.width;
         const maxMagnifierAreaTop = imageSizes.height - magnifierAreaSizes.height;
 
-        const magnifierAreaLeft = event.pageX - containerRef.current.getBoundingClientRect().left - (magnifierAreaSizes.width * 0.5);
-        const magnifierAreaTop = event.pageY - containerRef.current.getBoundingClientRect().top - (magnifierAreaSizes.height * 0.5);
+        const magnifierAreaLeft = event.pageX - containerRef.current.offsetLeft - (magnifierAreaSizes.width * 0.5);
+        const magnifierAreaTop = event.pageY - containerRef.current.offsetTop - (magnifierAreaSizes.height * 0.5);
 
         setOffsetMagnifierArea({
             left: maxMagnifierAreaLeft > (magnifierAreaLeft > 0 ? magnifierAreaLeft : 0) ? (magnifierAreaLeft > 0 ? magnifierAreaLeft : 0) : maxMagnifierAreaLeft,
@@ -93,27 +93,29 @@ const ImageMagnifier: FC<IImageMagnifierProps> = ({
 
     return (
         <>
-            <div ref={containerRef} onMouseMove={onMouseMove} onMouseLeave={() => setIsActiveMagnifier(false)} style={{maxWidth: "100%", position: "relative"}}>
-                <img ref={el => {
-                    resizeImageObserverRef.current = el;
-                    imageRef.current = el;
-                }} src={imageSrc} alt={alt} style={{display: "block", maxHeight: maxHeightContent, maxWidth: "100%"}}/>
-                <div
-                    ref={el => {
-                        magnifierAreaRef.current = el;
-                    }}
-                    style={{
-                        display: isActiveMagnifier ? "block" : "none",
-                        position: "absolute",
-                        left: offsetMagnifierArea ? offsetMagnifierArea.left : 0,
-                        top: offsetMagnifierArea ? offsetMagnifierArea.top : 0,
-                        width: magnifierAreaSizes.width,
-                        height: magnifierAreaSizes.height,
-                        border: borderMagnifierArea ? borderMagnifierArea : "none",
-                        backgroundColor: colorMagnifierArea ? colorMagnifierArea : "rgb(0 0 0 / 30%)",
-                        boxShadow: boxShadowMagnifierArea ? boxShadowMagnifierArea : "none"
-                    }}
-                />
+            <div ref={containerRef} style={{maxWidth: "100%", position: "relative"}}>
+                <div onMouseMove={onMouseMove} onMouseLeave={() => setIsActiveMagnifier(false)}>
+                    <img ref={el => {
+                        resizeImageObserverRef.current = el;
+                        imageRef.current = el;
+                    }} src={imageSrc} alt={alt} style={{display: "block", maxHeight: maxHeightContent, maxWidth: "100%"}}/>
+                    <div
+                        ref={el => {
+                            magnifierAreaRef.current = el;
+                        }}
+                        style={{
+                            display: isActiveMagnifier ? "block" : "none",
+                            position: "absolute",
+                            left: offsetMagnifierArea ? offsetMagnifierArea.left : 0,
+                            top: offsetMagnifierArea ? offsetMagnifierArea.top : 0,
+                            width: magnifierAreaSizes.width,
+                            height: magnifierAreaSizes.height,
+                            border: borderMagnifierArea ? borderMagnifierArea : "none",
+                            backgroundColor: colorMagnifierArea ? colorMagnifierArea : "rgb(0 0 0 / 30%)",
+                            boxShadow: boxShadowMagnifierArea ? boxShadowMagnifierArea : "none"
+                        }}
+                    />
+                </div>
             </div>
 
             {imageSizes &&

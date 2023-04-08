@@ -1,6 +1,5 @@
 import {Outlet, RouteObject} from "react-router-dom";
 import React, {lazy} from "react";
-
 // pages
 const UserLogin = lazy(() => import("../../pages/UserLogin"));
 const UserRegistration = lazy(() => import("../../pages/UserRegistration"));

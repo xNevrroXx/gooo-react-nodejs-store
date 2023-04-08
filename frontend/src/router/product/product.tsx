@@ -1,6 +1,5 @@
 import {Outlet, RouteObject} from "react-router-dom";
 import React, {lazy} from "react";
-
 // pages
 const ProductPage = lazy(() => import("../../pages/Product"));
 

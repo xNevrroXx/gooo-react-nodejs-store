@@ -1,6 +1,7 @@
 import {RouteObject} from "react-router-dom";
+import {lazy} from "react";
 // pages
-import ShoppingCart from "../../pages/ShoppingCart";
+const ShoppingCart = lazy(() => import("../../pages/ShoppingCart"));
 
 export const shoppingCart: RouteObject = {
     path: "/cart",

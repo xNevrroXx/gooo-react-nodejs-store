@@ -18,7 +18,7 @@ class MailService {
     }
     async sendRecoveryMail(targetAddress: string, recoveryLink: string | number) {
         await this.transporter.sendMail({
-            from: 'Gooo online store <govorov.business@gmail.com>',
+            from: 'Gooo online store',
             to: targetAddress,
             subject: "Recovery account",
             html: `
@@ -34,7 +34,7 @@ class MailService {
 
     async sendActivationMail(targetAddress: string, link: string) {
         await this.transporter.sendMail({
-            from: 'Gooo online store <govorov.business@gmail.com>',
+            from: 'Gooo online store',
             to: targetAddress,
             subject: "Hello! Gooo online store glad to meet you!",
             html: `

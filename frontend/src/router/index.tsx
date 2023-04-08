@@ -1,16 +1,16 @@
 // third-party modules
 import {createBrowserRouter,} from "react-router-dom";
-import React from "react";
+import React, {lazy} from "react";
 // own modules
-import Index from "../pages/Index";
-import NotFound from "../pages/NotFound";
 import {admin} from "./admin/admin";
 import {user} from "./user/user";
 import {product} from "./product/product";
 import {shoppingCart} from "./shopping-cart/shoppingCart";
-// main pages
-import Main from "../pages/Main";
-import Filtering from "../pages/Filtering";
+// pages
+const Index = lazy(() => import("../pages/Index"));
+const NotFound = lazy(() => import("../pages/NotFound"));
+const Main = lazy(() => import("../pages/Main")) ;
+const Filtering = lazy(() => import("../pages/Filtering"));
 
 export const router = createBrowserRouter([
     {
